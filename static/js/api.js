@@ -11,19 +11,6 @@
     en: "The AI chat isn't available right now. Please try again later.\n\nIf you're struggling, or worried about your safety or someone else's, please call your local emergency number or a crisis line. In mainland China, call 12356, or 110 / 120 in an emergency."
   };
 
-  var noteText = {
-    zh: 'AI 的回复可能有错，不能替代专业帮助。发给 AI 的文字只用来生成回复，本站不保存。紧急情况请拨打 12356 或当地急救电话。',
-    en: "AI replies can be wrong and can't replace professional help. Text sent to the AI is only used to generate a reply, and this site doesn't save it. In an emergency, call your local emergency number."
-  };
-
-  function currentLang() {
-    try {
-      return localStorage.getItem('lang') || 'zh';
-    } catch (e) {
-      return 'zh';
-    }
-  }
-
   function json(body) {
     return new Response(JSON.stringify(body), {
       status: 200,
@@ -71,18 +58,8 @@
   document.addEventListener('DOMContentLoaded', function () {
     var style = document.createElement('style');
     style.textContent =
-      '.ai-note{background:var(--bg-warm);color:var(--text-medium);font-size:.875rem;line-height:1.5;padding:.6rem 1rem;text-align:center}' +
       '.message-feedback{display:none}' +
       '#ai-response-text,#aiAnalysisContent{white-space:pre-line}';
     document.head.appendChild(style);
-
-    var main = document.querySelector('.main-content');
-    if (!main) return;
-    var note = document.createElement('div');
-    note.className = 'ai-note';
-    note.setAttribute('data-zh', noteText.zh);
-    note.setAttribute('data-en', noteText.en);
-    note.textContent = noteText[currentLang()] || noteText.zh;
-    main.insertBefore(note, main.firstChild);
   });
 })();
