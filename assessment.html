@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <script src="static/js/static-demo.js"></script>
+    <script src="static/js/api.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>心理测试 | Mental Test - 心理健康平台 | Mental Health Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -473,7 +473,7 @@
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
                 <li><a href="assessment.html" class="nav-link active" data-zh="心理测试" data-en="Test">心理测试</a></li>
-                <li><a href="chat.html" class="nav-link " data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI 对话" data-en="AI Chat">AI 对话</a></li>
                 <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
                 <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
                 <!-- 移动端语言切换 -->
@@ -599,11 +599,11 @@
                     <div class="result-section" id="aiAnalysisSection">
                         <h3 class="result-section-title">
                             <span>🌱</span>
-                            <span data-zh="MindJoy 个性化反馈" data-en="MindJoy Personal Feedback">MindJoy 个性化反馈</span>
+                            <span data-zh="MindJoy AI 个性化分析" data-en="MindJoy AI Personal Analysis">MindJoy AI 个性化分析</span>
                         </h3>
                         <div id="aiAnalysisLoading" style="text-align: center; padding: 1.5rem;">
                             <div style="width: 30px; height: 30px; border: 3px solid #E8F5E9; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 0.75rem;"></div>
-                            <p style="color: var(--text-medium); font-size: 0.9rem;" data-zh="正在生成反馈..." data-en="Preparing your feedback...">正在生成反馈...</p>
+                            <p style="color: var(--text-medium); font-size: 0.9rem;" data-zh="AI正在分析你的答题情况..." data-en="AI is analyzing your responses...">AI正在分析你的答题情况...</p>
                         </div>
                         <div id="aiAnalysisContent" class="result-section-content" style="display: none; background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); padding: 1.25rem; border-radius: var(--radius-md); line-height: 1.8;"></div>
                     </div>
@@ -618,14 +618,14 @@
 
                     <div class="disclaimer">
                         <div class="disclaimer-title" data-zh="⚠️ 重要提示" data-en="⚠️ Important Notice">⚠️ 重要提示</div>
-                        <div class="disclaimer-text" data-zh="此测试仅供参考，不能作为医学诊断依据。如果您有心理健康方面的担忧，请咨询专业人员。紧急求助热线：400-161-9995" data-en="This test is for reference only and cannot replace professional diagnosis. Emergency hotline: 400-161-9995">
-                            此测试仅供参考，不能作为医学诊断依据。如果您有心理健康方面的担忧，请咨询专业人员。紧急求助热线：<strong>400-161-9995</strong>
+                        <div class="disclaimer-text" data-zh="此测试仅供参考，不能作为医学诊断依据。如果您有心理健康方面的担忧，请咨询专业人员。紧急求助热线：12356" data-en="This test is for reference only and cannot replace professional diagnosis. Emergency hotline: 12356">
+                            此测试仅供参考，不能作为医学诊断依据。如果您有心理健康方面的担忧，请咨询专业人员。紧急求助热线：<strong>12356</strong>
                         </div>
                     </div>
 
                     <div class="result-actions">
                         <button class="result-btn secondary" onclick="restartTest()" data-zh="🔄 重新测试" data-en="🔄 Retake Test">🔄 重新测试</button>
-                        <a href="chat.html" class="result-btn primary" data-zh="💬 查看 AI 对话演示" data-en="💬 See the AI Chat Demo">💬 查看 AI 对话演示</a>
+                        <a href="chat.html" class="result-btn primary" data-zh="💬 和 AI 聊聊" data-en="💬 Talk with the AI">💬 和 AI 聊聊</a>
                     </div>
                 </div>
             </div>
@@ -644,7 +644,7 @@
             </div>
             <div class="footer-section">
                 <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
-                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>12356</strong></p>
                 <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
             </div>
             <div class="footer-section">
@@ -668,7 +668,7 @@
                 <div class="crisis-contacts">
                     <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
                     <ul>
-                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 全国心理援助热线：<a href="tel:12356">12356</a></li>
                         <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
                         <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
                     </ul>
@@ -860,8 +860,8 @@ const resultData = {
             en: "Your current mental state is very exhausted, with accumulated negative emotions. Please take your feelings seriously, put aside trivial matters, give yourself a small break. Try stress-relieving activities like walking outdoors, connecting with nature, and consider talking to a counselor to gradually adjust. With rest, your condition will improve!"
         },
         suggestions: {
-            zh: ["立即给自己一个休息的机会", "出门散步，接触大自然", "强烈建议寻求专业心理帮助", "拨打心理援助热线：400-161-9995", "避免独自承受，让信任的人陪伴你", "关注基本需求：吃饭、睡觉、休息"],
-            en: ["Give yourself a chance to rest immediately", "Go for walks, connect with nature", "Strongly recommend seeking professional help", "Call mental health hotline: 400-161-9995", "Avoid bearing alone, let trusted people accompany you", "Focus on basic needs: eating, sleeping, resting"]
+            zh: ["立即给自己一个休息的机会", "出门散步，接触大自然", "强烈建议寻求专业心理帮助", "拨打心理援助热线：12356", "避免独自承受，让信任的人陪伴你", "关注基本需求：吃饭、睡觉、休息"],
+            en: ["Give yourself a chance to rest immediately", "Go for walks, connect with nature", "Strongly recommend seeking professional help", "Call mental health hotline: 12356", "Avoid bearing alone, let trusted people accompany you", "Focus on basic needs: eating, sleeping, resting"]
         }
     }
 };
@@ -1083,8 +1083,8 @@ Don't repeat test results, be specific. Tone should be warm and encouraging.`;
     } catch (error) {
         console.error('AI analysis error:', error);
         content.textContent = currentLang === 'zh'
-            ? `感谢你完成测试 💚 愿意了解自己是成长的第一步。如果你感到需要支持，随时可以和我们的AI咨询师聊聊。`
-            : `Thank you for completing the test 💚 Wanting to understand yourself is the first step to growth. If you need support, feel free to chat with our AI counselor anytime.`;
+            ? `感谢你完成测试 💚 愿意了解自己是成长的第一步。如果你感到需要支持，可以和我们的 AI 助手聊聊，或拨打心理援助热线 12356。`
+            : `Thank you for completing the test 💚 Wanting to understand yourself is the first step to growth. If you need support, you can chat with our AI assistant or call a crisis line.`;
     }
 
     loading.style.display = 'none';

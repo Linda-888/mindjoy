@@ -523,17 +523,6 @@ document.addEventListener('DOMContentLoaded', () => {
     AnimationObserver.init();
     KeyboardNav.init();
     
-    // Add loading state handler
-    document.querySelectorAll('form').forEach(form => {
-        form.addEventListener('submit', function() {
-            const submitBtn = this.querySelector('[type="submit"]');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.dataset.originalText = submitBtn.textContent;
-                submitBtn.textContent = '处理中...';
-            }
-        });
-    });
 });
 
 // ===================================

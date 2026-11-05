@@ -2,9 +2,9 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <script src="static/js/static-demo.js"></script>
+    <script src="static/js/api.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI心理咨询 - AI Counseling - 心理健康平台 | Mental Health Platform</title>
+    <title>AI 对话 - AI Chat - 心理健康平台 | Mental Health Platform</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -594,7 +594,7 @@
             <ul class="nav-menu" id="navMenu">
                 <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
                 <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
-                <li><a href="chat.html" class="nav-link active" data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="chat.html" class="nav-link active" data-zh="AI 对话" data-en="AI Chat">AI 对话</a></li>
                 <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
                 <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
                 <!-- 移动端语言切换 -->
@@ -628,7 +628,7 @@
         <!-- 聊天侧边栏 -->
         <aside class="chat-sidebar">
             <div class="sidebar-header">
-                <h3>🤖 <span data-zh="AI心理咨询" data-en="AI Counseling">AI心理咨询</span></h3>
+                <h3>🤖 <span data-zh="AI 对话" data-en="AI Chat">AI 对话</span></h3>
             </div>
             <div class="sidebar-content">
                 <div class="chat-intro">
@@ -637,8 +637,8 @@
                             <span>🌱</span>
                         </div>
                     </div>
-                    <h4 data-zh="AI 对话演示" data-en="AI Chat Demo">AI 对话演示</h4>
-                    <p data-zh="这个版本没有连接 AI，不会回复你输入的内容。需要帮助时，请拨打心理援助热线。" data-en="This version isn't connected to an AI and can't reply. If you need help, please call a crisis line.">这个版本没有连接 AI，不会回复你输入的内容。需要帮助时，请拨打心理援助热线。</p>
+                    <h4 data-zh="你好，我是 MindJoy 的 AI 助手" data-en="Hi, I'm MindJoy's AI Assistant">你好，我是 MindJoy 的 AI 助手</h4>
+                    <p data-zh="我是 AI，不是医生或心理咨询师。可以和我聊聊压力和情绪；如有危险，请拨打 12356 或当地急救电话。" data-en="I'm an AI, not a doctor or counselor. You can talk to me about stress and emotions. If you're in danger, please call your local emergency number or a crisis line.">我是 AI，不是医生或心理咨询师。可以和我聊聊压力和情绪；如有危险，请拨打 12356 或当地急救电话。</p>
                 </div>
                 
                 <div class="quick-topics">
@@ -680,7 +680,7 @@
                     <span class="notice-icon">⚠️</span>
                     <div>
                         <p data-zh="如遇紧急情况，请拨打" data-en="In case of emergency, call">如遇紧急情况，请拨打</p>
-                        <p><strong>400-161-9995</strong></p>
+                        <p><strong>12356</strong></p>
                     </div>
                 </div>
             </div>
@@ -691,10 +691,10 @@
             <div class="chat-header">
                 <div class="header-info">
                     <div class="bot-status">
-                        <span class="status-dot" style="background:#9ca3af"></span>
-                        <span data-zh="AI 未连接（演示版）" data-en="AI not connected (demo)">AI 未连接（演示版）</span>
+                        <span class="status-dot online"></span>
+                        <span data-zh="AI 助手" data-en="AI Assistant">AI 助手</span>
                     </div>
-                    <span class="header-subtitle" data-zh="输入的内容不会被发送或保存" data-en="Your messages aren't sent or saved">输入的内容不会被发送或保存</span>
+                    <span class="header-subtitle" data-zh="本站不保存对话 · 支持中英双语" data-en="Chats aren't saved by this site · Bilingual">本站不保存对话 · 支持中英双语</span>
                 </div>
                 <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">
                     <span>☰</span>
@@ -766,7 +766,7 @@
             </div>
             <div class="footer-section">
                 <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
-                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>12356</strong></p>
                 <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
             </div>
             <div class="footer-section">
@@ -790,7 +790,7 @@
                 <div class="crisis-contacts">
                     <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
                     <ul>
-                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 全国心理援助热线：<a href="tel:12356">12356</a></li>
                         <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
                         <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
                     </ul>
@@ -848,8 +848,8 @@ function getCurrentLang() {
 // 双语消息内容
 const messages = {
     welcome: {
-        zh: '这里是 MindJoy AI 对话的演示页 🌱\n\n这个版本没有连接 AI，不会回复你输入的内容，你输入的文字也不会被发送或保存。\n\n如果你现在需要帮助，请拨打心理援助热线 400-161-9995。',
-        en: "This is the MindJoy AI chat demo 🌱\n\nThis version isn't connected to an AI, so it can't reply to what you type, and your messages aren't sent or saved.\n\nIf you need help right now, please call your local emergency number or a crisis line.",
+        zh: '你好！我是 MindJoy 的 AI 助手 🌱\n\n压力、焦虑、情绪低落，或者只是想找人说说话，都可以和我聊。\n\n我是 AI，不是医生或心理咨询师，说的话可能有错。如果你现在有危险，请立刻拨打全国统一心理援助热线 12356，或 110、120。',
+        en: "Hi! I'm MindJoy's AI assistant 🌱\n\nStress, anxiety, feeling low, or just wanting someone to talk to: you can share it here.\n\nI'm an AI, not a doctor or counselor, and I can be wrong. If you're in danger right now, please call your local emergency number or a crisis line.",
     },
     helpful: {
         zh: '👍 有帮助',
