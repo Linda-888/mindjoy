@@ -1039,7 +1039,7 @@ async function getAiAnalysis(score, resultKey) {
         .map(q => q.text[currentLang]);
 
     const prompt = currentLang === 'zh'
-        ? `用户完成了心理健康自测，总分${score}/100分（分数越低越好），结果为"${resultKey}"级别。
+        ? `用户完成了心理健康自测，总分${score}/100分（分数越低越好），结果为"${resultData[resultKey].title.zh}"级别。
 以下是用户得分较高（表示有困扰）的问题领域：
 ${lowScoreQuestions.slice(0, 5).join('\n')}
 
@@ -1048,7 +1048,7 @@ ${lowScoreQuestions.slice(0, 5).join('\n')}
 2. 针对具体问题领域给出温暖的理解
 3. 提供1-2条实用的小建议
 不要重复测试结果，不要太笼统。语气要温暖、鼓励。`
-        : `User completed a mental health self-assessment with a total score of ${score}/100 (lower is better), rated as "${resultKey}" level.
+        : `User completed a mental health self-assessment with a total score of ${score}/100 (lower is better), rated as "${resultData[resultKey].title.en}" level.
 Here are the areas where the user scored higher (indicating concerns):
 ${lowScoreQuestions.slice(0, 5).join('\n')}
 
