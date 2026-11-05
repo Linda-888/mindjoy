@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <script src="static/js/static-demo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>情绪树洞 - Emotion Tree Hole - 心理健康平台 | Mental Health Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    
+<style>
+    /* 页面整体 */
+    .tree-hole-page {
+        padding-top: 80px;
+        min-height: 100vh;
+        background: linear-gradient(180deg, #E8F5E9 0%, #F1F8E9 50%, #FAF8F5 100%);
+        overflow-x: hidden;
+    }
+
+    /* 页头 */
+    .tree-header {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .tree-header h1 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .tree-header p {
+        color: var(--text-light);
+        font-size: 1.1rem;
+    }
+
+    /* 树的容器 */
+    .tree-container {
+        position: relative;
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+        min-height: 600px;
+    }
+
+    /* SVG 树 */
+    .tree-svg {
+        width: 100%;
+        height: 600px;
+    }
+
+    /* 树干 */
+    .tree-trunk {
+        fill: #8B6914;
+    }
+
+    /* 树枝 */
+    .tree-branch {
+        fill: none;
+        stroke: #6D5313;
+        stroke-width: 8;
+        stroke-linecap: round;
+        transition: all 0.3s ease;
+    }
+
+    /* 树叶群 */
+    .tree-leaves {
+        transition: all 0.5s ease;
+    }
+
+    /* 分类节点 */
+    .category-node {
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .category-node:hover {
+        transform: scale(1.1);
+    }
+
+    .category-circle {
+        transition: all 0.3s ease;
+    }
+
+    .category-node:hover .category-circle {
+        filter: brightness(1.1);
+    }
+
+    .category-icon {
+        font-size: 1.8rem;
+        text-anchor: middle;
+        dominant-baseline: central;
+        pointer-events: none;
+    }
+
+    .category-label {
+        font-family: 'Nunito', 'Noto Sans SC', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        fill: var(--text-dark);
+        text-anchor: middle;
+    }
+
+    /* 飘落的叶子动画 */
+    @keyframes leafFall {
+        0% {
+            transform: translateY(0) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(100px) rotate(360deg);
+            opacity: 0;
+        }
+    }
+
+    .falling-leaf {
+        animation: leafFall 3s ease-in-out forwards;
+    }
+
+    /* 树叶摇摆动画 */
+    @keyframes sway {
+        0%, 100% { transform: rotate(-2deg); }
+        50% { transform: rotate(2deg); }
+    }
+
+    .tree-leaves {
+        animation: sway 4s ease-in-out infinite;
+        transform-origin: center bottom;
+    }
+
+    /* 选中的分类闪烁 */
+    @keyframes pulse-glow {
+        0%, 100% { filter: drop-shadow(0 0 8px currentColor); }
+        50% { filter: drop-shadow(0 0 20px currentColor); }
+    }
+
+    .category-node.active .category-circle {
+        animation: pulse-glow 1.5s ease-in-out infinite;
+    }
+
+    /* 弹窗通用样式 */
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.6);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 2000;
+        opacity: 0;
+        visibility: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        max-width: 500px;
+        width: 90%;
+        max-height: 85vh;
+        overflow-y: auto;
+        transform: scale(0.9) translateY(20px);
+        transition: all 0.3s ease;
+    }
+
+    .modal-overlay.show .modal-content {
+        transform: scale(1) translateY(0);
+    }
+
+    .modal-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .modal-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+    }
+
+    .modal-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .modal-subtitle {
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+    .modal-close {
+        position: absolute;
+        top: 1rem;
+        right: 1rem;
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: var(--text-light);
+        transition: all 0.3s ease;
+    }
+
+    .modal-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: var(--text-dark);
+    }
+
+    /* 情绪记录弹窗 */
+    .emotion-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .emotion-textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 1rem;
+        border: 2px solid #E2E8F0;
+        border-radius: var(--radius-md);
+        font-family: inherit;
+        font-size: 1rem;
+        line-height: 1.6;
+        resize: vertical;
+        transition: all 0.3s ease;
+    }
+
+    .emotion-textarea:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(91, 140, 90, 0.1);
+    }
+
+    .emotion-textarea::placeholder {
+        color: var(--text-light);
+    }
+
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        justify-content: flex-end;
+    }
+
+    .btn-secondary {
+        padding: 0.75rem 1.5rem;
+        background: #F1F5F9;
+        color: var(--text-medium);
+        border: none;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+        background: #E2E8F0;
+    }
+
+    .btn-primary {
+        padding: 0.75rem 1.5rem;
+        background: var(--primary);
+        color: white;
+        border: none;
+        border-radius: var(--radius-full);
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    /* 呼吸练习弹窗 */
+    .breathing-modal .modal-content {
+        max-width: 600px;
+        text-align: center;
+        background: linear-gradient(180deg, #E8F5E9 0%, #FFFFFF 100%);
+    }
+
+    .breathing-intro {
+        margin-bottom: 2rem;
+    }
+
+    .breathing-intro p {
+        color: var(--text-medium);
+        line-height: 1.8;
+    }
+
+    .breathing-animation {
+        position: relative;
+        width: 200px;
+        height: 200px;
+        margin: 2rem auto;
+    }
+
+    .breathing-circle {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 120px;
+        height: 120px;
+        transform: translate(-50%, -50%);
+        background: linear-gradient(135deg, var(--primary-light), var(--accent-mint));
+        border-radius: 50%;
+        transition: all 4s ease-in-out;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .breathing-circle.inhale {
+        width: 180px;
+        height: 180px;
+    }
+
+    .breathing-circle.exhale {
+        width: 100px;
+        height: 100px;
+    }
+
+    .breathing-text {
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: white;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .breathing-outer-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 190px;
+        height: 190px;
+        transform: translate(-50%, -50%);
+        border: 3px dashed var(--primary-light);
+        border-radius: 50%;
+        opacity: 0.5;
+    }
+
+    .breathing-phase {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin: 1rem 0;
+    }
+
+    .breathing-timer {
+        font-size: 3rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin: 0.5rem 0;
+    }
+
+    .breathing-instruction {
+        color: var(--text-medium);
+        font-size: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .breathing-controls {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .btn-breathing {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: var(--radius-full);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .btn-start {
+        background: var(--primary);
+        color: white;
+    }
+
+    .btn-start:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .btn-stop {
+        background: #EF5350;
+        color: white;
+    }
+
+    .btn-stop:hover {
+        background: #E53935;
+    }
+
+    /* 进度条 */
+    .breathing-progress {
+        width: 100%;
+        height: 8px;
+        background: #E0E0E0;
+        border-radius: var(--radius-full);
+        overflow: hidden;
+        margin-top: 1rem;
+    }
+
+    .breathing-progress-bar {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary), var(--accent-mint));
+        transition: width 0.5s linear;
+    }
+
+    /* 完成界面 */
+    .breathing-complete {
+        display: none;
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .breathing-complete.show {
+        display: block;
+    }
+
+    .complete-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .complete-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.5rem;
+    }
+
+    .complete-message {
+        color: var(--text-medium);
+        margin-bottom: 1.5rem;
+    }
+
+    /* 匿名倾诉记录列表 */
+    .records-section {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 0 2rem 4rem;
+    }
+
+    .records-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 1.5rem;
+    }
+
+    .records-header h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-dark);
+    }
+
+    .record-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        border-left: 4px solid;
+    }
+
+    .record-card:hover {
+        box-shadow: var(--shadow-md);
+        transform: translateY(-2px);
+    }
+
+    .record-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .record-category-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+    }
+
+    .record-meta {
+        flex: 1;
+    }
+
+    .record-category-name {
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .record-date {
+        font-size: 0.85rem;
+        color: var(--text-light);
+    }
+
+    .record-content {
+        color: var(--text-medium);
+        line-height: 1.7;
+    }
+
+    .no-records {
+        text-align: center;
+        padding: 3rem;
+        color: var(--text-light);
+    }
+
+    .no-records-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        opacity: 0.5;
+    }
+
+    /* 提示条 */
+    .tip-bar {
+        background: linear-gradient(135deg, var(--primary-light), var(--accent-mint));
+        color: white;
+        padding: 1rem 2rem;
+        text-align: center;
+        font-weight: 500;
+    }
+
+    .tip-bar span {
+        opacity: 0.9;
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+        .tree-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .tree-svg {
+            height: 500px;
+        }
+
+        .modal-content {
+            padding: 1.5rem;
+        }
+
+        .breathing-animation {
+            width: 150px;
+            height: 150px;
+        }
+
+        .breathing-circle {
+            width: 100px;
+            height: 100px;
+        }
+
+        .breathing-circle.inhale {
+            width: 140px;
+            height: 140px;
+        }
+
+        .breathing-circle.exhale {
+            width: 80px;
+            height: 80px;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">🌱</div>
+                <span class="logo-text">MindJoy</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="tree-hole.html" class="nav-link active" data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
+                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <!-- 移动端语言切换 -->
+                <li class="mobile-lang-switch">
+                    <div class="lang-switch-mobile">
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
+                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        
+<div class="tree-hole-page">
+    <!-- 提示条 -->
+    <div class="tip-bar">
+        <span data-zh="💚 这里是你的安全空间，所有倾诉都是匿名的" data-en="💚 This is your safe space, all confessions are anonymous">💚 这里是你的安全空间，所有倾诉都是匿名的</span>
+    </div>
+
+    <!-- 页头 -->
+    <div class="tree-header">
+        <h1 data-zh="情绪树洞" data-en="Emotion Tree Hole">情绪树洞</h1>
+        <p data-zh="点击树上的分支，选择你想要倾诉的类型" data-en="Click a branch on the tree to share your feelings">点击树上的分支，选择你想要倾诉的类型</p>
+    </div>
+
+    <!-- 树可视化 -->
+    <div class="tree-container">
+        <svg class="tree-svg" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+            <!-- 树干 -->
+            <path class="tree-trunk" d="M380 600 L420 600 L430 450 L410 380 L420 300 L400 280 L380 300 L390 380 L370 450 Z"/>
+            
+            <!-- 树根 -->
+            <path fill="#6D5313" d="M350 600 Q360 580, 370 600 M430 600 Q440 580, 450 600 M380 600 Q390 590, 395 600"/>
+            
+            <!-- 左边树枝组 -->
+            <g class="tree-leaves" style="transform-origin: 400px 300px;">
+                <!-- 学业压力分支 -->
+                <path class="tree-branch" d="M390 320 Q320 280, 250 260"/>
+                <ellipse cx="220" cy="250" rx="70" ry="50" fill="#81C784"/>
+                <ellipse cx="200" cy="230" rx="50" ry="35" fill="#A5D6A7"/>
+                <ellipse cx="240" cy="225" rx="40" ry="30" fill="#C8E6C9"/>
+                
+                <!-- 人际关系分支 -->
+                <path class="tree-branch" d="M380 280 Q280 220, 180 200"/>
+                <ellipse cx="150" cy="190" rx="65" ry="45" fill="#81C784"/>
+                <ellipse cx="130" cy="170" rx="50" ry="35" fill="#A5D6A7"/>
+                <ellipse cx="170" cy="165" rx="40" ry="28" fill="#C8E6C9"/>
+            </g>
+            
+            <!-- 右边树枝组 -->
+            <g class="tree-leaves" style="transform-origin: 400px 300px; animation-delay: 1s;">
+                <!-- 情感困惑分支 -->
+                <path class="tree-branch" d="M410 320 Q480 280, 550 260"/>
+                <ellipse cx="580" cy="250" rx="70" ry="50" fill="#81C784"/>
+                <ellipse cx="600" cy="230" rx="50" ry="35" fill="#A5D6A7"/>
+                <ellipse cx="560" cy="225" rx="40" ry="30" fill="#C8E6C9"/>
+                
+                <!-- 自我成长分支 -->
+                <path class="tree-branch" d="M420 280 Q520 220, 620 200"/>
+                <ellipse cx="650" cy="190" rx="65" ry="45" fill="#81C784"/>
+                <ellipse cx="670" cy="170" rx="50" ry="35" fill="#A5D6A7"/>
+                <ellipse cx="630" cy="165" rx="40" ry="28" fill="#C8E6C9"/>
+            </g>
+            
+            <!-- 顶部树枝组 -->
+            <g class="tree-leaves" style="transform-origin: 400px 300px; animation-delay: 2s;">
+                <!-- 工作烦恼分支 -->
+                <path class="tree-branch" d="M400 280 Q400 180, 350 120"/>
+                <ellipse cx="330" cy="100" rx="60" ry="45" fill="#81C784"/>
+                <ellipse cx="310" cy="80" rx="45" ry="32" fill="#A5D6A7"/>
+                <ellipse cx="350" cy="75" rx="35" ry="25" fill="#C8E6C9"/>
+                
+                <!-- 其他烦恼分支 -->
+                <path class="tree-branch" d="M400 280 Q400 180, 450 120"/>
+                <ellipse cx="470" cy="100" rx="60" ry="45" fill="#81C784"/>
+                <ellipse cx="490" cy="80" rx="45" ry="32" fill="#A5D6A7"/>
+                <ellipse cx="450" cy="75" rx="35" ry="25" fill="#C8E6C9"/>
+            </g>
+            
+            <!-- 分类节点 - 可点击区域 -->
+            <!-- 学业压力 -->
+            <g class="category-node" data-category="study" onclick="openEmotionModal('study')">
+                <circle class="category-circle" cx="220" cy="250" r="35" fill="#FF7043" opacity="0.9"/>
+                <text class="category-icon" x="220" y="250">📚</text>
+                <text class="category-label" x="220" y="300" data-zh="学业压力" data-en="Study">学业压力</text>
+            </g>
+            
+            <!-- 人际关系 -->
+            <g class="category-node" data-category="relationship" onclick="openEmotionModal('relationship')">
+                <circle class="category-circle" cx="150" cy="190" r="35" fill="#42A5F5" opacity="0.9"/>
+                <text class="category-icon" x="150" y="190">👥</text>
+                <text class="category-label" x="150" y="240" data-zh="人际关系" data-en="Relations">人际关系</text>
+            </g>
+            
+            <!-- 情感困惑 -->
+            <g class="category-node" data-category="emotion" onclick="openEmotionModal('emotion')">
+                <circle class="category-circle" cx="580" cy="250" r="35" fill="#EC407A" opacity="0.9"/>
+                <text class="category-icon" x="580" y="250">💕</text>
+                <text class="category-label" x="580" y="300" data-zh="情感困惑" data-en="Emotion">情感困惑</text>
+            </g>
+            
+            <!-- 自我成长 -->
+            <g class="category-node" data-category="growth" onclick="openEmotionModal('growth')">
+                <circle class="category-circle" cx="650" cy="190" r="35" fill="#66BB6A" opacity="0.9"/>
+                <text class="category-icon" x="650" y="190">🌱</text>
+                <text class="category-label" x="650" y="240" data-zh="自我成长" data-en="Growth">自我成长</text>
+            </g>
+            
+            <!-- 工作烦恼 -->
+            <g class="category-node" data-category="work" onclick="openEmotionModal('work')">
+                <circle class="category-circle" cx="330" cy="100" r="35" fill="#FFA726" opacity="0.9"/>
+                <text class="category-icon" x="330" y="100">💼</text>
+                <text class="category-label" x="330" y="150" data-zh="工作烦恼" data-en="Work">工作烦恼</text>
+            </g>
+            
+            <!-- 其他烦恼 -->
+            <g class="category-node" data-category="other" onclick="openEmotionModal('other')">
+                <circle class="category-circle" cx="470" cy="100" r="35" fill="#AB47BC" opacity="0.9"/>
+                <text class="category-icon" x="470" y="100">💭</text>
+                <text class="category-label" x="470" y="150" data-zh="其他烦恼" data-en="Other">其他烦恼</text>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 我的倾诉记录 -->
+    <div class="records-section">
+        <div class="records-header">
+            <h2 data-zh="我的倾诉记录" data-en="My Confessions">我的倾诉记录</h2>
+        </div>
+        <div id="records-list">
+            <div class="no-records">
+                <div class="no-records-icon">🌿</div>
+                <p data-zh="还没有倾诉记录，点击树上的分支开始吧" data-en="No confessions yet, click a branch to start">还没有倾诉记录，点击树上的分支开始吧</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 情绪记录弹窗 -->
+<div class="modal-overlay" id="emotion-modal">
+    <div class="modal-content" style="position: relative;">
+        <button class="modal-close" onclick="closeEmotionModal()">✕</button>
+        <div class="modal-header">
+            <div class="modal-icon" id="modal-icon">📚</div>
+            <div>
+                <div class="modal-title" id="modal-title">学业压力</div>
+                <div class="modal-subtitle" data-zh="说出你的烦恼，这里是安全的" data-en="Share your worries, this is a safe space">说出你的烦恼，这里是安全的</div>
+            </div>
+        </div>
+        <form class="emotion-form" onsubmit="submitEmotion(event)">
+            <div class="form-group">
+                <label data-zh="写下你的心事..." data-en="Write your feelings...">写下你的心事...</label>
+                <textarea class="emotion-textarea" id="emotion-text" 
+                    placeholder="在这里倾诉，一切都会好起来的..."
+                    data-placeholder-zh="在这里倾诉，一切都会好起来的..."
+                    data-placeholder-en="Share here, everything will be okay..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn-secondary" onclick="closeEmotionModal()">
+                    <span data-zh="取消" data-en="Cancel">取消</span>
+                </button>
+                <button type="submit" class="btn-primary">
+                    <span data-zh="倾诉完毕" data-en="Done Sharing">倾诉完毕</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- AI共情回复弹窗 -->
+<div class="modal-overlay" id="ai-response-modal">
+    <div class="modal-content" style="position: relative; max-width: 500px;">
+        <button class="modal-close" onclick="closeAiResponseModal()">✕</button>
+        <div class="modal-header" style="justify-content: center;">
+            <div>
+                <div class="modal-title" style="text-align: center;">
+                    <span style="font-size: 2rem;">🌱</span>
+                </div>
+                <div class="modal-subtitle" style="text-align: center; margin-top: 0.5rem;" 
+                     data-zh="MindJoy 想对你说" data-en="MindJoy wants to tell you">MindJoy 想对你说</div>
+            </div>
+        </div>
+        
+        <!-- 加载状态 -->
+        <div id="ai-loading" style="text-align: center; padding: 2rem;">
+            <div class="loading-spinner" style="width: 40px; height: 40px; border: 3px solid #E8F5E9; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
+            <p style="color: var(--text-medium);" data-zh="请稍等..." data-en="One moment...">请稍等...</p>
+        </div>
+        
+        <!-- AI回复内容 -->
+        <div id="ai-response-content" style="display: none;">
+            <div style="background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); border-radius: var(--radius-lg); padding: 1.5rem; margin: 1rem 0;">
+                <p id="ai-response-text" style="color: var(--text-dark); line-height: 1.8; font-size: 1rem;"></p>
+            </div>
+            
+            <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
+                <button class="btn-secondary" style="flex: 1;" onclick="closeAiResponseModal()">
+                    <span data-zh="情绪舒缓了" data-en="Feeling Better">情绪舒缓了</span>
+                </button>
+                <button class="btn-primary" style="flex: 1;" onclick="goToBreathing()">
+                    <span data-zh="做呼吸练习" data-en="Do Breathing">做呼吸练习</span>
+                </button>
+            </div>
+            <div style="margin-top: 1rem;">
+                <a href="chat.html" class="btn-ai-chat" style="display: block; text-align: center; padding: 0.85rem 1.5rem; background: linear-gradient(135deg, #7B68EE 0%, #9370DB 100%); color: white; border-radius: var(--radius-full); font-weight: 600; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(123, 104, 238, 0.3);">
+                    <span data-zh="💬 查看 AI 对话演示" data-en="💬 See the AI Chat Demo">💬 查看 AI 对话演示</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.btn-ai-chat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(123, 104, 238, 0.45);
+}
+</style>
+
+<!-- 呼吸练习弹窗 -->
+<div class="modal-overlay breathing-modal" id="breathing-modal">
+    <div class="modal-content" style="position: relative;">
+        <button class="modal-close" onclick="closeBreathingModal()">✕</button>
+        
+        <!-- 介绍界面 -->
+        <div id="breathing-intro">
+            <div class="modal-header" style="justify-content: center;">
+                <div>
+                    <div class="modal-title" style="text-align: center;" data-zh="🌿 深呼吸放松练习" data-en="🌿 Deep Breathing Exercise">🌿 深呼吸放松练习</div>
+                </div>
+            </div>
+            <div class="breathing-intro">
+                <p data-zh="感谢你愿意分享自己的心事。现在，让我们一起做一个简单的呼吸练习，帮助你放松身心。" 
+                   data-en="Thank you for sharing. Now, let's do a simple breathing exercise to help you relax.">
+                    感谢你愿意分享自己的心事。现在，让我们一起做一个简单的呼吸练习，帮助你放松身心。
+                </p>
+                <br>
+                <p data-zh="这个练习包含3轮呼吸，每轮持续约16秒：" 
+                   data-en="This exercise includes 3 rounds, each lasting about 16 seconds:">
+                    这个练习包含3轮呼吸，每轮持续约16秒：
+                </p>
+                <ul style="text-align: left; margin: 1rem 2rem; color: var(--text-medium);">
+                    <li data-zh="吸气 4 秒" data-en="Inhale for 4 seconds">吸气 4 秒</li>
+                    <li data-zh="屏气 4 秒" data-en="Hold for 4 seconds">屏气 4 秒</li>
+                    <li data-zh="呼气 4 秒" data-en="Exhale for 4 seconds">呼气 4 秒</li>
+                    <li data-zh="放松 4 秒" data-en="Relax for 4 seconds">放松 4 秒</li>
+                </ul>
+            </div>
+            <div class="breathing-controls">
+                <button class="btn-breathing btn-secondary" onclick="closeBreathingModal()">
+                    <span data-zh="稍后再说" data-en="Maybe Later">稍后再说</span>
+                </button>
+                <button class="btn-breathing btn-start" onclick="startBreathing()">
+                    <span data-zh="开始练习" data-en="Start Exercise">开始练习</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 练习界面 -->
+        <div id="breathing-exercise" style="display: none;">
+            <div class="breathing-animation">
+                <div class="breathing-outer-ring"></div>
+                <div class="breathing-circle" id="breathing-circle">
+                    <span class="breathing-text" id="breathing-action-text">准备</span>
+                </div>
+            </div>
+            <div class="breathing-phase" id="breathing-phase" data-zh="准备开始" data-en="Get Ready">准备开始</div>
+            <div class="breathing-timer" id="breathing-timer">4</div>
+            <div class="breathing-instruction" id="breathing-round">
+                <span data-zh="第 1 轮 / 共 3 轮" data-en="Round 1 of 3">第 1 轮 / 共 3 轮</span>
+            </div>
+            <div class="breathing-progress">
+                <div class="breathing-progress-bar" id="breathing-progress" style="width: 0%"></div>
+            </div>
+            <div class="breathing-controls">
+                <button class="btn-breathing btn-stop" onclick="stopBreathing()">
+                    <span data-zh="停止" data-en="Stop">停止</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 完成界面 -->
+        <div class="breathing-complete" id="breathing-complete">
+            <div class="complete-icon">🎉</div>
+            <div class="complete-title" data-zh="做得很好！" data-en="Well Done!">做得很好！</div>
+            <div class="complete-message" data-zh="你完成了呼吸练习，希望你现在感觉好一些了。记住，照顾好自己的情绪很重要。" 
+                 data-en="You've completed the breathing exercise. Hope you feel better now. Remember, taking care of your emotions is important.">
+                你完成了呼吸练习，希望你现在感觉好一些了。记住，照顾好自己的情绪很重要。
+            </div>
+            <div class="breathing-controls">
+                <button class="btn-breathing btn-start" onclick="closeBreathingModal()">
+                    <span data-zh="完成" data-en="Done">完成</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>MindJoy 心灵乐园</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MindJoy Mental Health Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 危机提示模态框 -->
+    <div class="modal" id="crisisModal">
+        <div class="modal-content crisis-modal">
+            <div class="modal-header">
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+            </div>
+            <div class="modal-body">
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <div class="crisis-contacts">
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <ul>
+                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        
+        function switchLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            // 更新桌面端语言按钮
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新移动端语言按钮
+            document.querySelectorAll('.lang-btn-mobile').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新所有带有 data-zh/data-en 属性的元素
+            document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => switchLang(currentLang));
+        
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+        
+        function showCrisisModal() {
+            document.getElementById('crisisModal').classList.add('active');
+        }
+        
+        function closeCrisisModal() {
+            document.getElementById('crisisModal').classList.remove('active');
+        }
+    </script>
+    <script src="static/js/main.js"></script>
+    
+<script>
+    // 分类数据
+    const categories = {
+        study: {
+            icon: '📚',
+            color: '#FF7043',
+            zh: '学业压力',
+            en: 'Study Pressure'
+        },
+        relationship: {
+            icon: '👥',
+            color: '#42A5F5',
+            zh: '人际关系',
+            en: 'Relationships'
+        },
+        emotion: {
+            icon: '💕',
+            color: '#EC407A',
+            zh: '情感困惑',
+            en: 'Emotional Confusion'
+        },
+        growth: {
+            icon: '🌱',
+            color: '#66BB6A',
+            zh: '自我成长',
+            en: 'Self Growth'
+        },
+        work: {
+            icon: '💼',
+            color: '#FFA726',
+            zh: '工作烦恼',
+            en: 'Work Issues'
+        },
+        other: {
+            icon: '💭',
+            color: '#AB47BC',
+            zh: '其他烦恼',
+            en: 'Other'
+        }
+    };
+
+    // 当前选中的分类
+    let currentCategory = null;
+    
+    // 存储记录
+    let records = JSON.parse(localStorage.getItem('treeHoleRecords') || '[]');
+
+    // 获取当前语言
+    function getCurrentLang() {
+        return localStorage.getItem('lang') || 'zh';
+    }
+
+    // 打开情绪记录弹窗
+    function openEmotionModal(category) {
+        currentCategory = category;
+        const cat = categories[category];
+        const lang = getCurrentLang();
+        
+        // 更新弹窗内容
+        document.getElementById('modal-icon').innerHTML = cat.icon;
+        document.getElementById('modal-icon').style.background = cat.color;
+        document.getElementById('modal-title').textContent = lang === 'zh' ? cat.zh : cat.en;
+        
+        // 更新占位符
+        const textarea = document.getElementById('emotion-text');
+        textarea.value = '';
+        textarea.placeholder = lang === 'zh' 
+            ? textarea.dataset.placeholderZh 
+            : textarea.dataset.placeholderEn;
+        
+        // 高亮对应的节点
+        document.querySelectorAll('.category-node').forEach(node => {
+            node.classList.remove('active');
+            if (node.dataset.category === category) {
+                node.classList.add('active');
+            }
+        });
+        
+        // 显示弹窗
+        document.getElementById('emotion-modal').classList.add('show');
+    }
+
+    // 关闭情绪记录弹窗
+    function closeEmotionModal() {
+        document.getElementById('emotion-modal').classList.remove('show');
+        document.querySelectorAll('.category-node').forEach(node => {
+            node.classList.remove('active');
+        });
+    }
+
+    // 提交情绪记录
+    async function submitEmotion(event) {
+        event.preventDefault();
+        const text = document.getElementById('emotion-text').value.trim();
+        const lang = getCurrentLang();
+        
+        if (!text) {
+            alert(lang === 'zh' ? '请写下你的心事' : 'Please write your feelings');
+            return;
+        }
+        
+        // 保存记录
+        const record = {
+            id: Date.now(),
+            category: currentCategory,
+            content: text,
+            date: new Date().toISOString()
+        };
+        
+        records.unshift(record);
+        localStorage.setItem('treeHoleRecords', JSON.stringify(records));
+        
+        // 关闭情绪弹窗，打开AI回复弹窗
+        closeEmotionModal();
+        openAiResponseModal(text, currentCategory, lang);
+        
+        // 更新记录列表
+        renderRecords();
+    }
+
+    // 打开AI回复弹窗
+    async function openAiResponseModal(userText, category, lang) {
+        const modal = document.getElementById('ai-response-modal');
+        const loading = document.getElementById('ai-loading');
+        const content = document.getElementById('ai-response-content');
+        const responseText = document.getElementById('ai-response-text');
+        
+        // 显示弹窗和加载状态
+        modal.classList.add('show');
+        loading.style.display = 'block';
+        content.style.display = 'none';
+        
+        // 构建提示词，让AI知道这是树洞倾诉场景
+        const categoryInfo = categories[category];
+        const contextPrompt = lang === 'zh' 
+            ? `用户在"${categoryInfo.zh}"分类下倾诉了心事。请给出温暖、共情的回复（100-150字），不要给太多建议，主要是理解和陪伴。用户说：${userText}`
+            : `User shared feelings under "${categoryInfo.en}" category. Please give a warm, empathetic response (50-100 words), focus on understanding and companionship rather than advice. User said: ${userText}`;
+        
+        try {
+            const response = await fetch('/api/tree-hole/comfort', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    message: contextPrompt,
+                    category: category,
+                    lang: lang
+                })
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.response) {
+                responseText.textContent = data.response;
+            } else {
+                // 使用备用回复
+                responseText.textContent = lang === 'zh' 
+                    ? '我听到了你的心声 💚 谢谢你愿意在这里倾诉。每个人都会有这样的时刻，你的感受是真实的、重要的。无论发生什么，记住你并不孤单。'
+                    : "I hear you 💚 Thank you for sharing here. Everyone has moments like this, and your feelings are real and valid. No matter what happens, remember you're not alone.";
+            }
+        } catch (error) {
+            console.error('AI response error:', error);
+            // 使用备用回复
+            responseText.textContent = lang === 'zh' 
+                ? '我听到了你的心声 💚 谢谢你愿意在这里倾诉。每个人都会有这样的时刻，你的感受是真实的、重要的。无论发生什么，记住你并不孤单。'
+                : "I hear you 💚 Thank you for sharing here. Everyone has moments like this, and your feelings are real and valid. No matter what happens, remember you're not alone.";
+        }
+        
+        // 显示回复内容
+        loading.style.display = 'none';
+        content.style.display = 'block';
+    }
+
+    // 关闭AI回复弹窗
+    function closeAiResponseModal() {
+        document.getElementById('ai-response-modal').classList.remove('show');
+    }
+
+    // 从AI回复进入呼吸练习
+    function goToBreathing() {
+        closeAiResponseModal();
+        openBreathingModal();
+    }
+
+    // 渲染记录列表
+    function renderRecords() {
+        const container = document.getElementById('records-list');
+        const lang = getCurrentLang();
+        
+        if (records.length === 0) {
+            container.innerHTML = `
+                <div class="no-records">
+                    <div class="no-records-icon">🌿</div>
+                    <p data-zh="还没有倾诉记录，点击树上的分支开始吧" data-en="No confessions yet, click a branch to start">
+                        ${lang === 'zh' ? '还没有倾诉记录，点击树上的分支开始吧' : 'No confessions yet, click a branch to start'}
+                    </p>
+                </div>
+            `;
+            return;
+        }
+        
+        container.innerHTML = records.map(record => {
+            const cat = categories[record.category];
+            const date = new Date(record.date);
+            const dateStr = date.toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            return `
+                <div class="record-card" style="border-left-color: ${cat.color}">
+                    <div class="record-header">
+                        <div class="record-category-icon" style="background: ${cat.color}20">
+                            ${cat.icon}
+                        </div>
+                        <div class="record-meta">
+                            <div class="record-category-name">${lang === 'zh' ? cat.zh : cat.en}</div>
+                            <div class="record-date">${dateStr}</div>
+                        </div>
+                    </div>
+                    <div class="record-content">${record.content}</div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ==================== 呼吸练习 ====================
+    let breathingInterval = null;
+    let breathingPhase = 0;
+    let breathingRound = 1;
+    let breathingTimer = 4;
+    const TOTAL_ROUNDS = 3;
+    const PHASE_DURATION = 4;
+
+    const phases = [
+        { zh: '吸气', en: 'Inhale', class: 'inhale' },
+        { zh: '屏气', en: 'Hold', class: '' },
+        { zh: '呼气', en: 'Exhale', class: 'exhale' },
+        { zh: '放松', en: 'Relax', class: '' }
+    ];
+
+    function openBreathingModal() {
+        document.getElementById('breathing-intro').style.display = 'block';
+        document.getElementById('breathing-exercise').style.display = 'none';
+        document.getElementById('breathing-complete').classList.remove('show');
+        document.getElementById('breathing-modal').classList.add('show');
+    }
+
+    function closeBreathingModal() {
+        stopBreathing();
+        document.getElementById('breathing-modal').classList.remove('show');
+    }
+
+    function startBreathing() {
+        // 重置状态
+        breathingPhase = 0;
+        breathingRound = 1;
+        breathingTimer = PHASE_DURATION;
+        
+        // 切换界面
+        document.getElementById('breathing-intro').style.display = 'none';
+        document.getElementById('breathing-exercise').style.display = 'block';
+        
+        updateBreathingUI();
+        
+        // 开始计时
+        breathingInterval = setInterval(tickBreathing, 1000);
+    }
+
+    function tickBreathing() {
+        breathingTimer--;
+        
+        if (breathingTimer <= 0) {
+            // 进入下一阶段
+            breathingPhase++;
+            
+            if (breathingPhase >= 4) {
+                // 完成一轮
+                breathingPhase = 0;
+                breathingRound++;
+                
+                if (breathingRound > TOTAL_ROUNDS) {
+                    // 完成所有轮次
+                    completeBreathing();
+                    return;
+                }
+            }
+            
+            breathingTimer = PHASE_DURATION;
+        }
+        
+        updateBreathingUI();
+    }
+
+    function updateBreathingUI() {
+        const lang = getCurrentLang();
+        const phase = phases[breathingPhase];
+        const circle = document.getElementById('breathing-circle');
+        const actionText = document.getElementById('breathing-action-text');
+        const phaseText = document.getElementById('breathing-phase');
+        const timerText = document.getElementById('breathing-timer');
+        const roundText = document.getElementById('breathing-round');
+        const progressBar = document.getElementById('breathing-progress');
+        
+        // 更新圆圈动画类
+        circle.className = 'breathing-circle';
+        if (phase.class) {
+            circle.classList.add(phase.class);
+        }
+        
+        // 更新文字
+        actionText.textContent = lang === 'zh' ? phase.zh : phase.en;
+        phaseText.textContent = lang === 'zh' ? phase.zh : phase.en;
+        timerText.textContent = breathingTimer;
+        
+        // 更新轮次
+        const roundStr = lang === 'zh' 
+            ? `第 ${breathingRound} 轮 / 共 ${TOTAL_ROUNDS} 轮`
+            : `Round ${breathingRound} of ${TOTAL_ROUNDS}`;
+        roundText.innerHTML = roundStr;
+        
+        // 更新进度条
+        const totalPhases = TOTAL_ROUNDS * 4;
+        const currentPhaseNum = (breathingRound - 1) * 4 + breathingPhase;
+        const phaseProgress = (PHASE_DURATION - breathingTimer) / PHASE_DURATION;
+        const progress = ((currentPhaseNum + phaseProgress) / totalPhases) * 100;
+        progressBar.style.width = `${progress}%`;
+    }
+
+    function stopBreathing() {
+        if (breathingInterval) {
+            clearInterval(breathingInterval);
+            breathingInterval = null;
+        }
+    }
+
+    function completeBreathing() {
+        stopBreathing();
+        document.getElementById('breathing-exercise').style.display = 'none';
+        document.getElementById('breathing-complete').classList.add('show');
+    }
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', function() {
+        renderRecords();
+        
+        // 更新占位符语言
+        const lang = getCurrentLang();
+        const textarea = document.getElementById('emotion-text');
+        textarea.placeholder = lang === 'zh' 
+            ? textarea.dataset.placeholderZh 
+            : textarea.dataset.placeholderEn;
+    });
+
+    // 语言切换监听
+    window.addEventListener('langchange', function(e) {
+        renderRecords();
+        
+        const textarea = document.getElementById('emotion-text');
+        textarea.placeholder = e.detail.lang === 'zh' 
+            ? textarea.dataset.placeholderZh 
+            : textarea.dataset.placeholderEn;
+    });
+
+    // 点击弹窗外部关闭
+    document.getElementById('emotion-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeEmotionModal();
+    });
+    
+    document.getElementById('breathing-modal').addEventListener('click', function(e) {
+        if (e.target === this) closeBreathingModal();
+    });
+</script>
+
+</body>
+</html>

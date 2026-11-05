@@ -1,0 +1,1107 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <script src="static/js/static-demo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心理测试 | Mental Test - 心理健康平台 | Mental Health Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    
+<style>
+    .assessment-page {
+        min-height: calc(100vh - 70px);
+        background: linear-gradient(180deg, var(--bg-cream) 0%, var(--bg-warm) 100%);
+        padding: 2rem;
+    }
+
+    .assessment-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    /* 开始页面 */
+    .start-screen {
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: 3rem;
+        text-align: center;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .start-icon {
+        width: 100px;
+        height: 100px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        border-radius: var(--radius-xl);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        margin: 0 auto 1.5rem;
+        box-shadow: var(--shadow-glow);
+    }
+
+    .start-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+    .start-subtitle {
+        font-size: 1.1rem;
+        color: var(--text-medium);
+        margin-bottom: 2rem;
+    }
+
+    .dimensions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .dimension-item {
+        background: var(--bg-warm);
+        padding: 1rem;
+        border-radius: var(--radius-md);
+        text-align: center;
+    }
+
+    .dimension-icon {
+        font-size: 1.5rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .dimension-name {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .start-info {
+        display: flex;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        color: var(--text-medium);
+    }
+
+    /* 问题页面 */
+    .question-screen {
+        display: none;
+    }
+
+    .question-screen.active {
+        display: block;
+    }
+
+    .progress-section {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .progress-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 0.75rem;
+    }
+
+    .progress-text {
+        font-size: 0.95rem;
+        color: var(--text-medium);
+    }
+
+    .progress-text span {
+        color: var(--primary);
+        font-weight: 700;
+    }
+
+    .progress-bar {
+        height: 10px;
+        background: var(--bg-cream);
+        border-radius: var(--radius-full);
+        overflow: hidden;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--primary) 0%, var(--primary-light) 100%);
+        border-radius: var(--radius-full);
+        transition: width 0.5s ease;
+    }
+
+    .question-card {
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        box-shadow: var(--shadow-md);
+        animation: fadeIn 0.5s ease;
+    }
+
+    .question-number {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white;
+        border-radius: 50%;
+        font-weight: 700;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .question-text {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+        line-height: 1.6;
+    }
+
+    .options-list {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .option-item {
+        position: relative;
+    }
+
+    .option-input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+    }
+
+    .option-label {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding: 1rem 1.25rem;
+        background: var(--bg-cream);
+        border-radius: var(--radius-md);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+
+    .option-label:hover {
+        background: var(--bg-warm);
+        border-color: var(--primary-light);
+    }
+
+    .option-input:checked + .option-label {
+        background: linear-gradient(135deg, rgba(91, 140, 90, 0.1) 0%, rgba(123, 175, 122, 0.1) 100%);
+        border-color: var(--primary);
+    }
+
+    .option-letter {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 0.9rem;
+        color: var(--text-medium);
+        flex-shrink: 0;
+        transition: all 0.3s ease;
+    }
+
+    .option-input:checked + .option-label .option-letter {
+        background: var(--primary);
+        color: white;
+    }
+
+    .option-text {
+        flex: 1;
+        font-size: 1rem;
+        color: var(--text-dark);
+    }
+
+    .question-nav {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        gap: 1rem;
+    }
+
+    .nav-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-full);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        font-family: inherit;
+    }
+
+    .nav-btn.prev {
+        background: var(--bg-cream);
+        color: var(--text-medium);
+    }
+
+    .nav-btn.prev:hover:not(:disabled) {
+        background: var(--bg-warm);
+    }
+
+    .nav-btn.prev:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .nav-btn.next {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(91, 140, 90, 0.3);
+    }
+
+    .nav-btn.next:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(91, 140, 90, 0.4);
+    }
+
+    /* 结果页面 */
+    .result-screen {
+        display: none;
+    }
+
+    .result-screen.active {
+        display: block;
+    }
+
+    .result-card {
+        background: white;
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        box-shadow: var(--shadow-lg);
+    }
+
+    .result-header {
+        padding: 2.5rem;
+        text-align: center;
+        color: white;
+    }
+
+    .result-header.excellent {
+        background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+    }
+
+    .result-header.good {
+        background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+    }
+
+    .result-header.balanced {
+        background: linear-gradient(135deg, #f59e0b 0%, #fbbf24 100%);
+    }
+
+    .result-header.warning {
+        background: linear-gradient(135deg, #f97316 0%, #fb923c 100%);
+    }
+
+    .result-header.critical {
+        background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+    }
+
+    .result-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .result-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .result-score {
+        font-size: 3rem;
+        font-weight: 800;
+    }
+
+    .result-score span {
+        font-size: 1.25rem;
+        opacity: 0.8;
+    }
+
+    .result-body {
+        padding: 2rem;
+    }
+
+    .result-section {
+        margin-bottom: 1.5rem;
+    }
+
+    .result-section-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.75rem;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .result-section-content {
+        font-size: 1rem;
+        color: var(--text-medium);
+        line-height: 1.8;
+        background: var(--bg-cream);
+        padding: 1.25rem;
+        border-radius: var(--radius-md);
+    }
+
+    .suggestion-list {
+        list-style: none;
+        padding: 0;
+    }
+
+    .suggestion-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid var(--bg-cream);
+    }
+
+    .suggestion-list li:last-child {
+        border-bottom: none;
+    }
+
+    .suggestion-icon {
+        color: var(--primary);
+        font-weight: bold;
+    }
+
+    .disclaimer {
+        background: var(--bg-warm);
+        padding: 1.25rem;
+        border-radius: var(--radius-md);
+        border-left: 4px solid var(--accent-warm);
+    }
+
+    .disclaimer-title {
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .disclaimer-text {
+        font-size: 0.9rem;
+        color: var(--text-medium);
+    }
+
+    .result-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .result-btn {
+        flex: 1;
+        padding: 1rem;
+        border-radius: var(--radius-full);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+    }
+
+    .result-btn.secondary {
+        background: var(--bg-cream);
+        color: var(--text-dark);
+    }
+
+    .result-btn.primary {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        color: white;
+    }
+
+    @media (max-width: 768px) {
+        .assessment-page {
+            padding: 1rem;
+        }
+
+        .start-screen, .question-card, .result-card {
+            padding: 1.5rem;
+        }
+
+        .question-text {
+            font-size: 1.1rem;
+        }
+
+        .result-actions {
+            flex-direction: column;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">🌱</div>
+                <span class="logo-text">MindJoy</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
+                <li><a href="assessment.html" class="nav-link active" data-zh="心理测试" data-en="Test">心理测试</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
+                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <!-- 移动端语言切换 -->
+                <li class="mobile-lang-switch">
+                    <div class="lang-switch-mobile">
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
+                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        
+<div class="assessment-page">
+    <div class="assessment-container">
+        <!-- 开始页面 -->
+        <div class="start-screen" id="startScreen">
+            <div class="start-icon">📋</div>
+            <h1 class="start-title" data-zh="MindJoy 心理测试" data-en="MindJoy Mental Test">MindJoy 心理测试</h1>
+            <p class="start-subtitle" data-zh="全面了解你的心理健康状态" data-en="Comprehensive understanding of your mental health">全面了解你的心理健康状态</p>
+            
+            <div class="dimensions-grid">
+                <div class="dimension-item">
+                    <div class="dimension-icon">😌</div>
+                    <div class="dimension-name" data-zh="情绪稳定度" data-en="Emotional Stability">情绪稳定度</div>
+                </div>
+                <div class="dimension-item">
+                    <div class="dimension-icon">👥</div>
+                    <div class="dimension-name" data-zh="人际适应力" data-en="Social Adaptability">人际适应力</div>
+                </div>
+                <div class="dimension-item">
+                    <div class="dimension-icon">💪</div>
+                    <div class="dimension-name" data-zh="压力耐受度" data-en="Stress Tolerance">压力耐受度</div>
+                </div>
+                <div class="dimension-item">
+                    <div class="dimension-icon">💝</div>
+                    <div class="dimension-name" data-zh="自我接纳度" data-en="Self-Acceptance">自我接纳度</div>
+                </div>
+                <div class="dimension-item">
+                    <div class="dimension-icon">🌟</div>
+                    <div class="dimension-name" data-zh="生活愉悦感" data-en="Life Satisfaction">生活愉悦感</div>
+                </div>
+            </div>
+
+            <div class="start-info">
+                <div class="info-item">
+                    <span>📝</span>
+                    <span data-zh="25道问题" data-en="25 Questions">25道问题</span>
+                </div>
+                <div class="info-item">
+                    <span>⏱️</span>
+                    <span data-zh="约5-10分钟" data-en="About 5-10 min">约5-10分钟</span>
+                </div>
+                <div class="info-item">
+                    <span>🎯</span>
+                    <span data-zh="适用全年龄段" data-en="All Ages">适用全年龄段</span>
+                </div>
+            </div>
+
+            <button class="btn btn-primary btn-lg" onclick="startTest()" data-zh="开始测试" data-en="Start Test">开始测试</button>
+        </div>
+
+        <!-- 问题页面 -->
+        <div class="question-screen" id="questionScreen">
+            <div class="progress-section">
+                <div class="progress-header">
+                    <div class="progress-text">
+                        <span data-zh="第" data-en="Question">第</span> <span id="currentNum">1</span> <span data-zh="题 / 共 25 题" data-en="of 25">题 / 共 25 题</span>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progressPercent">4</span>%
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill" style="width: 4%"></div>
+                </div>
+            </div>
+
+            <div class="question-card" id="questionCard">
+                <div class="question-number" id="questionNumber">1</div>
+                <div class="question-text" id="questionText"></div>
+                <div class="options-list" id="optionsList"></div>
+                <div class="question-nav">
+                    <button class="nav-btn prev" id="prevBtn" onclick="prevQuestion()" disabled data-zh="← 上一题" data-en="← Previous">← 上一题</button>
+                    <button class="nav-btn next" id="nextBtn" onclick="nextQuestion()" data-zh="下一题 →" data-en="Next →">下一题 →</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 结果页面 -->
+        <div class="result-screen" id="resultScreen">
+            <div class="result-card">
+                <div class="result-header" id="resultHeader">
+                    <div class="result-icon" id="resultIcon">🌟</div>
+                    <div class="result-title" id="resultTitle"></div>
+                    <div class="result-score"><span id="resultScore">0</span><span> / 100</span></div>
+                </div>
+                <div class="result-body">
+                    <div class="result-section">
+                        <h3 class="result-section-title">
+                            <span>📖</span>
+                            <span data-zh="结果解读" data-en="Result Interpretation">结果解读</span>
+                        </h3>
+                        <div class="result-section-content" id="resultInterpretation"></div>
+                    </div>
+
+                    <!-- AI个性化分析 -->
+                    <div class="result-section" id="aiAnalysisSection">
+                        <h3 class="result-section-title">
+                            <span>🌱</span>
+                            <span data-zh="MindJoy 个性化反馈" data-en="MindJoy Personal Feedback">MindJoy 个性化反馈</span>
+                        </h3>
+                        <div id="aiAnalysisLoading" style="text-align: center; padding: 1.5rem;">
+                            <div style="width: 30px; height: 30px; border: 3px solid #E8F5E9; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 0.75rem;"></div>
+                            <p style="color: var(--text-medium); font-size: 0.9rem;" data-zh="正在生成反馈..." data-en="Preparing your feedback...">正在生成反馈...</p>
+                        </div>
+                        <div id="aiAnalysisContent" class="result-section-content" style="display: none; background: linear-gradient(135deg, #E8F5E9 0%, #C8E6C9 100%); padding: 1.25rem; border-radius: var(--radius-md); line-height: 1.8;"></div>
+                    </div>
+
+                    <div class="result-section">
+                        <h3 class="result-section-title">
+                            <span>💡</span>
+                            <span data-zh="建议" data-en="Suggestions">建议</span>
+                        </h3>
+                        <ul class="suggestion-list" id="suggestionList"></ul>
+                    </div>
+
+                    <div class="disclaimer">
+                        <div class="disclaimer-title" data-zh="⚠️ 重要提示" data-en="⚠️ Important Notice">⚠️ 重要提示</div>
+                        <div class="disclaimer-text" data-zh="此测试仅供参考，不能作为医学诊断依据。如果您有心理健康方面的担忧，请咨询专业人员。紧急求助热线：400-161-9995" data-en="This test is for reference only and cannot replace professional diagnosis. Emergency hotline: 400-161-9995">
+                            此测试仅供参考，不能作为医学诊断依据。如果您有心理健康方面的担忧，请咨询专业人员。紧急求助热线：<strong>400-161-9995</strong>
+                        </div>
+                    </div>
+
+                    <div class="result-actions">
+                        <button class="result-btn secondary" onclick="restartTest()" data-zh="🔄 重新测试" data-en="🔄 Retake Test">🔄 重新测试</button>
+                        <a href="chat.html" class="result-btn primary" data-zh="💬 查看 AI 对话演示" data-en="💬 See the AI Chat Demo">💬 查看 AI 对话演示</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>MindJoy 心灵乐园</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MindJoy Mental Health Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 危机提示模态框 -->
+    <div class="modal" id="crisisModal">
+        <div class="modal-content crisis-modal">
+            <div class="modal-header">
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+            </div>
+            <div class="modal-body">
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <div class="crisis-contacts">
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <ul>
+                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        
+        function switchLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            // 更新桌面端语言按钮
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新移动端语言按钮
+            document.querySelectorAll('.lang-btn-mobile').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新所有带有 data-zh/data-en 属性的元素
+            document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => switchLang(currentLang));
+        
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+        
+        function showCrisisModal() {
+            document.getElementById('crisisModal').classList.add('active');
+        }
+        
+        function closeCrisisModal() {
+            document.getElementById('crisisModal').classList.remove('active');
+        }
+    </script>
+    <script src="static/js/main.js"></script>
+    
+<script>
+// 完整题库 - 70道题
+const questionBank = [
+    { id: 1, text: { zh: "最近一周，你每天能拥有一段让自己觉得放松的时间吗？", en: "In the past week, did you have time to relax each day?" }, options: { zh: ["每天都有，能好好享受这份轻松", "大概3-4天有，偶尔会被琐事打断", "只有1-2天有，大部分时间都很紧绷", "几乎没有，每天都忙得喘不过气"], en: ["Every day, I can enjoy the relaxation", "About 3-4 days, occasionally interrupted", "Only 1-2 days, mostly tense", "Almost never, too busy to breathe"] }},
+    { id: 2, text: { zh: "当你和家人/朋友产生小矛盾时，你的感受更接近下面哪种？", en: "When you have a small conflict with family/friends, how do you feel?" }, options: { zh: ["能坦然沟通，很快就能和好", "有点不舒服，但过一阵就忘了", "心里会别扭很久，不想主动说话", "觉得很委屈，甚至会影响好几天的心情"], en: ["Can communicate openly, make up quickly", "A bit uncomfortable, but forget soon", "Feel awkward for a long time, don't want to talk", "Feel very wronged, affects mood for days"] }},
+    { id: 3, text: { zh: "面对一件有点难度的事（比如学新技能、处理复杂工作），你会？", en: "When facing something challenging (like learning new skills), you would?" }, options: { zh: ["主动尝试，就算失败也觉得是经验", "犹豫一下，但还是会开始做", "很担心做不好，迟迟不敢动手", "直接觉得自己不行，放弃尝试"], en: ["Try actively, even failure is experience", "Hesitate a bit, but still start", "Worry about failing, hesitate to start", "Think I can't do it, give up"] }},
+    { id: 4, text: { zh: "你对自己目前的样子满意吗？", en: "Are you satisfied with yourself currently?" }, options: { zh: ["挺满意的，接纳自己的所有优缺点", "基本满意，只有小部分地方想改进", "不太满意，总觉得自己不够好", "很不满意，经常嫌弃自己"], en: ["Quite satisfied, accept all my strengths and weaknesses", "Basically satisfied, only want to improve small parts", "Not very satisfied, always feel not good enough", "Very dissatisfied, often dislike myself"] }},
+    { id: 5, text: { zh: "晚上躺在床上，你能顺利入睡吗？", en: "Can you fall asleep smoothly at night?" }, options: { zh: ["沾床就睡，一觉到天亮", "偶尔会翻几分钟，但很快能睡着", "经常要躺半小时以上才能入睡", "很难睡着，还会反复醒过来"], en: ["Fall asleep immediately, sleep until morning", "Sometimes toss for a few minutes, but fall asleep quickly", "Often takes more than 30 minutes to fall asleep", "Hard to fall asleep, wake up repeatedly"] }},
+    { id: 6, text: { zh: "当别人夸奖你时，你的第一反应是？", en: "When others praise you, your first reaction is?" }, options: { zh: ["开心接受，觉得自己值得这份夸奖", "有点不好意思，但心里还是高兴的", "觉得对方只是客气，不是真心的", "很别扭，甚至会反驳'没有啦'"], en: ["Happy to accept, feel worthy of the praise", "A bit embarrassed, but still happy inside", "Think they're just being polite, not sincere", "Feel awkward, even refute 'No, I'm not'"] }},
+    { id: 7, text: { zh: "最近一个月，你有没有发自内心地笑过？", en: "In the past month, have you laughed genuinely?" }, options: { zh: ["经常，很多小事都能让我开心", "偶尔，遇到开心的事才会笑", "很少，没什么能让我觉得高兴的", "几乎没有，连笑都觉得累"], en: ["Often, many small things make me happy", "Occasionally, only laugh when something happy happens", "Rarely, nothing makes me feel happy", "Almost never, even laughing feels tiring"] }},
+    { id: 8, text: { zh: "遇到压力大的事时，你会怎么调节？", en: "How do you cope when facing high pressure?" }, options: { zh: ["找办法释放（比如运动、聊天），很快就能缓过来", "自己闷一会儿，慢慢就好了", "不知道怎么调节，只能硬扛着", "越想越烦，压力一直堆积在心里"], en: ["Find ways to release (like exercise, chat), recover quickly", "Keep it to myself for a while, gradually feel better", "Don't know how to cope, just endure", "The more I think, the more upset, pressure accumulates"] }},
+    { id: 9, text: { zh: "你和身边人的关系怎么样？", en: "How are your relationships with people around you?" }, options: { zh: ["很融洽，有很多能说心里话的人", "还不错，和大部分人都能和睦相处", "一般般，没什么特别亲近的人", "不太好，总觉得和别人合不来"], en: ["Very harmonious, have many people to share with", "Pretty good, get along with most people", "Average, no particularly close people", "Not so good, always feel incompatible with others"] }},
+    { id: 10, text: { zh: "做完一件事之后，你更倾向于？", en: "After completing something, you tend to?" }, options: { zh: ["肯定自己的努力，哪怕有小瑕疵", "觉得还行，但还能做得更好", "只盯着没做好的地方，很懊恼", "觉得自己做得一塌糊涂，很挫败"], en: ["Affirm my effort, even with small flaws", "Think it's okay, but could be better", "Only focus on what wasn't done well, feel annoyed", "Think I did terribly, feel defeated"] }},
+    { id: 11, text: { zh: "你会主动给自己安排一些喜欢的活动吗？", en: "Do you proactively arrange activities you enjoy?" }, options: { zh: ["会，经常主动找乐子", "偶尔会，有空的时候才安排", "很少，没心思做这些事", "不会，觉得做什么都没意思"], en: ["Yes, often actively seek fun", "Occasionally, only when I have time", "Rarely, no mood for these things", "No, everything feels meaningless"] }},
+    { id: 12, text: { zh: "当你觉得委屈时，你会？", en: "When you feel wronged, you would?" }, options: { zh: ["找信任的人倾诉，释放情绪", "自己消化，写写日记之类的", "憋在心里，不想让别人知道", "越想越难过，甚至会偷偷哭"], en: ["Talk to someone trusted, release emotions", "Process it myself, like writing a diary", "Keep it inside, don't want others to know", "Feel sadder the more I think, even cry secretly"] }},
+    { id: 13, text: { zh: "你对未来的日子有期待吗？", en: "Do you look forward to the future?" }, options: { zh: ["很期待，觉得有很多美好的事等着自己", "有点期待，希望能顺利一点", "没什么期待，觉得和现在差不多", "很迷茫，不知道未来会怎么样"], en: ["Very much, many good things await me", "A bit, hope things go smoothly", "Not really, think it'll be similar to now", "Very confused, don't know what the future holds"] }},
+    { id: 14, text: { zh: "平时和人交流时，你会觉得紧张吗？", en: "Do you feel nervous when communicating with others?" }, options: { zh: ["完全不会，交流起来很轻松", "偶尔和陌生人说话会有点紧张", "经常紧张，怕自己说错话", "很害怕交流，能躲就躲"], en: ["Not at all, communication is easy", "Occasionally nervous with strangers", "Often nervous, afraid of saying wrong things", "Very afraid of communication, avoid when possible"] }},
+    { id: 15, text: { zh: "最近一周，你有没有觉得莫名的烦躁？", en: "In the past week, have you felt inexplicably irritated?" }, options: { zh: ["没有，心情一直很平和", "偶尔有一次，很快就平复了", "经常有，一点小事就想发火", "一直很烦躁，看什么都不顺眼"], en: ["No, mood has been peaceful", "Occasionally once, calmed down quickly", "Often, get angry over small things", "Always irritated, nothing looks right"] }},
+    { id: 16, text: { zh: "你会允许自己偶尔偷懒休息吗？", en: "Do you allow yourself to rest occasionally?" }, options: { zh: ["会，休息是为了更好地做事", "偶尔会，累的时候就歇会儿", "不太敢，总觉得偷懒是不对的", "不会，一休息就觉得有负罪感"], en: ["Yes, rest is for better performance", "Occasionally, rest when tired", "Not really, feel laziness is wrong", "No, feel guilty when resting"] }},
+    { id: 17, text: { zh: "当你看到别人过得好时，你的感受是？", en: "When you see others doing well, how do you feel?" }, options: { zh: ["替对方开心，也会激励自己", "有点羡慕，但不会放在心上", "很羡慕，甚至会有点嫉妒", "觉得不公平，心里不舒服"], en: ["Happy for them, also motivates me", "A bit envious, but don't dwell on it", "Very envious, even a bit jealous", "Feel it's unfair, uncomfortable inside"] }},
+    { id: 18, text: { zh: "你能清楚地知道自己当下的情绪吗？", en: "Can you clearly identify your current emotions?" }, options: { zh: ["能，很清楚自己为什么开心/难过", "大部分时候能，偶尔会有点模糊", "不太能，经常不知道自己在烦什么", "完全不能，总觉得情绪乱糟糟的"], en: ["Yes, clearly know why I'm happy/sad", "Most of the time, occasionally vague", "Not really, often don't know what's bothering me", "Not at all, emotions always feel chaotic"] }},
+    { id: 19, text: { zh: "最近一个月，你有没有做过一件让自己有成就感的事？", en: "In the past month, have you done something that gave you a sense of achievement?" }, options: { zh: ["有好几件，每一件都很有成就感", "有一件，做完觉得很满足", "好像没有，没什么值得骄傲的", "完全没有，做什么都没成就感"], en: ["Several things, each gave me achievement", "One thing, felt satisfied after", "Seems not, nothing to be proud of", "Not at all, nothing gives achievement"] }},
+    { id: 20, text: { zh: "当你犯错时，你会怎么对待自己？", en: "When you make mistakes, how do you treat yourself?" }, options: { zh: ["承认错误，总结经验，下次改进", "有点自责，但很快就翻篇了", "一直责怪自己，很难原谅自己", "觉得自己一无是处，特别没用"], en: ["Admit mistake, learn from it, improve next time", "Feel a bit guilty, but move on quickly", "Keep blaming myself, hard to forgive myself", "Feel I'm worthless, especially useless"] }},
+    { id: 21, text: { zh: "你喜欢现在的生活节奏吗？", en: "Do you like your current pace of life?" }, options: { zh: ["很喜欢，充实又不拥挤", "还可以，偶尔忙一点但能接受", "不太喜欢，总觉得太匆忙/太无聊", "很讨厌，每天都过得很煎熬"], en: ["Very much, fulfilling but not overwhelming", "Okay, occasionally busy but acceptable", "Not really, always too rushed/too boring", "Hate it, every day feels like a struggle"] }},
+    { id: 22, text: { zh: "你会主动关心身边的人吗？", en: "Do you proactively care for people around you?" }, options: { zh: ["会，经常主动关心别人", "偶尔会，看到别人需要就帮忙", "很少，自己的事都顾不过来", "不会，没精力去关心别人"], en: ["Yes, often proactively care for others", "Occasionally, help when I see others need", "Rarely, can barely manage my own things", "No, no energy to care for others"] }},
+    { id: 23, text: { zh: "当你感到焦虑时，你会做什么？", en: "What do you do when you feel anxious?" }, options: { zh: ["找具体的事做（比如打扫、运动），转移注意力", "听听歌、看看风景，让自己静下来", "坐着发呆，任由焦虑蔓延", "越想越焦虑，甚至会影响吃饭睡觉"], en: ["Do specific tasks (clean, exercise), divert attention", "Listen to music, look at scenery, calm down", "Sit and zone out, let anxiety spread", "Get more anxious thinking, affects eating and sleeping"] }},
+    { id: 24, text: { zh: "你觉得自己的存在有意义吗？", en: "Do you feel your existence is meaningful?" }, options: { zh: ["很有意义，能感受到自己的价值", "有点意义，至少能照顾好自己", "没什么意义，每天都在混日子", "完全没意义，觉得很空虚"], en: ["Very meaningful, can feel my value", "Somewhat meaningful, at least can take care of myself", "Not meaningful, just getting through each day", "Not meaningful at all, feel very empty"] }},
+    { id: 25, text: { zh: "你最想对现在的自己说什么？", en: "What would you most like to say to yourself now?" }, options: { zh: ["你很棒，继续保持，未来可期", "辛苦了，再加油一点就更好了", "别再这么没用了，要争气一点", "不知道说什么，有点失望"], en: ["You're great, keep it up, the future is bright", "You've worked hard, just a bit more effort", "Stop being useless, be more ambitious", "Don't know what to say, a bit disappointed"] }},
+    { id: 26, text: { zh: "当朋友向你求助时，你的第一反应是？", en: "When friends ask for help, your first reaction is?" }, options: { zh: ["很乐意帮忙，觉得能帮上忙很开心", "愿意帮忙，但会先看自己有没有时间", "有点犹豫，怕自己帮不好添麻烦", "不太想帮，觉得多一事不如少一事"], en: ["Happy to help, glad to be of assistance", "Willing to help, but check if I have time first", "A bit hesitant, afraid I might make things worse", "Don't really want to help, prefer less trouble"] }},
+    { id: 27, text: { zh: "最近一周，你有没有因为一件小事而感到温暖？", en: "In the past week, have you felt warmed by a small thing?" }, options: { zh: ["经常有，比如陌生人的一句提醒", "有过一次，印象还挺深的", "好像没有，没注意过这类小事", "完全没有，觉得生活冷冰冰的"], en: ["Often, like a reminder from a stranger", "Once, left a deep impression", "Seems not, didn't notice such small things", "Not at all, life feels cold"] }},
+    { id: 28, text: { zh: "面对别人的不同意见，你会怎么处理？", en: "How do you handle different opinions from others?" }, options: { zh: ["认真倾听，觉得不同观点很有意思", "可以接受，但不会轻易改变自己的想法", "有点不舒服，会下意识反驳", "很反感，觉得对方是在针对自己"], en: ["Listen carefully, find different views interesting", "Can accept, but won't easily change my mind", "A bit uncomfortable, instinctively refute", "Very annoyed, feel they're targeting me"] }},
+    { id: 29, text: { zh: "你会定期整理自己的房间或物品吗？", en: "Do you regularly organize your room or belongings?" }, options: { zh: ["会，整理完会觉得心情很舒畅", "偶尔会，乱到看不下去的时候才整理", "很少整理，觉得没必要花这个时间", "懒得整理，看着乱也无所谓"], en: ["Yes, feel refreshed after organizing", "Occasionally, only when it's too messy to bear", "Rarely, don't think it's worth the time", "Too lazy to organize, don't mind the mess"] }},
+    { id: 30, text: { zh: "听到一首熟悉的老歌时，你会想起美好的回忆吗？", en: "When hearing a familiar old song, do you recall good memories?" }, options: { zh: ["会，心里会涌起温暖的感觉", "会，但回忆很快就过去了", "不太会，只是觉得歌好听而已", "不会，甚至会觉得有点伤感"], en: ["Yes, warm feelings well up inside", "Yes, but the memories pass quickly", "Not really, just think the song sounds nice", "No, might even feel a bit sad"] }},
+    { id: 31, text: { zh: "当你完成一项任务后，你会给自己奖励吗？", en: "Do you reward yourself after completing a task?" }, options: { zh: ["会，比如吃顿好的或看场电影", "偶尔会，心情好的时候才奖励", "很少会，觉得完成任务是应该的", "不会，觉得没必要奖励自己"], en: ["Yes, like having a good meal or watching a movie", "Occasionally, only when in a good mood", "Rarely, think completing tasks is expected", "No, don't think rewarding myself is necessary"] }},
+    { id: 32, text: { zh: "你和家人每天会有轻松的聊天时间吗？", en: "Do you have relaxed chat time with family every day?" }, options: { zh: ["会，每天都会聊一会儿家常", "会，但只有周末才有时间聊", "很少，大家都忙着自己的事", "不会，和家人没什么话好说"], en: ["Yes, chat about daily life every day", "Yes, but only have time on weekends", "Rarely, everyone is busy with their own things", "No, don't have much to say to family"] }},
+    { id: 33, text: { zh: "遇到下雨天，你会觉得心情压抑吗？", en: "Do you feel depressed on rainy days?" }, options: { zh: ["不会，反而觉得雨天很惬意", "偶尔会，看当天的心情而定", "经常会，下雨天总觉得提不起劲", "一定会，雨天会让我特别烦躁"], en: ["No, actually find rainy days pleasant", "Occasionally, depends on my mood that day", "Often, rainy days make me feel low", "Definitely, rainy days make me especially irritated"] }},
+    { id: 34, text: { zh: "你会主动学习一个新的小技巧吗？", en: "Do you proactively learn new small skills?" }, options: { zh: ["会，很喜欢学新东西的感觉", "会，但只学自己感兴趣的", "不太会，觉得学新东西很麻烦", "不会，觉得现在的状态就够了"], en: ["Yes, love the feeling of learning new things", "Yes, but only learn what interests me", "Not really, find learning new things troublesome", "No, think my current state is enough"] }},
+    { id: 35, text: { zh: "当你被别人误解时，你会怎么做？", en: "What do you do when misunderstood by others?" }, options: { zh: ["主动解释清楚，不让误会发酵", "等对方冷静下来，再慢慢解释", "懒得解释，觉得懂你的人自然懂", "很委屈，不想和任何人说话"], en: ["Proactively explain, don't let misunderstanding grow", "Wait for them to calm down, then explain slowly", "Too lazy to explain, those who understand will understand", "Feel wronged, don't want to talk to anyone"] }},
+    { id: 36, text: { zh: "最近一周，你有没有好好欣赏过窗外的风景？", en: "In the past week, have you appreciated the scenery outside?" }, options: { zh: ["经常，看着风景会觉得很放松", "偶尔，发呆的时候会看一会儿", "很少，根本没心思看这些", "没有，觉得窗外没什么好看的"], en: ["Often, looking at scenery feels relaxing", "Occasionally, look when zoning out", "Rarely, no mood to look at these things", "No, don't think there's anything worth seeing outside"] }},
+    { id: 37, text: { zh: "你对自己的身体健康状况关心吗？", en: "Do you care about your physical health?" }, options: { zh: ["很关心，会主动运动、早睡早起", "比较关心，不舒服了会及时调理", "不太关心，没生病就不管", "完全不关心，觉得无所谓"], en: ["Very much, proactively exercise, sleep early", "Quite a bit, take care when feeling unwell", "Not really, don't care unless sick", "Not at all, don't think it matters"] }},
+    { id: 38, text: { zh: "当你看到可爱的小动物时，会觉得心情变好吗？", en: "Does seeing cute animals make you feel better?" }, options: { zh: ["会，忍不住想靠近、摸摸它们", "会，觉得很可爱，但不会主动接触", "没什么感觉，不喜欢也不讨厌", "不会，甚至有点害怕小动物"], en: ["Yes, can't help wanting to approach and pet them", "Yes, think they're cute, but won't actively approach", "No particular feeling, neither like nor dislike", "No, even a bit afraid of small animals"] }},
+    { id: 39, text: { zh: "你会把自己的开心事分享给别人吗？", en: "Do you share your happy moments with others?" }, options: { zh: ["会，分享快乐会让快乐加倍", "会，但只分享给最亲近的人", "很少分享，觉得没必要说", "不会分享，觉得没人会感兴趣"], en: ["Yes, sharing happiness doubles the joy", "Yes, but only with closest people", "Rarely share, don't think it's necessary", "Won't share, don't think anyone would be interested"] }},
+    { id: 40, text: { zh: "面对一项新的任务，你会感到兴奋吗？", en: "Do you feel excited facing a new task?" }, options: { zh: ["会，觉得是挑战也是机会", "有点兴奋，但也会有点紧张", "没什么感觉，只想着赶紧做完", "会感到焦虑，怕自己做不好"], en: ["Yes, see it as both challenge and opportunity", "A bit excited, but also a bit nervous", "No particular feeling, just want to finish quickly", "Feel anxious, afraid I can't do it well"] }},
+    { id: 41, text: { zh: "你会偶尔给自己写几句鼓励的话吗？", en: "Do you occasionally write encouraging words to yourself?" }, options: { zh: ["会，遇到困难时写来给自己打气", "偶尔会，心情低落的时候才写", "很少写，觉得没什么用", "不会写，觉得鼓励自己很矫情"], en: ["Yes, write to encourage myself when facing difficulties", "Occasionally, only when feeling down", "Rarely write, don't think it's useful", "Won't write, think encouraging myself is pretentious"] }},
+    { id: 42, text: { zh: "最近一周，你有没有和别人一起大笑过？", en: "In the past week, have you laughed heartily with others?" }, options: { zh: ["经常，和朋友、家人一起很开心", "有过一次，和熟人一起的时候", "很少，很久没和人一起大笑了", "没有，自己一个人笑都很少"], en: ["Often, very happy with friends and family", "Once, when with acquaintances", "Rarely, haven't laughed with others for a long time", "No, rarely even laugh alone"] }},
+    { id: 43, text: { zh: "当你需要拒绝别人时，你会觉得为难吗？", en: "Do you find it difficult to refuse others?" }, options: { zh: ["不会，会坦诚又礼貌地拒绝", "有点为难，但还是会说明原因", "很为难，怕得罪人不敢拒绝", "特别为难，宁愿委屈自己也会答应"], en: ["No, can refuse honestly and politely", "A bit difficult, but will explain the reason", "Very difficult, afraid to offend, dare not refuse", "Extremely difficult, would rather wrong myself than refuse"] }},
+    { id: 44, text: { zh: "你会关注身边的小美好吗（比如花开、晚霞）？", en: "Do you notice small beautiful things around you (like flowers, sunset)?" }, options: { zh: ["会，经常拍照记录这些瞬间", "会，看到的时候会停下来欣赏", "很少关注，脚步太匆忙没注意", "不会关注，觉得这些都不重要"], en: ["Yes, often take photos to record these moments", "Yes, stop to appreciate when I see them", "Rarely notice, too busy rushing around", "Don't notice, don't think these are important"] }},
+    { id: 45, text: { zh: "当你和别人发生争执后，你会主动和解吗？", en: "After an argument with someone, do you proactively reconcile?" }, options: { zh: ["会，觉得没必要为小事僵持", "会，但要看是谁的错", "不会，等对方先主动找自己", "不会，觉得主动和解很没面子"], en: ["Yes, don't think it's worth holding grudges over small things", "Yes, but depends on who was wrong", "No, wait for the other person to reach out first", "No, think initiating reconciliation is losing face"] }},
+    { id: 46, text: { zh: "你会给自己设定一些小目标吗？", en: "Do you set small goals for yourself?" }, options: { zh: ["会，完成小目标会很有成就感", "会，但偶尔会忘记执行", "很少设定，觉得目标太麻烦", "不会设定，觉得定了也完不成"], en: ["Yes, completing small goals gives achievement", "Yes, but occasionally forget to follow through", "Rarely set, think goals are too troublesome", "Won't set, think I can't complete them anyway"] }},
+    { id: 47, text: { zh: "当你独处时，你会感到孤独吗？", en: "Do you feel lonely when alone?" }, options: { zh: ["不会，很享受独处的时光", "偶尔会，但大部分时候很自在", "经常会，一个人待着就会胡思乱想", "一直都会，特别害怕独处"], en: ["No, really enjoy time alone", "Occasionally, but mostly feel comfortable", "Often, start overthinking when alone", "Always, especially afraid of being alone"] }},
+    { id: 48, text: { zh: "你会在意别人对你的评价吗？", en: "Do you care about others' opinions of you?" }, options: { zh: ["不太在意，做好自己最重要", "有点在意，但不会因此改变自己", "比较在意，会努力迎合别人期望", "非常在意，别人的评价会影响我很久"], en: ["Not really, being myself is most important", "A bit, but won't change myself because of it", "Quite a bit, try hard to meet others' expectations", "Very much, others' opinions affect me for a long time"] }},
+    { id: 49, text: { zh: "你会主动表达感谢吗？", en: "Do you proactively express gratitude?" }, options: { zh: ["会，觉得表达感谢很自然", "会，但有时候会不好意思说出口", "很少，觉得心里感激就行了", "不会，觉得没必要特意表达"], en: ["Yes, expressing thanks feels natural", "Yes, but sometimes feel embarrassed to say it", "Rarely, think feeling grateful in heart is enough", "No, don't think it's necessary to express specifically"] }},
+    { id: 50, text: { zh: "当遇到困难时，你会向别人求助吗？", en: "Do you ask for help when facing difficulties?" }, options: { zh: ["会，觉得寻求帮助是明智的", "会，但只找最信任的人", "不太会，觉得应该自己解决", "不会，怕给别人添麻烦"], en: ["Yes, think seeking help is wise", "Yes, but only ask most trusted people", "Not really, think I should solve it myself", "No, afraid of troubling others"] }},
+    { id: 51, text: { zh: "你能接受生活中的不确定性吗？", en: "Can you accept uncertainty in life?" }, options: { zh: ["能，觉得不确定性也是一种可能", "基本能，虽然有时候会担心", "不太能，不确定的事会让我焦虑", "完全不能，必须要有确定的答案"], en: ["Yes, think uncertainty is also possibility", "Mostly, though sometimes worry", "Not really, uncertain things make me anxious", "Not at all, must have definite answers"] }},
+    { id: 52, text: { zh: "你会为过去的事情后悔吗？", en: "Do you regret things from the past?" }, options: { zh: ["很少，过去的事就让它过去", "偶尔会，但很快就能释怀", "经常会，总是想着如果当初...", "一直会，很难放下过去的遗憾"], en: ["Rarely, let the past be the past", "Occasionally, but can let go quickly", "Often, always thinking 'what if I had...'", "Always, hard to let go of past regrets"] }},
+    { id: 53, text: { zh: "你觉得自己是一个乐观的人吗？", en: "Do you think you're an optimistic person?" }, options: { zh: ["是的，总能看到事情好的一面", "大部分时候是，偶尔会悲观", "不太是，看事情总是比较消极", "不是，觉得乐观是一种奢侈"], en: ["Yes, can always see the good side of things", "Mostly yes, occasionally pessimistic", "Not really, tend to see things negatively", "No, think optimism is a luxury"] }},
+    { id: 54, text: { zh: "当别人批评你时，你会怎么反应？", en: "How do you react when others criticize you?" }, options: { zh: ["认真听取，有则改之无则加勉", "先冷静，再判断批评是否有道理", "会难过，觉得自己被否定了", "很受伤，会生气或想反驳"], en: ["Listen carefully, improve if valid", "Stay calm first, then judge if criticism is valid", "Feel sad, feel I'm being denied", "Feel hurt, want to be angry or refute"] }},
+    { id: 55, text: { zh: "你会花时间陪伴重要的人吗？", en: "Do you spend time with important people?" }, options: { zh: ["会，经常主动安排相聚", "会，但工作忙时会有所疏忽", "不太会，总觉得以后还有机会", "不会，已经很久没有联系了"], en: ["Yes, often proactively arrange gatherings", "Yes, but sometimes neglect when busy with work", "Not really, always think there's time later", "No, haven't been in touch for a long time"] }},
+    { id: 56, text: { zh: "你能控制自己的脾气吗？", en: "Can you control your temper?" }, options: { zh: ["能，很少会发脾气", "大部分时候能，但偶尔会失控", "不太能，容易被激怒", "不能，经常控制不住自己"], en: ["Yes, rarely lose my temper", "Most of the time, but occasionally lose control", "Not really, easily provoked", "No, often can't control myself"] }},
+    { id: 57, text: { zh: "你觉得自己的生活有规律吗？", en: "Do you think your life is regular?" }, options: { zh: ["很有规律，作息饮食都很健康", "基本有规律，偶尔会打乱", "不太有规律，想起什么做什么", "完全没规律，生活很混乱"], en: ["Very regular, healthy routine and diet", "Basically regular, occasionally disrupted", "Not very regular, do whatever comes to mind", "No regularity at all, life is very chaotic"] }},
+    { id: 58, text: { zh: "你会主动维护友谊吗？", en: "Do you proactively maintain friendships?" }, options: { zh: ["会，经常主动联系朋友", "会，但主要是对方主动时才回应", "不太会，觉得真正的友情不需要刻意维护", "不会，朋友联系越来越少了"], en: ["Yes, often proactively contact friends", "Yes, but mainly respond when they reach out", "Not really, think true friendship doesn't need effort", "No, contact with friends is getting less"] }},
+    { id: 59, text: { zh: "当你成功完成某件事时，你会怎么想？", en: "What do you think when you successfully complete something?" }, options: { zh: ["为自己骄傲，值得庆祝", "开心，但觉得还可以做得更好", "还好吧，没什么特别的感觉", "可能只是运气好，下次不一定行"], en: ["Proud of myself, worth celebrating", "Happy, but think could have done better", "It's okay, no special feeling", "Probably just luck, might not succeed next time"] }},
+    { id: 60, text: { zh: "你会担心未来可能发生的坏事吗？", en: "Do you worry about bad things that might happen?" }, options: { zh: ["不会，船到桥头自然直", "偶尔会，但不会想太多", "经常会，很多事情都让我担心", "一直在担心，总觉得会有不好的事发生"], en: ["No, will cross that bridge when I come to it", "Occasionally, but don't think too much", "Often, many things worry me", "Always worrying, always feel bad things will happen"] }},
+    { id: 61, text: { zh: "你能接受自己的不完美吗？", en: "Can you accept your imperfections?" }, options: { zh: ["能，不完美是人之常情", "大部分能，有些缺点还在努力改", "不太能，总觉得自己应该更好", "不能，很讨厌自己的缺点"], en: ["Yes, imperfection is human nature", "Mostly, still working on some flaws", "Not really, always think I should be better", "No, really dislike my flaws"] }},
+    { id: 62, text: { zh: "你会主动尝试新鲜事物吗？", en: "Do you proactively try new things?" }, options: { zh: ["会，很喜欢探索未知", "会，但要在舒适区边缘", "不太会，更喜欢熟悉的东西", "不会，新事物让我感到不安"], en: ["Yes, love exploring the unknown", "Yes, but within the edge of comfort zone", "Not really, prefer familiar things", "No, new things make me feel uneasy"] }},
+    { id: 63, text: { zh: "你会把工作和生活分开吗？", en: "Do you separate work and life?" }, options: { zh: ["会，下班后不想工作的事", "尽量会，但有时候会带回家", "不太会，工作经常占用生活时间", "完全分不开，随时都在想工作"], en: ["Yes, don't think about work after hours", "Try to, but sometimes bring it home", "Not really, work often takes up personal time", "Can't separate at all, always thinking about work"] }},
+    { id: 64, text: { zh: "当你情绪低落时，会持续多久？", en: "When you feel down, how long does it last?" }, options: { zh: ["很短，很快就能调整好", "一两天，然后慢慢恢复", "几天到一周，比较难走出来", "很长时间，甚至不知道什么时候会好"], en: ["Very short, can adjust quickly", "A day or two, then gradually recover", "Several days to a week, hard to get out", "A long time, don't even know when it will get better"] }},
+    { id: 65, text: { zh: "你觉得自己被人需要吗？", en: "Do you feel needed by others?" }, options: { zh: ["是的，很多人都会想到我", "有时候，在某些人眼里还是重要的", "不太觉得，好像有没有我都一样", "完全不觉得，感觉可有可无"], en: ["Yes, many people think of me", "Sometimes, still important in some people's eyes", "Not really, seems the same with or without me", "Not at all, feel dispensable"] }},
+    { id: 66, text: { zh: "你能从失败中学到东西吗？", en: "Can you learn from failures?" }, options: { zh: ["能，失败是成功之母", "大部分能，虽然会难过一阵", "不太能，失败会让我很受挫", "不能，失败只会让我更否定自己"], en: ["Yes, failure is the mother of success", "Mostly, though feel sad for a while", "Not really, failure frustrates me a lot", "No, failure only makes me more self-critical"] }},
+    { id: 67, text: { zh: "你会珍惜现在拥有的吗？", en: "Do you cherish what you have now?" }, options: { zh: ["会，很感恩现在的一切", "会，虽然有时也会想要更多", "不太会，总觉得还不够好", "不会，对现状很不满意"], en: ["Yes, very grateful for everything now", "Yes, though sometimes want more", "Not really, always feel it's not enough", "No, very dissatisfied with current situation"] }},
+    { id: 68, text: { zh: "你觉得说出自己的感受困难吗？", en: "Do you find it difficult to express your feelings?" }, options: { zh: ["不困难，很愿意分享内心想法", "有点困难，但遇到合适的人会说", "比较困难，不知道怎么表达", "非常困难，从来不说自己的感受"], en: ["Not difficult, willing to share inner thoughts", "A bit difficult, but will speak to the right person", "Quite difficult, don't know how to express", "Very difficult, never talk about my feelings"] }},
+    { id: 69, text: { zh: "你有让自己放松的方式吗？", en: "Do you have ways to relax yourself?" }, options: { zh: ["有很多，随时可以让自己放松", "有几种，但不是每次都有效", "不太有，很难让自己真正放松", "没有，不知道怎么放松"], en: ["Many ways, can relax anytime", "A few, but not always effective", "Not really, hard to truly relax", "No, don't know how to relax"] }},
+    { id: 70, text: { zh: "总的来说，你对自己的生活满意吗？", en: "Overall, are you satisfied with your life?" }, options: { zh: ["很满意，觉得生活很美好", "基本满意，有些地方可以更好", "不太满意，很多事情不如意", "很不满意，觉得生活没有希望"], en: ["Very satisfied, life is wonderful", "Basically satisfied, some things could be better", "Not very satisfied, many things are unsatisfactory", "Very dissatisfied, feel life is hopeless"] }}
+];
+
+// 结果解读数据
+const resultData = {
+    excellent: {
+        range: [25, 35],
+        title: { zh: "心理状态极佳", en: "Excellent Mental State" },
+        icon: "🌟",
+        class: "excellent",
+        interpretation: {
+            zh: "你最近的心理状态非常好，情绪稳定、心态积极，能很好地应对生活中的小插曲。继续保持现在的生活节奏，多去做让自己开心的事，也可以把这份正能量传递给身边的人。",
+            en: "Your mental state has been excellent recently. Your emotions are stable, mindset positive, and you handle life's ups and downs well. Keep up your current pace, do more things that make you happy, and spread this positive energy to those around you."
+        },
+        suggestions: {
+            zh: ["继续保持规律的作息和运动习惯", "多与朋友家人分享快乐", "尝试帮助他人，传递正能量", "记录美好时刻，保持感恩的心"],
+            en: ["Keep regular sleep and exercise habits", "Share joy with friends and family", "Try helping others, spread positivity", "Record good moments, stay grateful"]
+        }
+    },
+    good: {
+        range: [36, 50],
+        title: { zh: "心理状态良好", en: "Good Mental State" },
+        icon: "😊",
+        class: "good",
+        interpretation: {
+            zh: "你的心理状态整体不错，偶尔会有小波动，但都能自己调节。可以多给自己留一点放松时间，比如每天花10分钟做喜欢的小事，让心情一直保持在愉悦状态。",
+            en: "Your overall mental state is good, with occasional small fluctuations that you can regulate yourself. Try to leave more relaxation time for yourself, like spending 10 minutes daily on small things you enjoy, to maintain a pleasant mood."
+        },
+        suggestions: {
+            zh: ["每天预留10-15分钟放松时间", "培养一个能让你开心的小爱好", "当压力来临时，试试深呼吸", "保持和朋友的联系和沟通"],
+            en: ["Reserve 10-15 minutes daily for relaxation", "Develop a hobby that makes you happy", "Try deep breathing when stress comes", "Maintain contact and communication with friends"]
+        }
+    },
+    balanced: {
+        range: [51, 70],
+        title: { zh: "心理状态均衡", en: "Balanced Mental State" },
+        icon: "🤔",
+        class: "balanced",
+        interpretation: {
+            zh: "你最近的心理状态有点起伏，压力和小烦恼会偶尔找上门。可以试试情绪树洞匿名倾诉，或者跟着减压工具做深呼吸练习；如果遇到解不开的结，也可以尝试找心理咨询师聊一聊。",
+            en: "Your mental state has been fluctuating lately, with occasional stress and minor worries. Try the Emotion Tree Hole for anonymous venting, or follow breathing exercises for stress relief. If you encounter unresolved issues, consider talking to a counselor."
+        },
+        suggestions: {
+            zh: ["使用情绪树洞释放压力", "学习并练习深呼吸放松技巧", "每天记录三件让你感恩的小事", "适当减少手机和社交媒体使用", "有需要时寻求专业咨询帮助"],
+            en: ["Use Emotion Tree Hole to release stress", "Learn and practice deep breathing techniques", "Record three grateful things daily", "Reduce phone and social media use appropriately", "Seek professional help when needed"]
+        }
+    },
+    warning: {
+        range: [71, 90],
+        title: { zh: "心理状态预警", en: "Mental State Warning" },
+        icon: "😔",
+        class: "warning",
+        interpretation: {
+            zh: "你现在的心理压力比较大，情绪容易低落或烦躁，别硬扛着。建议每天抽时间做30分钟运动（散步、瑜伽都可以），多和家人朋友聊聊天；也可以通过心理日记记录心情，梳理情绪；必要时可以找心理咨询师深度沟通。",
+            en: "Your current psychological pressure is quite high, with emotions prone to being low or irritable. Don't force yourself to bear it alone. Try 30 minutes of exercise daily (walking, yoga), talk more with family and friends, record moods in a diary to process emotions, and consider deep communication with a counselor if necessary."
+        },
+        suggestions: {
+            zh: ["每天进行30分钟适度运动", "主动与信任的人倾诉感受", "使用MindJoy日记记录心情变化", "减少独处时间，多参与社交活动", "建议寻求专业心理咨询支持", "保证充足的睡眠时间"],
+            en: ["Exercise moderately for 30 minutes daily", "Proactively share feelings with trusted people", "Use MindJoy Diary to track mood changes", "Reduce alone time, participate in social activities", "Recommend seeking professional counseling", "Ensure adequate sleep"]
+        }
+    },
+    critical: {
+        range: [91, 100],
+        title: { zh: "心理状态高危", en: "Critical Mental State" },
+        icon: "🆘",
+        class: "critical",
+        interpretation: {
+            zh: "你目前的心理状态很疲惫，负面情绪堆积较多。请务必重视自己的感受，先放下手头的琐事，给自己放个小假；可以尝试做些能帮助你缓解压力的事情，如出门散步、走进大自然，同时建议寻找心理咨询师对话，慢慢调整状态；相信你经过一段时间的休息，状态会回升的！",
+            en: "Your current mental state is very exhausted, with accumulated negative emotions. Please take your feelings seriously, put aside trivial matters, give yourself a small break. Try stress-relieving activities like walking outdoors, connecting with nature, and consider talking to a counselor to gradually adjust. With rest, your condition will improve!"
+        },
+        suggestions: {
+            zh: ["立即给自己一个休息的机会", "出门散步，接触大自然", "强烈建议寻求专业心理帮助", "拨打心理援助热线：400-161-9995", "避免独自承受，让信任的人陪伴你", "关注基本需求：吃饭、睡觉、休息"],
+            en: ["Give yourself a chance to rest immediately", "Go for walks, connect with nature", "Strongly recommend seeking professional help", "Call mental health hotline: 400-161-9995", "Avoid bearing alone, let trusted people accompany you", "Focus on basic needs: eating, sleeping, resting"]
+        }
+    }
+};
+
+// 测试状态
+let currentQuestions = [];
+let currentIndex = 0;
+let answers = {};
+// currentLang 已在 base.html 中定义，这里直接使用
+
+// 监听语言变化
+window.addEventListener('langchange', (e) => {
+    currentLang = e.detail.lang;
+    if (currentQuestions.length > 0 && document.getElementById('questionScreen').classList.contains('active')) {
+        renderQuestion();
+    }
+});
+
+// 随机选择25道题并打乱选项顺序
+function selectRandomQuestions() {
+    const shuffled = [...questionBank].sort(() => Math.random() - 0.5);
+    const selected = shuffled.slice(0, 25);
+
+    // 为每道题的选项生成随机顺序
+    return selected.map(q => {
+        const optionIndices = [0, 1, 2, 3].sort(() => Math.random() - 0.5);
+        return {
+            ...q,
+            shuffledOptions: optionIndices.map(i => ({
+                originalIndex: i,
+                text: { zh: q.options.zh[i], en: q.options.en[i] },
+                score: i + 1 // A=1, B=2, C=3, D=4
+            }))
+        };
+    });
+}
+
+// 开始测试
+function startTest() {
+    currentQuestions = selectRandomQuestions();
+    currentIndex = 0;
+    answers = {};
+
+    document.getElementById('startScreen').style.display = 'none';
+    document.getElementById('questionScreen').classList.add('active');
+    document.getElementById('resultScreen').classList.remove('active');
+
+    renderQuestion();
+}
+
+// 渲染当前问题
+function renderQuestion() {
+    const q = currentQuestions[currentIndex];
+    const letters = ['A', 'B', 'C', 'D'];
+
+    document.getElementById('questionNumber').textContent = currentIndex + 1;
+    document.getElementById('currentNum').textContent = currentIndex + 1;
+    document.getElementById('questionText').textContent = q.text[currentLang];
+
+    const optionsHtml = q.shuffledOptions.map((opt, i) => `
+        <div class="option-item">
+            <input type="radio" class="option-input"
+                   name="question${currentIndex}"
+                   id="opt${i}"
+                   value="${opt.score}"
+                   ${answers[currentIndex] === opt.score ? 'checked' : ''}
+                   onchange="selectAnswer(${opt.score})">
+            <label class="option-label" for="opt${i}">
+                <span class="option-letter">${letters[i]}</span>
+                <span class="option-text">${opt.text[currentLang]}</span>
+            </label>
+        </div>
+    `).join('');
+
+    document.getElementById('optionsList').innerHTML = optionsHtml;
+
+    // 更新进度
+    const progress = ((currentIndex + 1) / 25) * 100;
+    document.getElementById('progressPercent').textContent = Math.round(progress);
+    document.getElementById('progressFill').style.width = progress + '%';
+
+    // 更新导航按钮
+    document.getElementById('prevBtn').disabled = currentIndex === 0;
+    const nextBtn = document.getElementById('nextBtn');
+    if (currentIndex === 24) {
+        nextBtn.textContent = currentLang === 'zh' ? '完成测试 ✓' : 'Finish Test ✓';
+    } else {
+        nextBtn.textContent = currentLang === 'zh' ? '下一题 →' : 'Next →';
+    }
+}
+
+// 选择答案
+function selectAnswer(score) {
+    answers[currentIndex] = score;
+}
+
+// 下一题
+function nextQuestion() {
+    if (answers[currentIndex] === undefined) {
+        alert(currentLang === 'zh' ? '请先选择一个选项' : 'Please select an option first');
+        return;
+    }
+
+    if (currentIndex < 24) {
+        currentIndex++;
+        renderQuestion();
+    } else {
+        showResult();
+    }
+}
+
+// 上一题
+function prevQuestion() {
+    if (currentIndex > 0) {
+        currentIndex--;
+        renderQuestion();
+    }
+}
+
+// 计算分数并显示结果
+async function showResult() {
+    const totalScore = Object.values(answers).reduce((sum, score) => sum + score, 0);
+
+    let result;
+    for (const [key, data] of Object.entries(resultData)) {
+        if (totalScore >= data.range[0] && totalScore <= data.range[1]) {
+            result = { key, ...data };
+            break;
+        }
+    }
+
+    // 如果分数超出范围，默认显示最高危
+    if (!result) {
+        result = { key: 'critical', ...resultData.critical };
+    }
+
+    document.getElementById('questionScreen').classList.remove('active');
+    document.getElementById('resultScreen').classList.add('active');
+
+    document.getElementById('resultHeader').className = `result-header ${result.class}`;
+    document.getElementById('resultIcon').textContent = result.icon;
+    document.getElementById('resultTitle').textContent = result.title[currentLang];
+    document.getElementById('resultScore').textContent = totalScore;
+    document.getElementById('resultInterpretation').textContent = result.interpretation[currentLang];
+
+    const suggestionsHtml = result.suggestions[currentLang].map(s => `
+        <li>
+            <span class="suggestion-icon">✓</span>
+            <span>${s}</span>
+        </li>
+    `).join('');
+    document.getElementById('suggestionList').innerHTML = suggestionsHtml;
+
+    // 获取AI个性化分析
+    await getAiAnalysis(totalScore, result.key);
+}
+
+// 获取AI个性化分析
+async function getAiAnalysis(score, resultKey) {
+    const loading = document.getElementById('aiAnalysisLoading');
+    const content = document.getElementById('aiAnalysisContent');
+
+    loading.style.display = 'block';
+    content.style.display = 'none';
+
+    // 构建答题摘要
+    const answerSummary = currentQuestions.map((q, idx) => {
+        const answerScore = answers[idx] || 0;
+        const questionText = q.text[currentLang];
+        return `Q${idx + 1}: ${questionText.substring(0, 30)}... (得分: ${answerScore}/3)`;
+    }).join('\n');
+
+    // 识别低分题目（潜在问题领域）
+    const lowScoreQuestions = currentQuestions.filter((q, idx) => (answers[idx] || 0) >= 2)
+        .map(q => q.text[currentLang]);
+
+    const prompt = currentLang === 'zh'
+        ? `用户完成了心理健康自测，总分${score}/100分（分数越低越好），结果为"${resultKey}"级别。
+以下是用户得分较高（表示有困扰）的问题领域：
+${lowScoreQuestions.slice(0, 5).join('\n')}
+
+请根据这些信息，给出个性化的分析和建议（150-200字）：
+1. 肯定用户愿意做测试的勇气
+2. 针对具体问题领域给出温暖的理解
+3. 提供1-2条实用的小建议
+不要重复测试结果，不要太笼统。语气要温暖、鼓励。`
+        : `User completed a mental health self-assessment with a total score of ${score}/100 (lower is better), rated as "${resultKey}" level.
+Here are the areas where the user scored higher (indicating concerns):
+${lowScoreQuestions.slice(0, 5).join('\n')}
+
+Based on this information, please provide personalized analysis and suggestions (100-150 words):
+1. Acknowledge user's courage in taking the test
+2. Show warm understanding of specific problem areas
+3. Provide 1-2 practical tips
+Don't repeat test results, be specific. Tone should be warm and encouraging.`;
+
+    try {
+        const response = await fetch('/api/assessment/analysis', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                message: prompt,
+                score: score,
+                resultKey: resultKey,
+                lang: currentLang
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.response) {
+            content.textContent = data.response;
+        } else {
+            // 备用分析
+            content.textContent = currentLang === 'zh'
+                ? `感谢你完成这次自我探索 💚 愿意正视自己的内心状态，本身就是很有勇气的一步。从你的答题情况来看，生活中可能有一些让你感到困扰的地方，这是完全正常的。每个人都会有这样的时刻。建议你可以尝试和信任的人聊聊，或者通过运动、写日记等方式释放情绪。记住，寻求帮助是强者的表现。`
+                : `Thank you for completing this self-exploration 💚 Being willing to face your inner state is a courageous step. Based on your responses, there might be some areas in life causing concern, which is completely normal. Everyone has moments like this. Consider talking to someone you trust, or try releasing emotions through exercise or journaling. Remember, seeking help is a sign of strength.`;
+        }
+    } catch (error) {
+        console.error('AI analysis error:', error);
+        content.textContent = currentLang === 'zh'
+            ? `感谢你完成测试 💚 愿意了解自己是成长的第一步。如果你感到需要支持，随时可以和我们的AI咨询师聊聊。`
+            : `Thank you for completing the test 💚 Wanting to understand yourself is the first step to growth. If you need support, feel free to chat with our AI counselor anytime.`;
+    }
+
+    loading.style.display = 'none';
+    content.style.display = 'block';
+}
+
+// 重新测试
+function restartTest() {
+    document.getElementById('resultScreen').classList.remove('active');
+    document.getElementById('startScreen').style.display = 'block';
+}
+
+// 初始化语言监听
+document.addEventListener('DOMContentLoaded', () => {
+    currentLang = localStorage.getItem('lang') || 'zh';
+});
+</script>
+
+</body>
+</html>

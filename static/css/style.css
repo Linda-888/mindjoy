@@ -1,0 +1,533 @@
+/* MindJoy - Modern Mental Health Platform Styles */
+
+:root {
+    /* 主色调 - 温暖柔和的配色 */
+    --primary: #5B8C5A;
+    --primary-light: #7BAF7A;
+    --primary-dark: #3D6B3C;
+    --secondary: #F4E4BA;
+    --accent-warm: #FFB74D;
+    --accent-coral: #FF8A80;
+    --accent-lavender: #B39DDB;
+    --accent-mint: #80CBC4;
+    --accent-peach: #FFAB91;
+    --accent-sky: #81D4FA;
+    
+    /* 背景色 */
+    --bg-cream: #FAF8F5;
+    --bg-warm: #FFF9F0;
+    --bg-card: #FFFFFF;
+    --bg-dark: #1A1D29;
+    --bg-space: #0D1117;
+    
+    /* 文字颜色 */
+    --text-dark: #2D3748;
+    --text-medium: #4A5568;
+    --text-light: #718096;
+    --text-white: #FFFFFF;
+    
+    /* 心情颜色 */
+    --mood-happy: #FFD93D;
+    --mood-warm: #FFB74D;
+    --mood-fulfilled: #FF8A80;
+    --mood-proud: #AED581;
+    --mood-surprised: #FFB74D;
+    --mood-calm: #4DB6AC;
+    --mood-confused: #A1887F;
+    --mood-lonely: #90A4AE;
+    --mood-excited: #F48FB1;
+    --mood-sweet: #F8BBD9;
+    --mood-sad: #7986CB;
+    --mood-tired: #9575CD;
+    --mood-wronged: #64B5F6;
+    --mood-irritated: #8D6E63;
+    --mood-angry: #E57373;
+    
+    /* 圆角 */
+    --radius-sm: 8px;
+    --radius-md: 16px;
+    --radius-lg: 24px;
+    --radius-xl: 32px;
+    --radius-full: 9999px;
+    
+    /* 阴影 */
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.08);
+    --shadow-md: 0 4px 16px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 8px 32px rgba(0, 0, 0, 0.12);
+    --shadow-glow: 0 0 40px rgba(91, 140, 90, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Nunito', 'Noto Sans SC', sans-serif;
+    background: var(--bg-cream);
+    color: var(--text-dark);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* 导航栏 */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    padding: 0.75rem 2rem;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 42px;
+    height: 42px;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    border-radius: var(--radius-md);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: var(--shadow-md);
+}
+
+.logo-text {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.nav-menu {
+    display: flex;
+    list-style: none;
+    gap: 0.5rem;
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--text-medium);
+    padding: 0.6rem 1.2rem;
+    border-radius: var(--radius-full);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    background: var(--bg-warm);
+    color: var(--primary);
+}
+
+.nav-link.active {
+    background: var(--primary);
+    color: white;
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.lang-switch {
+    display: flex;
+    background: var(--bg-warm);
+    border-radius: var(--radius-full);
+    padding: 4px;
+}
+
+.lang-btn {
+    padding: 0.4rem 0.8rem;
+    border: none;
+    background: transparent;
+    border-radius: var(--radius-full);
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: var(--text-medium);
+}
+
+.lang-btn.active {
+    background: white;
+    color: var(--primary);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    padding: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.nav-toggle span {
+    width: 24px;
+    height: 2px;
+    background: var(--text-dark);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* 主内容 */
+.main-content {
+    padding-top: 70px;
+    min-height: 100vh;
+}
+
+/* 按钮样式 */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: var(--radius-full);
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(91, 140, 90, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 140, 90, 0.4);
+}
+
+.btn-secondary {
+    background: var(--bg-warm);
+    color: var(--primary);
+}
+
+.btn-secondary:hover {
+    background: var(--secondary);
+}
+
+.btn-lg {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+}
+
+/* 页脚 */
+.footer {
+    background: var(--bg-dark);
+    color: var(--text-white);
+    padding: 3rem 2rem 1.5rem;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+}
+
+.footer-section h4 {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+    color: var(--primary-light);
+}
+
+.footer-section p {
+    font-size: 0.9rem;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 0.5rem;
+}
+
+.footer-bottom {
+    max-width: 1200px;
+    margin: 2rem auto 0;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: center;
+    font-size: 0.85rem;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+/* 模态框 */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: var(--radius-lg);
+    max-width: 500px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modal-header h3 {
+    font-size: 1.25rem;
+    color: var(--text-dark);
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+.modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+/* 危机模态框 */
+.crisis-modal .modal-header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+    color: white;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+}
+
+.crisis-modal .modal-header h3 {
+    color: white;
+}
+
+.crisis-contacts {
+    background: var(--bg-warm);
+    padding: 1.25rem;
+    border-radius: var(--radius-md);
+    margin: 1rem 0;
+}
+
+.crisis-contacts h4 {
+    font-size: 0.95rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-dark);
+}
+
+.crisis-contacts ul {
+    list-style: none;
+}
+
+.crisis-contacts li {
+    padding: 0.5rem 0;
+    font-size: 0.9rem;
+}
+
+.crisis-contacts a {
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* 心情图标样式 */
+.mood-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.mood-icon:hover {
+    transform: scale(1.1);
+}
+
+.mood-icon.selected {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px white, 0 0 0 5px currentColor;
+}
+
+.mood-happy { background: var(--mood-happy); }
+.mood-warm { background: var(--mood-warm); }
+.mood-fulfilled { background: var(--mood-fulfilled); }
+.mood-proud { background: var(--mood-proud); }
+.mood-surprised { background: var(--mood-surprised); }
+.mood-calm { background: var(--mood-calm); }
+.mood-confused { background: var(--mood-confused); }
+.mood-lonely { background: var(--mood-lonely); }
+.mood-excited { background: var(--mood-excited); }
+.mood-sweet { background: var(--mood-sweet); }
+.mood-sad { background: var(--mood-sad); }
+.mood-tired { background: var(--mood-tired); }
+.mood-wronged { background: var(--mood-wronged); }
+.mood-irritated { background: var(--mood-irritated); }
+.mood-angry { background: var(--mood-angry); }
+
+/* 动画 */
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes pulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.05); opacity: 0.8; }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes breathe {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+}
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+}
+
+.animate-float {
+    animation: float 3s ease-in-out infinite;
+}
+
+.animate-pulse {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.5s ease forwards;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .nav-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 1rem;
+        box-shadow: var(--shadow-md);
+    }
+
+    .nav-menu.active {
+        display: flex;
+    }
+
+    .nav-toggle {
+        display: flex;
+    }
+
+    .nav-right .lang-switch {
+        display: none;
+    }
+    
+    /* 移动端语言切换样式 */
+    .mobile-lang-switch {
+        display: block;
+        padding: 1rem 0;
+        border-top: 1px solid rgba(0, 0, 0, 0.08);
+        margin-top: 0.5rem;
+    }
+    
+    .lang-switch-mobile {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+    }
+    
+    .lang-btn-mobile {
+        padding: 0.6rem 1.2rem;
+        border: 2px solid var(--primary);
+        background: transparent;
+        border-radius: var(--radius-full);
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        color: var(--primary);
+    }
+    
+    .lang-btn-mobile.active {
+        background: var(--primary);
+        color: white;
+    }
+    
+    .lang-divider {
+        color: var(--text-light);
+        font-weight: 300;
+    }
+}
+
+/* 桌面端隐藏移动端语言切换 */
+@media (min-width: 769px) {
+    .mobile-lang-switch {
+        display: none !important;
+    }
+}

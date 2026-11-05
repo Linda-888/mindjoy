@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <script src="static/js/static-demo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI心理咨询 - AI Counseling - 心理健康平台 | Mental Health Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    
+<style>
+/* 聊天页面特定样式 */
+.chat-page {
+    height: calc(100vh - 64px);
+    margin-top: 64px;
+    display: flex;
+    background: var(--bg-cream);
+}
+
+.chat-container {
+    display: flex;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+}
+
+/* 侧边栏 */
+.chat-sidebar {
+    width: 320px;
+    background: white;
+    border-right: 1px solid rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease;
+}
+
+.sidebar-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.sidebar-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.sidebar-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+}
+
+.chat-intro {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.intro-avatar {
+    margin-bottom: 1rem;
+}
+
+.avatar-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    font-size: 2.5rem;
+    box-shadow: var(--shadow-glow);
+}
+
+.chat-intro h4 {
+    margin: 0 0 0.5rem;
+    color: var(--text-dark);
+    font-weight: 700;
+}
+
+.chat-intro p {
+    margin: 0;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    line-height: 1.6;
+}
+
+.quick-topics h5 {
+    margin: 0 0 1rem;
+    color: var(--text-dark);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.topic-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.topic-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-full);
+    background: transparent;
+    color: var(--text-medium);
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.topic-btn:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+    transform: translateY(-2px);
+}
+
+.sidebar-actions {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-md);
+    background: transparent;
+    color: var(--text-medium);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    font-size: 0.9rem;
+}
+
+.action-btn:hover {
+    background: var(--bg-cream);
+    color: var(--text-dark);
+}
+
+.sidebar-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.crisis-notice {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05));
+    border-radius: var(--radius-md);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.notice-icon {
+    font-size: 1.25rem;
+}
+
+.crisis-notice p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--text-medium);
+    line-height: 1.5;
+}
+
+.crisis-notice strong {
+    color: #ef4444;
+}
+
+/* 主聊天区域 */
+.chat-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+}
+
+.chat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.header-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.bot-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+.status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #10B981;
+    animation: pulse 2s infinite;
+}
+
+.header-subtitle {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.mobile-sidebar-toggle {
+    display: none;
+    padding: 0.5rem;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-dark);
+}
+
+/* 消息区域 */
+.chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.message {
+    display: flex;
+    gap: 1rem;
+    max-width: 80%;
+    animation: fadeInUp 0.3s ease;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.bot-message {
+    align-self: flex-start;
+}
+
+.user-message {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-avatar {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.bot-message .message-avatar {
+    background: linear-gradient(135deg, var(--primary), var(--primary-light));
+}
+
+.user-message .message-avatar {
+    background: linear-gradient(135deg, var(--accent-lavender), #9575CD);
+}
+
+.message-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.message-bubble {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius-lg);
+    line-height: 1.7;
+}
+
+.bot-message .message-bubble {
+    background: white;
+    box-shadow: var(--shadow-sm);
+    border-bottom-left-radius: var(--radius-sm);
+}
+
+.user-message .message-bubble {
+    background: var(--primary);
+    color: white;
+    border-bottom-right-radius: var(--radius-sm);
+}
+
+.message-bubble p {
+    margin: 0;
+}
+
+.message-bubble p + p {
+    margin-top: 0.75rem;
+}
+
+.message-time {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    padding: 0 0.5rem;
+}
+
+.user-message .message-time {
+    text-align: right;
+}
+
+.message-feedback {
+    display: flex;
+    gap: 0.5rem;
+    padding: 0 0.5rem;
+}
+
+.feedback-btn {
+    padding: 0.35rem 0.75rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: var(--radius-full);
+    background: transparent;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.feedback-btn:hover {
+    background: var(--bg-cream);
+    color: var(--text-dark);
+}
+
+/* 打字指示器 */
+.typing-indicator {
+    display: flex;
+    gap: 4px;
+    padding: 0.5rem 0;
+}
+
+.typing-indicator span {
+    width: 8px;
+    height: 8px;
+    background: var(--primary);
+    border-radius: 50%;
+    animation: bounce 1.4s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: -0.32s; }
+.typing-indicator span:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes bounce {
+    0%, 80%, 100% { transform: scale(0.8); opacity: 0.5; }
+    40% { transform: scale(1); opacity: 1; }
+}
+
+/* 输入区域 */
+.chat-input-container {
+    padding: 1rem 1.5rem 1.5rem;
+    background: white;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.input-wrapper {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg-cream);
+    border-radius: var(--radius-lg);
+    border: 2px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.input-wrapper:focus-within {
+    background: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(91, 140, 90, 0.1);
+}
+
+#messageInput {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    font-family: inherit;
+    line-height: 1.6;
+    resize: none;
+    max-height: 150px;
+    color: var(--text-dark);
+}
+
+#messageInput:focus {
+    outline: none;
+}
+
+#messageInput::placeholder {
+    color: var(--text-light);
+}
+
+.input-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.char-count {
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+
+.send-btn {
+    width: 44px;
+    height: 44px;
+    border: none;
+    border-radius: 50%;
+    background: var(--primary);
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.send-btn:disabled {
+    background: #E2E8F0;
+    cursor: not-allowed;
+}
+
+.send-btn:not(:disabled):hover {
+    background: var(--primary-dark);
+    transform: scale(1.05);
+}
+
+.send-icon {
+    font-size: 1.2rem;
+}
+
+.input-hint {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 0.5rem;
+}
+
+/* 反馈弹窗 */
+.modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+
+.modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.feedback-modal .modal-content {
+    background: white;
+    border-radius: var(--radius-xl);
+    padding: 2rem;
+    max-width: 400px;
+    width: 90%;
+    text-align: center;
+}
+
+.feedback-modal .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.feedback-modal .modal-header h3 {
+    margin: 0;
+    font-size: 1.25rem;
+    color: var(--text-dark);
+}
+
+.feedback-modal .modal-close {
+    width: 32px;
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-size: 1.5rem;
+    color: var(--text-light);
+    cursor: pointer;
+}
+
+.feedback-modal .modal-body p {
+    color: var(--text-light);
+    margin-bottom: 1.5rem;
+}
+
+.rating-stars {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.star-btn {
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    filter: grayscale(1);
+}
+
+.star-btn:hover, .star-btn.active {
+    transform: scale(1.2);
+    filter: grayscale(0);
+}
+
+.rating-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.85rem;
+    color: var(--text-light);
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .chat-sidebar {
+        position: fixed;
+        left: 0;
+        top: 64px;
+        bottom: 0;
+        z-index: 100;
+        transform: translateX(-100%);
+    }
+    
+    .chat-sidebar.active {
+        transform: translateX(0);
+        box-shadow: var(--shadow-lg);
+    }
+    
+    .mobile-sidebar-toggle {
+        display: block;
+    }
+    
+    .message {
+        max-width: 90%;
+    }
+}
+</style>
+
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">🌱</div>
+                <span class="logo-text">MindJoy</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
+                <li><a href="chat.html" class="nav-link active" data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
+                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <!-- 移动端语言切换 -->
+                <li class="mobile-lang-switch">
+                    <div class="lang-switch-mobile">
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
+                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        
+<div class="chat-page">
+    <div class="chat-container">
+        <!-- 聊天侧边栏 -->
+        <aside class="chat-sidebar">
+            <div class="sidebar-header">
+                <h3>🤖 <span data-zh="AI心理咨询" data-en="AI Counseling">AI心理咨询</span></h3>
+            </div>
+            <div class="sidebar-content">
+                <div class="chat-intro">
+                    <div class="intro-avatar">
+                        <div class="avatar-circle">
+                            <span>🌱</span>
+                        </div>
+                    </div>
+                    <h4 data-zh="AI 对话演示" data-en="AI Chat Demo">AI 对话演示</h4>
+                    <p data-zh="这个版本没有连接 AI，不会回复你输入的内容。需要帮助时，请拨打心理援助热线。" data-en="This version isn't connected to an AI and can't reply. If you need help, please call a crisis line.">这个版本没有连接 AI，不会回复你输入的内容。需要帮助时，请拨打心理援助热线。</p>
+                </div>
+                
+                <div class="quick-topics">
+                    <h5 data-zh="快速话题" data-en="Quick Topics">快速话题</h5>
+                    <div class="topic-buttons">
+                        <button class="topic-btn" data-message-zh="我最近感觉压力很大" data-message-en="I've been feeling very stressed lately">
+                            <span>😓</span> <span data-zh="压力" data-en="Stress">压力</span>
+                        </button>
+                        <button class="topic-btn" data-message-zh="我感到很焦虑，不知道怎么办" data-message-en="I feel anxious and don't know what to do">
+                            <span>😰</span> <span data-zh="焦虑" data-en="Anxiety">焦虑</span>
+                        </button>
+                        <button class="topic-btn" data-message-zh="我心情很低落" data-message-en="I'm feeling down">
+                            <span>😢</span> <span data-zh="低落" data-en="Sadness">低落</span>
+                        </button>
+                        <button class="topic-btn" data-message-zh="我感觉很孤独" data-message-en="I feel very lonely">
+                            <span>😔</span> <span data-zh="孤独" data-en="Lonely">孤独</span>
+                        </button>
+                        <button class="topic-btn" data-message-zh="我晚上总是睡不好觉" data-message-en="I can't sleep well at night">
+                            <span>😴</span> <span data-zh="失眠" data-en="Insomnia">失眠</span>
+                        </button>
+                        <button class="topic-btn" data-message-zh="我想学习一些放松技巧" data-message-en="I want to learn some relaxation techniques">
+                            <span>🧘</span> <span data-zh="放松" data-en="Relax">放松</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="sidebar-actions">
+                    <button class="action-btn" id="clearChat">
+                        <span>🗑️</span> <span data-zh="清空对话" data-en="Clear Chat">清空对话</span>
+                    </button>
+                    <button class="action-btn" id="downloadChat">
+                        <span>💾</span> <span data-zh="保存对话" data-en="Save Chat">保存对话</span>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="crisis-notice">
+                    <span class="notice-icon">⚠️</span>
+                    <div>
+                        <p data-zh="如遇紧急情况，请拨打" data-en="In case of emergency, call">如遇紧急情况，请拨打</p>
+                        <p><strong>400-161-9995</strong></p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- 主聊天区域 -->
+        <main class="chat-main">
+            <div class="chat-header">
+                <div class="header-info">
+                    <div class="bot-status">
+                        <span class="status-dot" style="background:#9ca3af"></span>
+                        <span data-zh="AI 未连接（演示版）" data-en="AI not connected (demo)">AI 未连接（演示版）</span>
+                    </div>
+                    <span class="header-subtitle" data-zh="输入的内容不会被发送或保存" data-en="Your messages aren't sent or saved">输入的内容不会被发送或保存</span>
+                </div>
+                <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">
+                    <span>☰</span>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <!-- 欢迎消息将通过JS添加 -->
+            </div>
+            
+            <!-- 输入区域 -->
+            <div class="chat-input-container">
+                <div class="input-wrapper">
+                    <textarea 
+                        id="messageInput" 
+                        placeholder="输入你想说的话... / Type your message..."
+                        data-placeholder-zh="输入你想说的话..."
+                        data-placeholder-en="Type your message..."
+                        rows="1"
+                        maxlength="2000"
+                    ></textarea>
+                    <div class="input-actions">
+                        <span class="char-count"><span id="charCount">0</span>/2000</span>
+                        <button class="send-btn" id="sendBtn" disabled>
+                            <span class="send-icon">➤</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="input-hint" data-zh="按 Enter 发送，Shift + Enter 换行" data-en="Press Enter to send, Shift + Enter for new line">
+                    按 Enter 发送，Shift + Enter 换行
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- 反馈弹窗 -->
+<div class="modal feedback-modal" id="feedbackModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 data-zh="这个回答对你有帮助吗？" data-en="Was this response helpful?">这个回答对你有帮助吗？</h3>
+            <button class="modal-close" onclick="closeFeedbackModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p data-zh="你的反馈将帮助我变得更好" data-en="Your feedback helps me improve">你的反馈将帮助我变得更好</p>
+            <div class="rating-stars" id="ratingStars">
+                <button class="star-btn" data-rating="1">⭐</button>
+                <button class="star-btn" data-rating="2">⭐</button>
+                <button class="star-btn" data-rating="3">⭐</button>
+                <button class="star-btn" data-rating="4">⭐</button>
+                <button class="star-btn" data-rating="5">⭐</button>
+            </div>
+            <div class="rating-labels">
+                <span data-zh="没有帮助" data-en="Not helpful">没有帮助</span>
+                <span data-zh="非常有帮助" data-en="Very helpful">非常有帮助</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>MindJoy 心灵乐园</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MindJoy Mental Health Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 危机提示模态框 -->
+    <div class="modal" id="crisisModal">
+        <div class="modal-content crisis-modal">
+            <div class="modal-header">
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+            </div>
+            <div class="modal-body">
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <div class="crisis-contacts">
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <ul>
+                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        
+        function switchLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            // 更新桌面端语言按钮
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新移动端语言按钮
+            document.querySelectorAll('.lang-btn-mobile').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新所有带有 data-zh/data-en 属性的元素
+            document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => switchLang(currentLang));
+        
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+        
+        function showCrisisModal() {
+            document.getElementById('crisisModal').classList.add('active');
+        }
+        
+        function closeCrisisModal() {
+            document.getElementById('crisisModal').classList.remove('active');
+        }
+    </script>
+    <script src="static/js/main.js"></script>
+    
+<script>
+// 获取当前语言
+function getCurrentLang() {
+    return localStorage.getItem('lang') || 'zh';
+}
+
+// 双语消息内容
+const messages = {
+    welcome: {
+        zh: '这里是 MindJoy AI 对话的演示页 🌱\n\n这个版本没有连接 AI，不会回复你输入的内容，你输入的文字也不会被发送或保存。\n\n如果你现在需要帮助，请拨打心理援助热线 400-161-9995。',
+        en: "This is the MindJoy AI chat demo 🌱\n\nThis version isn't connected to an AI, so it can't reply to what you type, and your messages aren't sent or saved.\n\nIf you need help right now, please call your local emergency number or a crisis line.",
+    },
+    helpful: {
+        zh: '👍 有帮助',
+        en: '👍 Helpful'
+    },
+    needsImprovement: {
+        zh: '👎 需改进',
+        en: '👎 Needs work'
+    },
+    connectionError: {
+        zh: '抱歉，连接出现问题。请稍后再试。',
+        en: 'Sorry, there was a connection issue. Please try again later.'
+    },
+    genericError: {
+        zh: '抱歉，我遇到了一些问题。',
+        en: 'Sorry, I encountered an issue.'
+    },
+    clearConfirm: {
+        zh: '确定要清空所有对话记录吗？',
+        en: 'Are you sure you want to clear all chat history?'
+    },
+    justNow: {
+        zh: '刚刚',
+        en: 'Just now'
+    }
+};
+
+// 元素引用
+const chatMessages = document.getElementById('chatMessages');
+const messageInput = document.getElementById('messageInput');
+const sendBtn = document.getElementById('sendBtn');
+const charCount = document.getElementById('charCount');
+
+// 反馈相关变量
+let currentResponseIdx = null;
+let currentContext = '';
+let currentResponse = '';
+
+// 初始化
+document.addEventListener('DOMContentLoaded', function() {
+    // 添加欢迎消息
+    const lang = getCurrentLang();
+    addMessage(messages.welcome[lang], 'bot');
+    
+    // 更新输入框placeholder
+    updatePlaceholder();
+});
+
+// 更新输入框placeholder
+function updatePlaceholder() {
+    const lang = getCurrentLang();
+    const input = document.getElementById('messageInput');
+    input.placeholder = lang === 'zh' ? input.dataset.placeholderZh : input.dataset.placeholderEn;
+}
+
+// 语言切换监听
+window.addEventListener('langchange', function(e) {
+    updatePlaceholder();
+});
+
+// 自动调整文本框高度
+messageInput.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 150) + 'px';
+    
+    const length = this.value.length;
+    charCount.textContent = length;
+    sendBtn.disabled = length === 0;
+});
+
+// 检测输入语言
+function detectLanguage(text) {
+    // 简单检测：如果包含中文字符，认为是中文
+    const chineseRegex = /[\u4e00-\u9fa5]/;
+    return chineseRegex.test(text) ? 'zh' : 'en';
+}
+
+// 发送消息
+async function sendMessage() {
+    const message = messageInput.value.trim();
+    if (!message) return;
+    
+    // 检测消息语言
+    const inputLang = detectLanguage(message);
+    
+    // 清空输入
+    messageInput.value = '';
+    messageInput.style.height = 'auto';
+    charCount.textContent = '0';
+    sendBtn.disabled = true;
+    
+    // 添加用户消息
+    addMessage(message, 'user');
+    currentContext = message;
+    
+    // 显示打字指示器
+    const typingId = showTypingIndicator();
+    
+    try {
+        const response = await fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                message: message,
+                lang: inputLang  // 发送检测到的语言
+            })
+        });
+        
+        const data = await response.json();
+        removeTypingIndicator(typingId);
+        
+        if (data.status === 'success') {
+            currentResponse = data.response;
+            currentResponseIdx = data.metadata?.response_idx;
+            
+            addMessage(data.response, 'bot', data.metadata);
+            
+            // 如果是危机情况，显示危机模态框
+            if (data.metadata?.is_crisis) {
+                showCrisisModal();
+            }
+        } else {
+            const lang = getCurrentLang();
+            addMessage(data.response || messages.genericError[lang], 'bot');
+        }
+    } catch (error) {
+        removeTypingIndicator(typingId);
+        const lang = getCurrentLang();
+        addMessage(messages.connectionError[lang], 'bot');
+        console.error('Chat error:', error);
+    }
+}
+
+// 添加消息到聊天区域
+function addMessage(content, type, metadata = {}) {
+    const messageDiv = document.createElement('div');
+    messageDiv.className = `message ${type}-message`;
+    
+    const avatar = type === 'bot' ? '🌱' : '😊';
+    const lang = getCurrentLang();
+    const time = new Date().toLocaleTimeString(lang === 'zh' ? 'zh-CN' : 'en-US', { hour: '2-digit', minute: '2-digit' });
+    
+    let feedbackHtml = '';
+    if (type === 'bot' && !metadata.is_crisis) {
+        feedbackHtml = `
+            <div class="message-feedback">
+                <button class="feedback-btn" onclick="showFeedbackModal()">${messages.helpful[lang]}</button>
+                <button class="feedback-btn" onclick="submitQuickFeedback(1)">${messages.needsImprovement[lang]}</button>
+            </div>
+        `;
+    }
+    
+    messageDiv.innerHTML = `
+        <div class="message-avatar">
+            <span>${avatar}</span>
+        </div>
+        <div class="message-content">
+            <div class="message-bubble">
+                ${content.split('\n').map(p => p.trim() ? `<p>${escapeHtml(p)}</p>` : '').join('')}
+            </div>
+            <div class="message-time">${time}</div>
+            ${feedbackHtml}
+        </div>
+    `;
+    
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// 显示打字指示器
+function showTypingIndicator() {
+    const id = 'typing-' + Date.now();
+    const typingDiv = document.createElement('div');
+    typingDiv.id = id;
+    typingDiv.className = 'message bot-message';
+    typingDiv.innerHTML = `
+        <div class="message-avatar">
+            <span>🌱</span>
+        </div>
+        <div class="message-content">
+            <div class="message-bubble">
+                <div class="typing-indicator">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    `;
+    chatMessages.appendChild(typingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+    return id;
+}
+
+// 移除打字指示器
+function removeTypingIndicator(id) {
+    const typing = document.getElementById(id);
+    if (typing) typing.remove();
+}
+
+// HTML转义
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// 快速话题
+document.querySelectorAll('.topic-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+        const lang = getCurrentLang();
+        const message = lang === 'zh' ? this.dataset.messageZh : this.dataset.messageEn;
+        messageInput.value = message;
+        messageInput.dispatchEvent(new Event('input'));
+        sendMessage();
+    });
+});
+
+// 键盘事件
+messageInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+    }
+});
+
+sendBtn.addEventListener('click', sendMessage);
+
+// 清空对话
+document.getElementById('clearChat').addEventListener('click', async function() {
+    const lang = getCurrentLang();
+    if (confirm(messages.clearConfirm[lang])) {
+        try {
+            await fetch('/api/chat/clear', { method: 'POST' });
+            chatMessages.innerHTML = '';
+            // 重新添加欢迎消息
+            addMessage(messages.welcome[lang], 'bot');
+        } catch (error) {
+            console.error('Clear chat error:', error);
+        }
+    }
+});
+
+// 保存对话
+document.getElementById('downloadChat').addEventListener('click', function() {
+    const lang = getCurrentLang();
+    const messageElements = document.querySelectorAll('.message');
+    let content = 'MindJoy - ' + (lang === 'zh' ? '对话记录' : 'Chat History') + '\n' + '='.repeat(40) + '\n\n';
+    
+    messageElements.forEach(msg => {
+        const isBot = msg.classList.contains('bot-message');
+        const bubble = msg.querySelector('.message-bubble');
+        const time = msg.querySelector('.message-time')?.textContent || '';
+        const text = bubble?.textContent?.trim() || '';
+        
+        const sender = isBot ? (lang === 'zh' ? 'AI助手' : 'AI Assistant') : (lang === 'zh' ? '我' : 'Me');
+        content += `[${time}] ${sender}:\n${text}\n\n`;
+    });
+    
+    const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    const dateStr = new Date().toLocaleDateString(lang === 'zh' ? 'zh-CN' : 'en-US');
+    a.download = lang === 'zh' ? `对话记录_${dateStr}.txt` : `chat_history_${dateStr}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+});
+
+// 反馈功能
+function showFeedbackModal() {
+    document.getElementById('feedbackModal').classList.add('active');
+}
+
+function closeFeedbackModal() {
+    document.getElementById('feedbackModal').classList.remove('active');
+    document.querySelectorAll('.star-btn').forEach(s => s.classList.remove('active'));
+}
+
+// 星级评分
+document.querySelectorAll('.star-btn').forEach(star => {
+    star.addEventListener('click', async function() {
+        const rating = parseInt(this.dataset.rating);
+        
+        // 更新星星显示
+        document.querySelectorAll('.star-btn').forEach((s, i) => {
+            s.classList.toggle('active', i < rating);
+        });
+        
+        // 提交反馈
+        await submitFeedback(rating);
+        
+        setTimeout(closeFeedbackModal, 500);
+    });
+});
+
+async function submitFeedback(rating) {
+    try {
+        await fetch('/api/chat/feedback', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                response_idx: currentResponseIdx,
+                rating: rating,
+                context: currentContext,
+                response: currentResponse
+            })
+        });
+    } catch (error) {
+        console.error('Feedback error:', error);
+    }
+}
+
+async function submitQuickFeedback(rating) {
+    await submitFeedback(rating);
+}
+
+// 移动端侧边栏切换
+document.getElementById('mobileSidebarToggle')?.addEventListener('click', function() {
+    document.querySelector('.chat-sidebar').classList.toggle('active');
+});
+
+// 点击聊天区域关闭侧边栏（移动端）
+chatMessages.addEventListener('click', function() {
+    document.querySelector('.chat-sidebar').classList.remove('active');
+});
+</script>
+
+</body>
+</html>

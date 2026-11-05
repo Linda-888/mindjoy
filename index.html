@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <script src="static/js/static-demo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页 | Home - 心理健康平台 | Mental Health Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    
+<style>
+    .hero-section {
+        min-height: calc(100vh - 70px);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 2rem;
+        background: linear-gradient(180deg, var(--bg-cream) 0%, var(--bg-warm) 100%);
+        position: relative;
+        overflow: hidden;
+    }
+
+    /* 装饰性背景元素 */
+    .hero-bg-shapes {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+        overflow: hidden;
+    }
+
+    .bg-shape {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.15;
+    }
+
+    .bg-shape-1 {
+        width: 400px;
+        height: 400px;
+        background: var(--primary-light);
+        top: -100px;
+        right: -100px;
+        animation: float 8s ease-in-out infinite;
+    }
+
+    .bg-shape-2 {
+        width: 300px;
+        height: 300px;
+        background: var(--accent-warm);
+        bottom: -50px;
+        left: -50px;
+        animation: float 10s ease-in-out infinite reverse;
+    }
+
+    .bg-shape-3 {
+        width: 200px;
+        height: 200px;
+        background: var(--accent-lavender);
+        top: 40%;
+        left: 10%;
+        animation: float 6s ease-in-out infinite 2s;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        z-index: 1;
+        margin-bottom: 3rem;
+    }
+
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: white;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-size: 0.9rem;
+        color: var(--primary);
+        font-weight: 600;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 1.5rem;
+    }
+
+    .hero-title {
+        font-family: 'Quicksand', 'Noto Sans SC', sans-serif;
+        font-size: 3.5rem;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .hero-title .highlight {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        color: var(--text-medium);
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    /* 知识星球风格的模块卡片 */
+    .modules-container {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+        max-width: 900px;
+        width: 100%;
+        z-index: 1;
+    }
+
+    .module-card {
+        background: white;
+        border-radius: var(--radius-xl);
+        padding: 2rem;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        min-height: 220px;
+    }
+
+    .module-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+        transition: height 0.3s ease;
+    }
+
+    .module-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--shadow-lg);
+    }
+
+    .module-card:hover::before {
+        height: 6px;
+    }
+
+    .module-card.assessment::before { background: linear-gradient(90deg, #6366f1, #818cf8); }
+    .module-card.chat::before { background: linear-gradient(90deg, #10b981, #34d399); }
+    .module-card.tree-hole::before { background: linear-gradient(90deg, #f59e0b, #fbbf24); }
+    .module-card.diary::before { background: linear-gradient(90deg, #ec4899, #f472b6); }
+
+    .module-icon {
+        width: 64px;
+        height: 64px;
+        border-radius: var(--radius-lg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .module-card.assessment .module-icon {
+        background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+    }
+
+    .module-card.chat .module-icon {
+        background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    }
+
+    .module-card.tree-hole .module-icon {
+        background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    }
+
+    .module-card.diary .module-icon {
+        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+    }
+
+    .module-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+    .module-desc {
+        font-size: 0.95rem;
+        color: var(--text-light);
+        line-height: 1.6;
+        flex: 1;
+    }
+
+    .module-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        margin-top: 1rem;
+    }
+
+    .module-tag {
+        font-size: 0.75rem;
+        padding: 0.3rem 0.7rem;
+        border-radius: var(--radius-full);
+        background: var(--bg-cream);
+        color: var(--text-medium);
+        font-weight: 600;
+    }
+
+    .module-arrow {
+        position: absolute;
+        bottom: 1.5rem;
+        right: 1.5rem;
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: var(--bg-cream);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+    }
+
+    .module-card:hover .module-arrow {
+        background: var(--primary);
+        color: white;
+        transform: translateX(4px);
+    }
+
+    /* 特色区域 */
+    .features-section {
+        padding: 5rem 2rem;
+        background: white;
+    }
+
+    .section-header {
+        text-align: center;
+        max-width: 600px;
+        margin: 0 auto 3rem;
+    }
+
+    .section-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: var(--bg-warm);
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-size: 0.85rem;
+        color: var(--primary);
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: var(--text-dark);
+    }
+
+    .section-desc {
+        color: var(--text-medium);
+        font-size: 1.1rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .feature-item {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .feature-icon {
+        width: 72px;
+        height: 72px;
+        border-radius: var(--radius-lg);
+        background: linear-gradient(135deg, var(--bg-warm) 0%, var(--secondary) 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        margin: 0 auto 1rem;
+    }
+
+    .feature-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        color: var(--text-dark);
+    }
+
+    .feature-desc {
+        font-size: 0.95rem;
+        color: var(--text-light);
+    }
+
+    /* CTA区域 */
+    .cta-section {
+        padding: 5rem 2rem;
+        background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+        text-align: center;
+        color: white;
+    }
+
+    .cta-content {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+
+    .cta-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+    }
+
+    .cta-desc {
+        font-size: 1.1rem;
+        opacity: 0.9;
+        margin-bottom: 2rem;
+    }
+
+    .cta-btn {
+        background: white;
+        color: var(--primary);
+        padding: 1rem 2.5rem;
+        font-size: 1.1rem;
+    }
+
+    .cta-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    }
+
+    /* 紧急求助 */
+    .emergency-bar {
+        background: var(--bg-warm);
+        padding: 1rem 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        flex-wrap: wrap;
+    }
+
+    .emergency-text {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.95rem;
+        color: var(--text-medium);
+    }
+
+    .emergency-phone {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-decoration: none;
+        background: white;
+        padding: 0.5rem 1rem;
+        border-radius: var(--radius-full);
+        font-weight: 700;
+        color: var(--accent-coral);
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+    }
+
+    .emergency-phone:hover {
+        transform: scale(1.05);
+        box-shadow: var(--shadow-md);
+    }
+
+    /* 响应式 */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.25rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .modules-container {
+            grid-template-columns: 1fr;
+            padding: 0 1rem;
+        }
+
+        .module-card {
+            min-height: auto;
+        }
+    }
+</style>
+
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">🌱</div>
+                <span class="logo-text">MindJoy</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link active" data-zh="首页" data-en="Home">首页</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
+                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <!-- 移动端语言切换 -->
+                <li class="mobile-lang-switch">
+                    <div class="lang-switch-mobile">
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
+                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        
+<!-- 英雄区域 -->
+<section class="hero-section">
+    <div class="hero-bg-shapes">
+        <div class="bg-shape bg-shape-1"></div>
+        <div class="bg-shape bg-shape-2"></div>
+        <div class="bg-shape bg-shape-3"></div>
+    </div>
+    
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span>🌱</span>
+            <span data-zh="你的心灵伙伴" data-en="Your Mental Health Companion">你的心灵伙伴</span>
+        </div>
+        <h1 class="hero-title">
+            <span data-zh="关爱心理健康" data-en="Care for Your Mind">关爱心理健康</span><br>
+            <span class="highlight" data-zh="温暖每一颗心" data-en="Warm Every Heart">温暖每一颗心</span>
+        </h1>
+        <p class="hero-subtitle" data-zh="运用AI技术，为你提供专业的心理健康支持。倾听、理解、陪伴，与你一起走过每一个时刻。" data-en="Using AI technology to provide professional mental health support. Listen, understand, accompany - walking with you through every moment.">
+            运用AI技术，为你提供专业的心理健康支持。倾听、理解、陪伴，与你一起走过每一个时刻。
+        </p>
+    </div>
+
+    <!-- 四大功能模块 -->
+    <div class="modules-container">
+        <!-- 心理测试 -->
+        <a href="assessment.html" class="module-card assessment">
+            <div class="module-icon">📋</div>
+            <h3 class="module-title" data-zh="心理测试" data-en="Mental Health Test">心理测试</h3>
+            <p class="module-desc" data-zh="专业的MindJoy心理测评，25道精选问题，科学了解你的心理状态。" data-en="Professional MindJoy assessment with 25 selected questions to understand your mental state.">
+                专业的MindJoy心理测评，25道精选问题，科学了解你的心理状态。
+            </p>
+            <div class="module-tags">
+                <span class="module-tag" data-zh="25题测试" data-en="25 Questions">25题测试</span>
+                <span class="module-tag" data-zh="五维评估" data-en="5 Dimensions">五维评估</span>
+            </div>
+            <div class="module-arrow">→</div>
+        </a>
+
+        <!-- AI心理咨询 -->
+        <a href="chat.html" class="module-card chat">
+            <div class="module-icon">🤖</div>
+            <h3 class="module-title" data-zh="AI心理咨询" data-en="AI Counseling">AI心理咨询</h3>
+            <p class="module-desc" data-zh="基于深度学习与RLHF强化学习，提供专业、准确的双语心理咨询服务。" data-en="Deep learning & RLHF powered bilingual psychological counseling service.">
+                基于深度学习与RLHF强化学习，提供专业、准确的双语心理咨询服务。
+            </p>
+            <div class="module-tags">
+                <span class="module-tag" data-zh="双语支持" data-en="Bilingual">双语支持</span>
+                <span class="module-tag" data-zh="演示版" data-en="Demo">演示版</span>
+            </div>
+            <div class="module-arrow">→</div>
+        </a>
+
+        <!-- 情绪树洞 -->
+        <a href="tree-hole.html" class="module-card tree-hole">
+            <div class="module-icon">🌳</div>
+            <h3 class="module-title" data-zh="情绪树洞" data-en="Emotion Tree Hole">情绪树洞</h3>
+            <p class="module-desc" data-zh="可视化情绪大树，匿名倾诉心声，配合引导式深呼吸与放松练习。" data-en="Visual emotion tree, anonymous sharing with guided breathing exercises.">
+                可视化情绪大树，匿名倾诉心声，配合引导式深呼吸与放松练习。
+            </p>
+            <div class="module-tags">
+                <span class="module-tag" data-zh="匿名倾诉" data-en="Anonymous">匿名倾诉</span>
+                <span class="module-tag" data-zh="呼吸练习" data-en="Breathing">呼吸练习</span>
+            </div>
+            <div class="module-arrow">→</div>
+        </a>
+
+        <!-- MindJoy日记 -->
+        <a href="diary.html" class="module-card diary">
+            <div class="module-icon">📔</div>
+            <h3 class="module-title" data-zh="MindJoy日记" data-en="MindJoy Diary">MindJoy日记</h3>
+            <p class="module-desc" data-zh="记录每日心情，打造你的心灵宇宙。查看心情统计，与MindJoy世界互动。" data-en="Record daily mood, create your mind universe. View statistics and interact with MindJoy World.">
+                记录每日心情，打造你的心灵宇宙。查看心情统计，与MindJoy世界互动。
+            </p>
+            <div class="module-tags">
+                <span class="module-tag" data-zh="心情记录" data-en="Mood Log">心情记录</span>
+                <span class="module-tag" data-zh="宇宙视图" data-en="Universe">宇宙视图</span>
+            </div>
+            <div class="module-arrow">→</div>
+        </a>
+    </div>
+</section>
+
+<!-- 特色功能 -->
+<section class="features-section">
+    <div class="section-header">
+        <div class="section-badge">
+            <span>✨</span>
+            <span data-zh="核心功能" data-en="Core Features">核心功能</span>
+        </div>
+        <h2 class="section-title" data-zh="完整版的 AI 功能" data-en="AI Features in the Full Version">完整版的 AI 功能</h2>
+        <p class="section-desc" data-zh="以下功能属于完整版，当前演示版没有连接。需要帮助时，请直接拨打下方热线。" data-en="These belong to the full version and aren't active in this demo. If you need help, please call a line below.">以下功能属于完整版，当前演示版没有连接。需要帮助时，请直接拨打下方热线。</p>
+    </div>
+
+    <div class="features-grid">
+        <div class="feature-item">
+            <div class="feature-icon">🎯</div>
+            <h3 class="feature-title" data-zh="高精度响应" data-en="High Accuracy">高精度响应</h3>
+            <p class="feature-desc" data-zh="基于海量心理咨询对话数据训练，提供准确专业的回复" data-en="Trained on massive counseling data for accurate, professional responses">
+                基于海量心理咨询对话数据训练，提供准确专业的回复
+            </p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🔄</div>
+            <h3 class="feature-title" data-zh="RLHF防偏移" data-en="RLHF Anti-Bias">RLHF防偏移</h3>
+            <p class="feature-desc" data-zh="使用强化学习从人类反馈中学习，防止回答偏移" data-en="Using RLHF to prevent response drift and ensure consistency">
+                使用强化学习从人类反馈中学习，防止回答偏移
+            </p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🚨</div>
+            <h3 class="feature-title" data-zh="危机识别" data-en="Crisis Detection">危机识别</h3>
+            <p class="feature-desc" data-zh="智能识别危机信号，及时提供专业资源和援助" data-en="Smart crisis detection with timely professional resources">
+                智能识别危机信号，及时提供专业资源和援助
+            </p>
+        </div>
+        <div class="feature-item">
+            <div class="feature-icon">🔒</div>
+            <h3 class="feature-title" data-zh="隐私保护" data-en="Privacy Protection">隐私保护</h3>
+            <p class="feature-desc" data-zh="严格的数据保护措施，确保你的隐私安全" data-en="Strict data protection to ensure your privacy and security">
+                严格的数据保护措施，确保你的隐私安全
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- CTA区域 -->
+<section class="cta-section">
+    <div class="cta-content">
+        <h2 class="cta-title" data-zh="准备好开始了吗？" data-en="Ready to Get Started?">准备好开始了吗？</h2>
+        <p class="cta-desc" data-zh="无论你正在经历什么，我们都在这里倾听和陪伴。" data-en="Whatever you're going through, we're here to listen and accompany you.">
+            无论你正在经历什么，我们都在这里倾听和陪伴。
+        </p>
+        <a href="chat.html" class="btn cta-btn" data-zh="开始对话" data-en="Start Chat">开始对话</a>
+    </div>
+</section>
+
+<!-- 紧急求助栏 -->
+<div class="emergency-bar">
+    <div class="emergency-text">
+        <span>🆘</span>
+        <span data-zh="如果你正处于危机中，请立即联系专业帮助" data-en="If you're in crisis, please contact professional help immediately">
+            如果你正处于危机中，请立即联系专业帮助
+        </span>
+    </div>
+    <a href="tel:400-161-9995" class="emergency-phone">
+        <span>📞</span>
+        <span>400-161-9995</span>
+    </a>
+</div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>MindJoy 心灵乐园</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MindJoy Mental Health Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 危机提示模态框 -->
+    <div class="modal" id="crisisModal">
+        <div class="modal-content crisis-modal">
+            <div class="modal-header">
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+            </div>
+            <div class="modal-body">
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <div class="crisis-contacts">
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <ul>
+                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        
+        function switchLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            // 更新桌面端语言按钮
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新移动端语言按钮
+            document.querySelectorAll('.lang-btn-mobile').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新所有带有 data-zh/data-en 属性的元素
+            document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => switchLang(currentLang));
+        
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+        
+        function showCrisisModal() {
+            document.getElementById('crisisModal').classList.add('active');
+        }
+        
+        function closeCrisisModal() {
+            document.getElementById('crisisModal').classList.remove('active');
+        }
+    </script>
+    <script src="static/js/main.js"></script>
+    
+</body>
+</html>

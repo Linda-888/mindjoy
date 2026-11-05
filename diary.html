@@ -1,0 +1,1818 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <script src="static/js/static-demo.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindJoy日记 - MindJoy Diary - 心理健康平台 | Mental Health Platform</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="static/css/style.css">
+    
+<style>
+    /* 日记页面整体样式 */
+    .diary-page {
+        padding-top: 80px;
+        min-height: 100vh;
+        background: var(--bg-cream);
+    }
+
+    /* 视图切换标签 */
+    .view-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 1rem 2rem;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        position: sticky;
+        top: 64px;
+        z-index: 100;
+    }
+
+    .view-tab {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        background: transparent;
+        color: var(--text-medium);
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        border-radius: var(--radius-full);
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .view-tab:hover {
+        background: rgba(91, 140, 90, 0.1);
+        color: var(--primary);
+    }
+
+    .view-tab.active {
+        background: var(--primary);
+        color: white;
+    }
+
+    /* ==================== 日历视图 ==================== */
+    .calendar-view {
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .calendar-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .calendar-header h2 {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .calendar-header .year {
+        font-size: 1rem;
+        color: var(--text-light);
+    }
+
+    .calendar-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 2rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .calendar-nav-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: white;
+        border-radius: 50%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: var(--shadow-sm);
+        transition: all 0.3s ease;
+        color: var(--text-dark);
+        font-size: 1.2rem;
+    }
+
+    .calendar-nav-btn:hover {
+        background: var(--primary);
+        color: white;
+        transform: scale(1.1);
+    }
+
+    .calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.75rem;
+        background: rgba(255, 255, 255, 0.6);
+        padding: 1.5rem;
+        border-radius: var(--radius-lg);
+        box-shadow: var(--shadow-sm);
+    }
+
+    .calendar-weekday {
+        text-align: center;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-light);
+        padding: 0.5rem;
+    }
+
+    .calendar-day {
+        aspect-ratio: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        border: 2px solid transparent;
+        background: transparent;
+        font-family: inherit;
+    }
+
+    .calendar-day:hover {
+        background: rgba(91, 140, 90, 0.1);
+        border-color: var(--primary-light);
+    }
+
+    .calendar-day.today {
+        border-color: var(--primary);
+        background: rgba(91, 140, 90, 0.05);
+    }
+
+    .calendar-day.has-entry {
+        background: var(--mood-color, var(--primary-light));
+    }
+
+    .calendar-day.has-entry .day-number {
+        color: white;
+        text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+    }
+
+    .day-number {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .day-mood-dot {
+        position: absolute;
+        bottom: 4px;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--mood-color, var(--primary));
+    }
+
+    .calendar-day.empty {
+        pointer-events: none;
+    }
+
+    /* ==================== 心情选择器 ==================== */
+    .mood-selector-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(8px);
+        z-index: 1000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    .mood-selector-overlay.show {
+        display: flex;
+        opacity: 1;
+    }
+
+    .mood-selector-modal {
+        background: var(--bg-cream);
+        border-radius: var(--radius-xl);
+        padding: 2.5rem;
+        max-width: 500px;
+        width: 90%;
+        text-align: center;
+        animation: slideUp 0.4s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .mood-question {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 2rem;
+    }
+
+    .mood-grid {
+        display: grid;
+        grid-template-columns: repeat(5, 1fr);
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .mood-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        padding: 0.5rem;
+        border-radius: var(--radius-md);
+    }
+
+    .mood-item:hover {
+        transform: scale(1.1);
+    }
+
+    .mood-item.selected {
+        background: rgba(91, 140, 90, 0.1);
+    }
+
+    .mood-emoji {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .mood-item:hover .mood-emoji {
+        transform: scale(1.15);
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+    }
+
+    .mood-label {
+        font-size: 0.8rem;
+        color: var(--text-medium);
+        font-weight: 500;
+    }
+
+    .mood-confirm-btn {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.875rem 2.5rem;
+        border-radius: var(--radius-full);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .mood-confirm-btn:hover {
+        background: var(--primary-dark);
+        transform: translateY(-2px);
+    }
+
+    .mood-confirm-btn:disabled {
+        background: var(--text-light);
+        cursor: not-allowed;
+        transform: none;
+    }
+
+    /* ==================== 日记编辑视图 ==================== */
+    .diary-editor-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--bg-cream);
+        z-index: 1001;
+        display: none;
+        flex-direction: column;
+    }
+
+    .diary-editor-overlay.show {
+        display: flex;
+    }
+
+    .editor-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 1rem 1.5rem;
+        background: white;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .editor-close-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--text-medium);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .editor-close-btn:hover {
+        background: rgba(0, 0, 0, 0.05);
+    }
+
+    .editor-save-btn {
+        width: 40px;
+        height: 40px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .editor-save-btn:hover {
+        background: rgba(91, 140, 90, 0.1);
+    }
+
+    .editor-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem;
+        overflow-y: auto;
+    }
+
+    .editor-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        max-width: 600px;
+        width: 100%;
+        box-shadow: var(--shadow-md);
+    }
+
+    .editor-date {
+        font-size: 0.9rem;
+        color: var(--text-light);
+        margin-bottom: 1.5rem;
+    }
+
+    .editor-mood-display {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 2rem;
+    }
+
+    .editor-mood-emoji {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.5rem;
+        margin-bottom: 0.5rem;
+        animation: float 3s ease-in-out infinite;
+    }
+
+    .editor-mood-label {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .editor-textarea {
+        width: 100%;
+        min-height: 200px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        line-height: 1.8;
+        resize: none;
+        font-family: inherit;
+        color: var(--text-dark);
+    }
+
+    .editor-textarea::placeholder {
+        color: var(--text-light);
+    }
+
+    .editor-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+        margin-top: 1rem;
+    }
+
+    .toolbar-btn {
+        width: 36px;
+        height: 36px;
+        border: none;
+        background: transparent;
+        cursor: pointer;
+        font-size: 1.2rem;
+        color: var(--text-light);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        transition: all 0.3s ease;
+    }
+
+    .toolbar-btn:hover {
+        background: rgba(0, 0, 0, 0.05);
+        color: var(--text-dark);
+    }
+
+    .toolbar-colors {
+        display: flex;
+        gap: 0.5rem;
+        margin-left: auto;
+    }
+
+    .color-btn {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        border: 2px solid white;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .color-btn:hover {
+        transform: scale(1.2);
+    }
+
+    .public-toggle {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+        padding: 1rem;
+        background: rgba(91, 140, 90, 0.05);
+        border-radius: var(--radius-md);
+    }
+
+    .toggle-switch {
+        position: relative;
+        width: 48px;
+        height: 24px;
+        background: var(--text-light);
+        border-radius: 12px;
+        cursor: pointer;
+        transition: background 0.3s ease;
+    }
+
+    .toggle-switch.active {
+        background: var(--primary);
+    }
+
+    .toggle-switch::after {
+        content: '';
+        position: absolute;
+        width: 20px;
+        height: 20px;
+        background: white;
+        border-radius: 50%;
+        top: 2px;
+        left: 2px;
+        transition: transform 0.3s ease;
+    }
+
+    .toggle-switch.active::after {
+        transform: translateX(24px);
+    }
+
+    .toggle-label {
+        font-size: 0.9rem;
+        color: var(--text-medium);
+    }
+
+    /* ==================== 宇宙视图 ==================== */
+    .universe-view {
+        min-height: calc(100vh - 150px);
+        background: linear-gradient(180deg, #0D1117 0%, #1A1D29 50%, #2D3748 100%);
+        position: relative;
+        overflow: hidden;
+        padding: 2rem;
+    }
+
+    .universe-header {
+        text-align: center;
+        padding: 2rem 0;
+        color: white;
+    }
+
+    .universe-header h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+    }
+
+    .universe-header p {
+        color: rgba(255, 255, 255, 0.6);
+        font-size: 0.95rem;
+    }
+
+    .universe-container {
+        position: relative;
+        min-height: 500px;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    /* 星星背景 */
+    .stars {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        pointer-events: none;
+    }
+
+    .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        animation: twinkle 2s ease-in-out infinite;
+    }
+
+    .mood-planet {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        animation: float 4s ease-in-out infinite;
+    }
+
+    .mood-planet:hover {
+        transform: scale(1.15);
+        z-index: 10;
+    }
+
+    .planet-date {
+        font-size: 0.75rem;
+        color: rgba(255, 255, 255, 0.7);
+        white-space: nowrap;
+    }
+
+    .planet-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    .planet-mood {
+        font-size: 0.8rem;
+        color: rgba(255, 255, 255, 0.8);
+        font-weight: 500;
+    }
+
+    /* 宇航员图像 */
+    .astronaut {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+    }
+
+    .astronaut-img {
+        width: 150px;
+        height: auto;
+        filter: drop-shadow(0 0 20px rgba(255, 255, 255, 0.3));
+    }
+
+    .moon-surface {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+        background: linear-gradient(180deg, transparent 0%, rgba(200, 200, 200, 0.1) 50%, rgba(200, 200, 200, 0.2) 100%);
+        border-radius: 50% 50% 0 0;
+    }
+
+    /* ==================== MindJoy世界 (公共互动) ==================== */
+    .mindjoy-world {
+        padding: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .world-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .world-header h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .world-header p {
+        color: var(--text-light);
+    }
+
+    .post-composer {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .composer-textarea {
+        width: 100%;
+        min-height: 100px;
+        border: none;
+        outline: none;
+        font-size: 1rem;
+        resize: none;
+        font-family: inherit;
+        margin-bottom: 1rem;
+    }
+
+    .composer-actions {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .composer-mood-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: var(--radius-full);
+        background: transparent;
+        cursor: pointer;
+        font-size: 0.9rem;
+        color: var(--text-medium);
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .composer-mood-btn:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .composer-submit {
+        background: var(--primary);
+        color: white;
+        border: none;
+        padding: 0.75rem 1.5rem;
+        border-radius: var(--radius-full);
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .composer-submit:hover {
+        background: var(--primary-dark);
+    }
+
+    .posts-feed {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .post-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .post-header {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+
+    .post-avatar {
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+    }
+
+    .post-info {
+        flex: 1;
+    }
+
+    .post-username {
+        font-weight: 600;
+        color: var(--text-dark);
+        font-size: 0.95rem;
+    }
+
+    .post-time {
+        font-size: 0.8rem;
+        color: var(--text-light);
+    }
+
+    .post-content {
+        color: var(--text-dark);
+        line-height: 1.6;
+        margin-bottom: 1rem;
+    }
+
+    .post-actions {
+        display: flex;
+        gap: 1.5rem;
+        padding-top: 1rem;
+        border-top: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    .post-action-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        background: transparent;
+        border: none;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        cursor: pointer;
+        transition: color 0.3s ease;
+        font-family: inherit;
+    }
+
+    .post-action-btn:hover {
+        color: var(--primary);
+    }
+
+    .post-action-btn.liked {
+        color: var(--accent-coral);
+    }
+
+    /* ==================== 心情统计视图 ==================== */
+    .stats-view {
+        padding: 2rem;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .stats-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .stats-header h2 {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: var(--text-dark);
+        margin-bottom: 0.5rem;
+    }
+
+    .stats-period-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 0.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .period-tab {
+        padding: 0.5rem 1.25rem;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        background: white;
+        border-radius: var(--radius-full);
+        cursor: pointer;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        font-family: inherit;
+    }
+
+    .period-tab:hover {
+        border-color: var(--primary);
+        color: var(--primary);
+    }
+
+    .period-tab.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+    }
+
+    .stats-summary {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-bottom: 2rem;
+    }
+
+    .summary-card {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 1.5rem;
+        text-align: center;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .summary-value {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-bottom: 0.25rem;
+    }
+
+    .summary-label {
+        font-size: 0.9rem;
+        color: var(--text-light);
+    }
+
+    .mood-distribution {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        margin-bottom: 2rem;
+    }
+
+    .distribution-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .distribution-bars {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .distribution-item {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .distribution-mood {
+        width: 80px;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.9rem;
+        color: var(--text-medium);
+    }
+
+    .distribution-mood-emoji {
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.9rem;
+    }
+
+    .distribution-bar-container {
+        flex: 1;
+        height: 24px;
+        background: rgba(0, 0, 0, 0.05);
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .distribution-bar {
+        height: 100%;
+        border-radius: 12px;
+        transition: width 0.5s ease;
+    }
+
+    .distribution-count {
+        width: 40px;
+        text-align: right;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .mood-calendar-mini {
+        background: white;
+        border-radius: var(--radius-lg);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .mini-calendar-title {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--text-dark);
+        margin-bottom: 1.5rem;
+    }
+
+    .mini-calendar-grid {
+        display: grid;
+        grid-template-columns: repeat(7, 1fr);
+        gap: 0.5rem;
+    }
+
+    .mini-day {
+        aspect-ratio: 1;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 0.75rem;
+        color: var(--text-light);
+    }
+
+    .mini-day.has-mood {
+        color: white;
+        font-weight: 600;
+    }
+
+    /* ==================== 响应式设计 ==================== */
+    @media (max-width: 768px) {
+        .view-tabs {
+            padding: 0.75rem 1rem;
+            gap: 0.25rem;
+        }
+
+        .view-tab {
+            padding: 0.5rem 1rem;
+            font-size: 0.85rem;
+        }
+
+        .calendar-grid {
+            gap: 0.5rem;
+            padding: 1rem;
+        }
+
+        .mood-grid {
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+        }
+
+        .mood-emoji {
+            width: 40px;
+            height: 40px;
+            font-size: 1.2rem;
+        }
+
+        .stats-summary {
+            grid-template-columns: 1fr;
+        }
+
+        .universe-container {
+            min-height: 400px;
+        }
+    }
+
+    /* 动画 */
+    @keyframes float {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+
+    @keyframes twinkle {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 1; }
+    }
+
+    /* 隐藏视图 */
+    .view-content {
+        display: none;
+    }
+
+    .view-content.active {
+        display: block;
+    }
+</style>
+
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <div class="logo-icon">🌱</div>
+                <span class="logo-text">MindJoy</span>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI心理咨询" data-en="AI Chat">AI心理咨询</a></li>
+                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
+                <li><a href="diary.html" class="nav-link active" data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <!-- 移动端语言切换 -->
+                <li class="mobile-lang-switch">
+                    <div class="lang-switch-mobile">
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                    </div>
+                </li>
+            </ul>
+            <div class="nav-right">
+                <div class="lang-switch">
+                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
+                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                </div>
+            </div>
+            <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        
+<div class="diary-page">
+    <!-- 视图切换标签 -->
+    <div class="view-tabs">
+        <button class="view-tab active" data-view="calendar" data-zh="日历" data-en="Calendar">日历</button>
+        <button class="view-tab" data-view="universe" data-zh="宇宙" data-en="Universe">宇宙</button>
+        <button class="view-tab" data-view="world" data-zh="MindJoy世界" data-en="MindJoy World">MindJoy世界</button>
+        <button class="view-tab" data-view="stats" data-zh="统计" data-en="Statistics">统计</button>
+    </div>
+
+    <!-- 日历视图 -->
+    <div class="view-content active" id="calendar-view">
+        <div class="calendar-view">
+            <div class="calendar-header">
+                <div class="year" id="calendar-year">2025</div>
+                <div class="calendar-nav">
+                    <button class="calendar-nav-btn" id="prev-month">←</button>
+                    <h2 id="calendar-month" data-zh="十二月" data-en="December">十二月</h2>
+                    <button class="calendar-nav-btn" id="next-month">→</button>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendar-grid">
+                <!-- 星期标题 -->
+                <div class="calendar-weekday" data-zh="日" data-en="Sun">日</div>
+                <div class="calendar-weekday" data-zh="一" data-en="Mon">一</div>
+                <div class="calendar-weekday" data-zh="二" data-en="Tue">二</div>
+                <div class="calendar-weekday" data-zh="三" data-en="Wed">三</div>
+                <div class="calendar-weekday" data-zh="四" data-en="Thu">四</div>
+                <div class="calendar-weekday" data-zh="五" data-en="Fri">五</div>
+                <div class="calendar-weekday" data-zh="六" data-en="Sat">六</div>
+                <!-- 日期将通过 JavaScript 动态生成 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 宇宙视图 -->
+    <div class="view-content" id="universe-view">
+        <div class="universe-view">
+            <div class="universe-header">
+                <h2 data-zh="MindJoy宇宙" data-en="MindJoy Universe">MindJoy宇宙</h2>
+                <p data-zh="你的每一天，都是宇宙中独一无二的星球" data-en="Every day of yours is a unique planet in the universe">你的每一天，都是宇宙中独一无二的星球</p>
+            </div>
+            <div class="stars" id="stars-container"></div>
+            <div class="universe-container" id="universe-container">
+                <!-- 心情星球将通过 JavaScript 动态生成 -->
+            </div>
+            <div class="moon-surface"></div>
+            <div class="astronaut">
+                <div style="font-size: 4rem;">🧑‍🚀</div>
+                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.5rem;" data-zh="在宇宙中探索你的心情旅程" data-en="Explore your mood journey in the universe">在宇宙中探索你的心情旅程</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MindJoy世界 (公共互动) -->
+    <div class="view-content" id="world-view">
+        <div class="mindjoy-world">
+            <div class="world-header">
+                <h2 data-zh="MindJoy世界" data-en="MindJoy World">MindJoy世界</h2>
+                <p data-zh="分享你的心情，与世界温暖相连" data-en="Share your mood, connect warmly with the world">分享你的心情，与世界温暖相连</p>
+            </div>
+
+            <!-- 发帖组件 -->
+            <div class="post-composer">
+                <textarea class="composer-textarea" placeholder="分享你此刻的心情..." data-zh-placeholder="分享你此刻的心情..." data-en-placeholder="Share your current mood..." id="post-content"></textarea>
+                <div class="composer-actions">
+                    <button class="composer-mood-btn" id="select-post-mood">
+                        <span id="selected-post-mood-emoji">😊</span>
+                        <span data-zh="选择心情" data-en="Select mood">选择心情</span>
+                    </button>
+                    <button class="composer-submit" data-zh="发布" data-en="Post" id="submit-post">发布</button>
+                </div>
+            </div>
+
+            <!-- 帖子列表 -->
+            <div class="posts-feed" id="posts-feed">
+                <!-- 示例帖子 -->
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background: var(--mood-happy);">😊</div>
+                        <div class="post-info">
+                            <div class="post-username">小明</div>
+                            <div class="post-time">2小时前</div>
+                        </div>
+                    </div>
+                    <div class="post-content" data-zh="今天阳光很好，出门散步了一圈，感觉心情都变好了！希望大家也能多出去走走 🌞" data-en="The sun is so nice today, went for a walk and my mood got so much better! Hope everyone can also go out and enjoy 🌞">今天阳光很好，出门散步了一圈，感觉心情都变好了！希望大家也能多出去走走 🌞</div>
+                    <div class="post-actions">
+                        <button class="post-action-btn" onclick="toggleLike(this)">
+                            <span>❤️</span>
+                            <span>24</span>
+                        </button>
+                        <button class="post-action-btn">
+                            <span>💬</span>
+                            <span data-zh="评论" data-en="Comment">评论</span>
+                        </button>
+                        <button class="post-action-btn">
+                            <span>🔗</span>
+                            <span data-zh="分享" data-en="Share">分享</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="post-card">
+                    <div class="post-header">
+                        <div class="post-avatar" style="background: var(--mood-calm);">😌</div>
+                        <div class="post-info">
+                            <div class="post-username">心晴</div>
+                            <div class="post-time">5小时前</div>
+                        </div>
+                    </div>
+                    <div class="post-content" data-zh="学会了一个新的冥想技巧，深呼吸真的很有用。推荐给需要放松的朋友们~" data-en="Learned a new meditation technique, deep breathing is really helpful. Recommend to friends who need to relax~">学会了一个新的冥想技巧，深呼吸真的很有用。推荐给需要放松的朋友们~</div>
+                    <div class="post-actions">
+                        <button class="post-action-btn liked" onclick="toggleLike(this)">
+                            <span>❤️</span>
+                            <span>56</span>
+                        </button>
+                        <button class="post-action-btn">
+                            <span>💬</span>
+                            <span data-zh="评论" data-en="Comment">评论</span>
+                        </button>
+                        <button class="post-action-btn">
+                            <span>🔗</span>
+                            <span data-zh="分享" data-en="Share">分享</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 统计视图 -->
+    <div class="view-content" id="stats-view">
+        <div class="stats-view">
+            <div class="stats-header">
+                <h2 data-zh="心情统计" data-en="Mood Statistics">心情统计</h2>
+            </div>
+
+            <div class="stats-period-tabs">
+                <button class="period-tab active" data-period="week" data-zh="本周" data-en="This Week">本周</button>
+                <button class="period-tab" data-period="month" data-zh="本月" data-en="This Month">本月</button>
+                <button class="period-tab" data-period="year" data-zh="本年" data-en="This Year">本年</button>
+            </div>
+
+            <div class="stats-summary">
+                <div class="summary-card">
+                    <div class="summary-value" id="total-entries">12</div>
+                    <div class="summary-label" data-zh="日记总数" data-en="Total Entries">日记总数</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value" id="streak-days">5</div>
+                    <div class="summary-label" data-zh="连续打卡" data-en="Day Streak">连续打卡</div>
+                </div>
+                <div class="summary-card">
+                    <div class="summary-value" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
+                        <span style="font-size: 2rem;">😊</span>
+                    </div>
+                    <div class="summary-label" data-zh="最常见心情" data-en="Most Common Mood">最常见心情</div>
+                </div>
+            </div>
+
+            <div class="mood-distribution">
+                <div class="distribution-title" data-zh="心情分布" data-en="Mood Distribution">心情分布</div>
+                <div class="distribution-bars" id="distribution-bars">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+
+            <div class="mood-calendar-mini">
+                <div class="mini-calendar-title" data-zh="心情日历" data-en="Mood Calendar">心情日历</div>
+                <div class="mini-calendar-grid" id="mini-calendar">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 心情选择弹窗 -->
+<div class="mood-selector-overlay" id="mood-selector">
+    <div class="mood-selector-modal">
+        <div class="mood-question" data-zh="今天过得怎么样？" data-en="How was your day?">今天过得怎么样？</div>
+        <div class="mood-grid" id="mood-grid">
+            <!-- 15种心情 -->
+        </div>
+        <button class="mood-confirm-btn" id="mood-confirm" disabled data-zh="确定" data-en="Confirm">确定</button>
+    </div>
+</div>
+
+<!-- 日记编辑器 -->
+<div class="diary-editor-overlay" id="diary-editor">
+    <div class="editor-header">
+        <button class="editor-close-btn" id="editor-close">✕</button>
+        <button class="editor-save-btn" id="editor-save">✓</button>
+    </div>
+    <div class="editor-content">
+        <div class="editor-card">
+            <div class="editor-date" id="editor-date">Sat. 12.25</div>
+            <div class="editor-mood-display">
+                <div class="editor-mood-emoji" id="editor-mood-emoji" style="background: var(--mood-happy);">😊</div>
+                <div class="editor-mood-label" id="editor-mood-label" data-zh="开心" data-en="Happy">开心</div>
+            </div>
+            <textarea class="editor-textarea" id="editor-textarea" placeholder="记录今天的心情..." data-zh-placeholder="记录今天的心情..." data-en-placeholder="Record today's mood..."></textarea>
+            <div class="editor-toolbar">
+                <button class="toolbar-btn" title="添加图片">📷</button>
+                <button class="toolbar-btn" title="添加标签">🏷️</button>
+                <button class="toolbar-btn" title="添加位置">📍</button>
+                <div class="toolbar-colors">
+                    <div class="color-btn" style="background: #FF6B6B;"></div>
+                    <div class="color-btn" style="background: #4ECDC4;"></div>
+                    <div class="color-btn" style="background: #45B7D1;"></div>
+                    <div class="color-btn" style="background: #96CEB4;"></div>
+                    <div class="color-btn" style="background: #FFEAA7;"></div>
+                    <div class="color-btn" style="background: #DDA0DD;"></div>
+                </div>
+            </div>
+            <div class="public-toggle">
+                <div class="toggle-switch" id="public-toggle"></div>
+                <span class="toggle-label" data-zh="公开到 MindJoy世界" data-en="Share to MindJoy World">公开到 MindJoy世界</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-section">
+                <h4>MindJoy 心灵乐园</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
+                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>400-161-9995</strong></p>
+                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+            </div>
+            <div class="footer-section">
+                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 MindJoy Mental Health Platform. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- 危机提示模态框 -->
+    <div class="modal" id="crisisModal">
+        <div class="modal-content crisis-modal">
+            <div class="modal-header">
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+            </div>
+            <div class="modal-body">
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <div class="crisis-contacts">
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <ul>
+                        <li>📞 全国心理援助热线：<a href="tel:400-161-9995">400-161-9995</a></li>
+                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentLang = localStorage.getItem('lang') || 'zh';
+        
+        function switchLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('lang', lang);
+            // 更新桌面端语言按钮
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新移动端语言按钮
+            document.querySelectorAll('.lang-btn-mobile').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === lang);
+            });
+            // 更新所有带有 data-zh/data-en 属性的元素
+            document.querySelectorAll('[data-zh][data-en]').forEach(el => {
+                el.textContent = el.dataset[lang];
+            });
+            window.dispatchEvent(new CustomEvent('langchange', { detail: { lang } }));
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => switchLang(currentLang));
+        
+        function toggleNav() {
+            document.getElementById('navMenu').classList.toggle('active');
+        }
+        
+        function showCrisisModal() {
+            document.getElementById('crisisModal').classList.add('active');
+        }
+        
+        function closeCrisisModal() {
+            document.getElementById('crisisModal').classList.remove('active');
+        }
+    </script>
+    <script src="static/js/main.js"></script>
+    
+<script>
+    // ==================== 数据定义 ====================
+    const moods = [
+        { id: 'happy', zh: '开心', en: 'Happy', emoji: '😊', color: 'var(--mood-happy)' },
+        { id: 'warm', zh: '暖心', en: 'Warm', emoji: '🥰', color: 'var(--mood-warm)' },
+        { id: 'fulfilled', zh: '充实', en: 'Fulfilled', emoji: '😌', color: 'var(--mood-fulfilled)' },
+        { id: 'proud', zh: '得意', en: 'Proud', emoji: '😏', color: 'var(--mood-proud)' },
+        { id: 'surprised', zh: '惊喜', en: 'Surprised', emoji: '😮', color: 'var(--mood-surprised)' },
+        { id: 'calm', zh: '平静', en: 'Calm', emoji: '😐', color: 'var(--mood-calm)' },
+        { id: 'confused', zh: '迷茫', en: 'Confused', emoji: '😕', color: 'var(--mood-confused)' },
+        { id: 'lonely', zh: '孤独', en: 'Lonely', emoji: '😔', color: 'var(--mood-lonely)' },
+        { id: 'excited', zh: '心动', en: 'Excited', emoji: '😍', color: 'var(--mood-excited)' },
+        { id: 'sweet', zh: '甜蜜', en: 'Sweet', emoji: '🥳', color: 'var(--mood-sweet)' },
+        { id: 'sad', zh: '难过', en: 'Sad', emoji: '😢', color: 'var(--mood-sad)' },
+        { id: 'tired', zh: '疲意', en: 'Tired', emoji: '😴', color: 'var(--mood-tired)' },
+        { id: 'wronged', zh: '委屈', en: 'Wronged', emoji: '🥺', color: 'var(--mood-wronged)' },
+        { id: 'irritated', zh: '烦躁', en: 'Irritated', emoji: '😤', color: 'var(--mood-irritated)' },
+        { id: 'angry', zh: '生气', en: 'Angry', emoji: '😡', color: 'var(--mood-angry)' }
+    ];
+
+    // 从localStorage读取用户个人日记数据（每个用户独立存储）
+    let diaryEntries = JSON.parse(localStorage.getItem('mindjoy_diary_entries') || '[]');
+
+    // 保存数据到localStorage的辅助函数
+    function saveDiaryEntries() {
+        localStorage.setItem('mindjoy_diary_entries', JSON.stringify(diaryEntries));
+    }
+
+    // currentLang 已在 base.html 中定义，这里直接使用
+    let currentYear = 2025;
+    let currentMonth = 12;
+    let selectedMood = null;
+    let selectedDate = null;
+
+    // ==================== 初始化 ====================
+    document.addEventListener('DOMContentLoaded', function() {
+        initMoodGrid();
+        renderCalendar();
+        generateStars();
+        renderUniverse();
+        renderStats();
+        initEventListeners();
+    });
+
+    // ==================== 心情选择器 ====================
+    function initMoodGrid() {
+        const moodGrid = document.getElementById('mood-grid');
+        moodGrid.innerHTML = moods.map(mood => `
+            <div class="mood-item" data-mood="${mood.id}">
+                <div class="mood-emoji" style="background: ${mood.color};">${mood.emoji}</div>
+                <div class="mood-label" data-zh="${mood.zh}" data-en="${mood.en}">${currentLang === 'zh' ? mood.zh : mood.en}</div>
+            </div>
+        `).join('');
+
+        // 添加点击事件
+        moodGrid.querySelectorAll('.mood-item').forEach(item => {
+            item.addEventListener('click', function() {
+                moodGrid.querySelectorAll('.mood-item').forEach(i => i.classList.remove('selected'));
+                this.classList.add('selected');
+                selectedMood = moods.find(m => m.id === this.dataset.mood);
+                document.getElementById('mood-confirm').disabled = false;
+            });
+        });
+    }
+
+    // ==================== 日历渲染 ====================
+    function renderCalendar() {
+        const grid = document.getElementById('calendar-grid');
+        const monthNames = {
+            zh: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+            en: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        };
+
+        document.getElementById('calendar-year').textContent = currentYear;
+        const monthEl = document.getElementById('calendar-month');
+        monthEl.textContent = monthNames[currentLang][currentMonth - 1];
+        monthEl.dataset.zh = monthNames.zh[currentMonth - 1];
+        monthEl.dataset.en = monthNames.en[currentMonth - 1];
+
+        // 清除现有日期（保留星期标题）
+        const weekdays = grid.querySelectorAll('.calendar-weekday');
+        grid.innerHTML = '';
+        weekdays.forEach(w => grid.appendChild(w));
+
+        // 计算月份信息
+        const firstDay = new Date(currentYear, currentMonth - 1, 1).getDay();
+        const daysInMonth = new Date(currentYear, currentMonth, 0).getDate();
+        const today = new Date();
+
+        // 填充空白
+        for (let i = 0; i < firstDay; i++) {
+            const emptyDay = document.createElement('button');
+            emptyDay.className = 'calendar-day empty';
+            grid.appendChild(emptyDay);
+        }
+
+        // 填充日期
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateStr = `${currentYear}-${String(currentMonth).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+            const entry = diaryEntries.find(e => e.date === dateStr);
+            const mood = entry ? moods.find(m => m.id === entry.mood) : null;
+
+            const dayEl = document.createElement('button');
+            dayEl.className = 'calendar-day';
+
+            if (today.getFullYear() === currentYear &&
+                today.getMonth() + 1 === currentMonth &&
+                today.getDate() === day) {
+                dayEl.classList.add('today');
+            }
+
+            if (entry) {
+                dayEl.classList.add('has-entry');
+                dayEl.style.setProperty('--mood-color', mood.color);
+                dayEl.style.background = mood.color;
+            }
+
+            dayEl.innerHTML = `<span class="day-number">${day}</span>`;
+            dayEl.dataset.date = dateStr;
+            dayEl.addEventListener('click', () => openMoodSelector(dateStr));
+            grid.appendChild(dayEl);
+        }
+    }
+
+    // ==================== 宇宙视图 ====================
+    function generateStars() {
+        const container = document.getElementById('stars-container');
+        for (let i = 0; i < 100; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.width = Math.random() * 3 + 1 + 'px';
+            star.style.height = star.style.width;
+            star.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(star);
+        }
+    }
+
+    function renderUniverse() {
+        const container = document.getElementById('universe-container');
+        container.innerHTML = '';
+
+        diaryEntries.forEach((entry, index) => {
+            const mood = moods.find(m => m.id === entry.mood);
+            const planet = document.createElement('div');
+            planet.className = 'mood-planet';
+
+            // 随机位置（避开底部宇航员区域）
+            const left = 10 + Math.random() * 80;
+            const top = 10 + Math.random() * 60;
+            planet.style.left = left + '%';
+            planet.style.top = top + '%';
+            planet.style.animationDelay = index * 0.5 + 's';
+
+            const dateParts = entry.date.split('-');
+            const dateDisplay = `${dateParts[0]}/${dateParts[1]}/${dateParts[2]}`;
+
+            planet.innerHTML = `
+                <div class="planet-date">${dateDisplay}</div>
+                <div class="planet-circle" style="background: ${mood.color};">${mood.emoji}</div>
+                <div class="planet-mood">${currentLang === 'zh' ? mood.zh : mood.en}</div>
+            `;
+
+            planet.addEventListener('click', () => viewDiaryEntry(entry));
+            container.appendChild(planet);
+        });
+    }
+
+    // ==================== 统计视图 ====================
+    function renderStats() {
+        // 计算心情分布
+        const moodCounts = {};
+        moods.forEach(m => moodCounts[m.id] = 0);
+        diaryEntries.forEach(e => moodCounts[e.mood]++);
+
+        const maxCount = Math.max(...Object.values(moodCounts), 1);
+        const distributionBars = document.getElementById('distribution-bars');
+
+        const sortedMoods = moods.filter(m => moodCounts[m.id] > 0)
+            .sort((a, b) => moodCounts[b.id] - moodCounts[a.id]);
+
+        distributionBars.innerHTML = sortedMoods.map(mood => `
+            <div class="distribution-item">
+                <div class="distribution-mood">
+                    <div class="distribution-mood-emoji" style="background: ${mood.color};">${mood.emoji}</div>
+                    <span>${currentLang === 'zh' ? mood.zh : mood.en}</span>
+                </div>
+                <div class="distribution-bar-container">
+                    <div class="distribution-bar" style="width: ${(moodCounts[mood.id] / maxCount) * 100}%; background: ${mood.color};"></div>
+                </div>
+                <div class="distribution-count">${moodCounts[mood.id]}</div>
+            </div>
+        `).join('');
+
+        // 更新日记总数
+        document.getElementById('total-entries').textContent = diaryEntries.length;
+
+        // 计算连续打卡天数
+        const streakDays = calculateStreak();
+        document.getElementById('streak-days').textContent = streakDays;
+
+        // 计算最常见心情
+        const mostCommonMood = sortedMoods.length > 0 ? sortedMoods[0] : null;
+        const moodEmojiEl = document.querySelector('.summary-card:last-child .summary-value');
+        if (moodEmojiEl && mostCommonMood) {
+            moodEmojiEl.innerHTML = `<span style="font-size: 2rem;">${mostCommonMood.emoji}</span>`;
+        } else if (moodEmojiEl) {
+            moodEmojiEl.innerHTML = `<span style="font-size: 2rem;">-</span>`;
+        }
+    }
+
+    // 计算连续打卡天数
+    function calculateStreak() {
+        if (diaryEntries.length === 0) return 0;
+
+        // 获取所有日期并排序（从最新到最旧）
+        const dates = diaryEntries.map(e => e.date).sort((a, b) => new Date(b) - new Date(a));
+        
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        
+        let streak = 0;
+        let checkDate = new Date(today);
+
+        // 检查今天或昨天是否有记录（允许今天还没记录的情况）
+        const todayStr = formatDateStr(today);
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        const yesterdayStr = formatDateStr(yesterday);
+
+        if (!dates.includes(todayStr) && !dates.includes(yesterdayStr)) {
+            return 0; // 今天和昨天都没有记录，连续天数为0
+        }
+
+        // 如果今天没有记录，从昨天开始计算
+        if (!dates.includes(todayStr)) {
+            checkDate = yesterday;
+        }
+
+        // 向前计算连续天数
+        while (true) {
+            const dateStr = formatDateStr(checkDate);
+            if (dates.includes(dateStr)) {
+                streak++;
+                checkDate.setDate(checkDate.getDate() - 1);
+            } else {
+                break;
+            }
+        }
+
+        return streak;
+    }
+
+    // 格式化日期为 YYYY-MM-DD 字符串
+    function formatDateStr(date) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    // ==================== 事件监听 ====================
+    function initEventListeners() {
+        // 视图切换
+        document.querySelectorAll('.view-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.view-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.view-content').forEach(v => v.classList.remove('active'));
+                this.classList.add('active');
+                document.getElementById(this.dataset.view + '-view').classList.add('active');
+            });
+        });
+
+        // 月份导航
+        document.getElementById('prev-month').addEventListener('click', () => {
+            currentMonth--;
+            if (currentMonth < 1) {
+                currentMonth = 12;
+                currentYear--;
+            }
+            renderCalendar();
+        });
+
+        document.getElementById('next-month').addEventListener('click', () => {
+            currentMonth++;
+            if (currentMonth > 12) {
+                currentMonth = 1;
+                currentYear++;
+            }
+            renderCalendar();
+        });
+
+        // 心情确认
+        document.getElementById('mood-confirm').addEventListener('click', () => {
+            if (selectedMood) {
+                closeMoodSelector();
+                openDiaryEditor();
+            }
+        });
+
+        // 编辑器关闭
+        document.getElementById('editor-close').addEventListener('click', closeDiaryEditor);
+
+        // 编辑器保存
+        document.getElementById('editor-save').addEventListener('click', saveDiaryEntry);
+
+        // 公开开关
+        document.getElementById('public-toggle').addEventListener('click', function() {
+            this.classList.toggle('active');
+        });
+
+        // 统计周期切换
+        document.querySelectorAll('.period-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                document.querySelectorAll('.period-tab').forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                // 可以根据周期过滤数据重新渲染
+            });
+        });
+
+        // 语言切换监听
+        window.addEventListener('langchange', function(e) {
+            currentLang = e.detail.lang;
+            initMoodGrid();
+            renderCalendar();
+            renderUniverse();
+            renderStats();
+        });
+    }
+
+    // ==================== 弹窗控制 ====================
+    function openMoodSelector(date) {
+        selectedDate = date;
+        selectedMood = null;
+        document.querySelectorAll('.mood-item').forEach(i => i.classList.remove('selected'));
+        document.getElementById('mood-confirm').disabled = true;
+        document.getElementById('mood-selector').classList.add('show');
+    }
+
+    function closeMoodSelector() {
+        document.getElementById('mood-selector').classList.remove('show');
+    }
+
+    function openDiaryEditor() {
+        const editor = document.getElementById('diary-editor');
+        const dateObj = new Date(selectedDate);
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dateStr = `${days[dateObj.getDay()]}. ${dateObj.getMonth() + 1}.${dateObj.getDate()}`;
+
+        document.getElementById('editor-date').textContent = dateStr;
+        document.getElementById('editor-mood-emoji').innerHTML = selectedMood.emoji;
+        document.getElementById('editor-mood-emoji').style.background = selectedMood.color;
+        document.getElementById('editor-mood-label').textContent = currentLang === 'zh' ? selectedMood.zh : selectedMood.en;
+        document.getElementById('editor-textarea').value = '';
+
+        editor.classList.add('show');
+    }
+
+    function closeDiaryEditor() {
+        document.getElementById('diary-editor').classList.remove('show');
+    }
+
+    function saveDiaryEntry() {
+        const content = document.getElementById('editor-textarea').value;
+        const isPublic = document.getElementById('public-toggle').classList.contains('active');
+
+        // 检查是否已有该日期的条目
+        const existingIndex = diaryEntries.findIndex(e => e.date === selectedDate);
+        const newEntry = {
+            date: selectedDate,
+            mood: selectedMood.id,
+            content: content,
+            isPublic: isPublic
+        };
+
+        if (existingIndex >= 0) {
+            diaryEntries[existingIndex] = newEntry;
+        } else {
+            diaryEntries.push(newEntry);
+        }
+
+        // 保存到localStorage
+        saveDiaryEntries();
+
+        closeDiaryEditor();
+        renderCalendar();
+        renderUniverse();
+        renderStats();
+
+        // 显示保存成功提示
+        alert(currentLang === 'zh' ? '日记保存成功！' : 'Diary saved successfully!');
+    }
+
+    function viewDiaryEntry(entry) {
+        const mood = moods.find(m => m.id === entry.mood);
+        selectedDate = entry.date;
+        selectedMood = mood;
+
+        const editor = document.getElementById('diary-editor');
+        const dateObj = new Date(entry.date);
+        const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const dateStr = `${days[dateObj.getDay()]}. ${dateObj.getMonth() + 1}.${dateObj.getDate()}`;
+
+        document.getElementById('editor-date').textContent = dateStr;
+        document.getElementById('editor-mood-emoji').innerHTML = mood.emoji;
+        document.getElementById('editor-mood-emoji').style.background = mood.color;
+        document.getElementById('editor-mood-label').textContent = currentLang === 'zh' ? mood.zh : mood.en;
+        document.getElementById('editor-textarea').value = entry.content || '';
+
+        editor.classList.add('show');
+    }
+
+    // 点赞功能
+    function toggleLike(btn) {
+        btn.classList.toggle('liked');
+        const countSpan = btn.querySelector('span:last-child');
+        let count = parseInt(countSpan.textContent);
+        countSpan.textContent = btn.classList.contains('liked') ? count + 1 : count - 1;
+    }
+
+    // 关闭弹窗点击外部区域
+    document.getElementById('mood-selector').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeMoodSelector();
+        }
+    });
+</script>
+
+</body>
+</html>
