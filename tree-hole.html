@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <script src="static/js/api.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>情绪树洞 - Emotion Tree Hole - 心理健康平台 | Mental Health Platform</title>
+    <title>Emotion Tree Hole | 情绪树洞 - Mental Health Platform | 心理健康平台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -612,24 +612,24 @@
                 <span class="logo-text">MindJoy</span>
             </a>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
-                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
-                <li><a href="chat.html" class="nav-link " data-zh="AI 对话" data-en="AI Chat">AI 对话</a></li>
-                <li><a href="tree-hole.html" class="nav-link active" data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
-                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">Home</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">Test</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI 对话" data-en="AI Chat">AI Chat</a></li>
+                <li><a href="tree-hole.html" class="nav-link active" data-zh="情绪树洞" data-en="Tree Hole">Tree Hole</a></li>
+                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Diary</a></li>
                 <!-- 移动端语言切换 -->
                 <li class="mobile-lang-switch">
                     <div class="lang-switch-mobile">
-                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
-                        <span class="lang-divider">|</span>
                         <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
                     </div>
                 </li>
             </ul>
             <div class="nav-right">
                 <div class="lang-switch">
-                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
-                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn active" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中</button>
                 </div>
             </div>
             <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
@@ -646,13 +646,13 @@
 <div class="tree-hole-page">
     <!-- 提示条 -->
     <div class="tip-bar">
-        <span data-zh="💚 这里是你的安全空间，所有倾诉都是匿名的" data-en="💚 This is your safe space, all confessions are anonymous">💚 这里是你的安全空间，所有倾诉都是匿名的</span>
+        <span data-zh="💚 这里是你的安全空间，所有倾诉都是匿名的" data-en="💚 This is your safe space, all confessions are anonymous">💚 This is your safe space, all confessions are anonymous</span>
     </div>
 
     <!-- 页头 -->
     <div class="tree-header">
-        <h1 data-zh="情绪树洞" data-en="Emotion Tree Hole">情绪树洞</h1>
-        <p data-zh="点击树上的分支，选择你想要倾诉的类型" data-en="Click a branch on the tree to share your feelings">点击树上的分支，选择你想要倾诉的类型</p>
+        <h1 data-zh="情绪树洞" data-en="Emotion Tree Hole">Emotion Tree Hole</h1>
+        <p data-zh="点击树上的分支，选择你想要倾诉的类型" data-en="Click a branch on the tree to share your feelings">Click a branch on the tree to share your feelings</p>
     </div>
 
     <!-- 树可视化 -->
@@ -714,42 +714,42 @@
             <g class="category-node" data-category="study" onclick="openEmotionModal('study')">
                 <circle class="category-circle" cx="220" cy="250" r="35" fill="#FF7043" opacity="0.9"/>
                 <text class="category-icon" x="220" y="250">📚</text>
-                <text class="category-label" x="220" y="300" data-zh="学业压力" data-en="Study">学业压力</text>
+                <text class="category-label" x="220" y="300" data-zh="学业压力" data-en="Study">Study</text>
             </g>
             
             <!-- 人际关系 -->
             <g class="category-node" data-category="relationship" onclick="openEmotionModal('relationship')">
                 <circle class="category-circle" cx="150" cy="190" r="35" fill="#42A5F5" opacity="0.9"/>
                 <text class="category-icon" x="150" y="190">👥</text>
-                <text class="category-label" x="150" y="240" data-zh="人际关系" data-en="Relations">人际关系</text>
+                <text class="category-label" x="150" y="240" data-zh="人际关系" data-en="Relations">Relations</text>
             </g>
             
             <!-- 情感困惑 -->
             <g class="category-node" data-category="emotion" onclick="openEmotionModal('emotion')">
                 <circle class="category-circle" cx="580" cy="250" r="35" fill="#EC407A" opacity="0.9"/>
                 <text class="category-icon" x="580" y="250">💕</text>
-                <text class="category-label" x="580" y="300" data-zh="情感困惑" data-en="Emotion">情感困惑</text>
+                <text class="category-label" x="580" y="300" data-zh="情感困惑" data-en="Emotion">Emotion</text>
             </g>
             
             <!-- 自我成长 -->
             <g class="category-node" data-category="growth" onclick="openEmotionModal('growth')">
                 <circle class="category-circle" cx="650" cy="190" r="35" fill="#66BB6A" opacity="0.9"/>
                 <text class="category-icon" x="650" y="190">🌱</text>
-                <text class="category-label" x="650" y="240" data-zh="自我成长" data-en="Growth">自我成长</text>
+                <text class="category-label" x="650" y="240" data-zh="自我成长" data-en="Growth">Growth</text>
             </g>
             
             <!-- 工作烦恼 -->
             <g class="category-node" data-category="work" onclick="openEmotionModal('work')">
                 <circle class="category-circle" cx="330" cy="100" r="35" fill="#FFA726" opacity="0.9"/>
                 <text class="category-icon" x="330" y="100">💼</text>
-                <text class="category-label" x="330" y="150" data-zh="工作烦恼" data-en="Work">工作烦恼</text>
+                <text class="category-label" x="330" y="150" data-zh="工作烦恼" data-en="Work">Work</text>
             </g>
             
             <!-- 其他烦恼 -->
             <g class="category-node" data-category="other" onclick="openEmotionModal('other')">
                 <circle class="category-circle" cx="470" cy="100" r="35" fill="#AB47BC" opacity="0.9"/>
                 <text class="category-icon" x="470" y="100">💭</text>
-                <text class="category-label" x="470" y="150" data-zh="其他烦恼" data-en="Other">其他烦恼</text>
+                <text class="category-label" x="470" y="150" data-zh="其他烦恼" data-en="Other">Other</text>
             </g>
         </svg>
     </div>
@@ -757,12 +757,12 @@
     <!-- 我的倾诉记录 -->
     <div class="records-section">
         <div class="records-header">
-            <h2 data-zh="我的倾诉记录" data-en="My Confessions">我的倾诉记录</h2>
+            <h2 data-zh="我的倾诉记录" data-en="My Confessions">My Confessions</h2>
         </div>
         <div id="records-list">
             <div class="no-records">
                 <div class="no-records-icon">🌿</div>
-                <p data-zh="还没有倾诉记录，点击树上的分支开始吧" data-en="No confessions yet, click a branch to start">还没有倾诉记录，点击树上的分支开始吧</p>
+                <p data-zh="还没有倾诉记录，点击树上的分支开始吧" data-en="No confessions yet, click a branch to start">No confessions yet, click a branch to start</p>
             </div>
         </div>
     </div>
@@ -776,12 +776,12 @@
             <div class="modal-icon" id="modal-icon">📚</div>
             <div>
                 <div class="modal-title" id="modal-title">学业压力</div>
-                <div class="modal-subtitle" data-zh="说出你的烦恼，这里是安全的" data-en="Share your worries, this is a safe space">说出你的烦恼，这里是安全的</div>
+                <div class="modal-subtitle" data-zh="说出你的烦恼，这里是安全的" data-en="Share your worries, this is a safe space">Share your worries, this is a safe space</div>
             </div>
         </div>
         <form class="emotion-form" onsubmit="submitEmotion(event)">
             <div class="form-group">
-                <label data-zh="写下你的心事..." data-en="Write your feelings...">写下你的心事...</label>
+                <label data-zh="写下你的心事..." data-en="Write your feelings...">Write your feelings...</label>
                 <textarea class="emotion-textarea" id="emotion-text" 
                     placeholder="在这里倾诉，一切都会好起来的..."
                     data-placeholder-zh="在这里倾诉，一切都会好起来的..."
@@ -789,10 +789,10 @@
             </div>
             <div class="form-actions">
                 <button type="button" class="btn-secondary" onclick="closeEmotionModal()">
-                    <span data-zh="取消" data-en="Cancel">取消</span>
+                    <span data-zh="取消" data-en="Cancel">Cancel</span>
                 </button>
                 <button type="submit" class="btn-primary">
-                    <span data-zh="倾诉完毕" data-en="Done Sharing">倾诉完毕</span>
+                    <span data-zh="倾诉完毕" data-en="Done Sharing">Done Sharing</span>
                 </button>
             </div>
         </form>
@@ -809,14 +809,14 @@
                     <span style="font-size: 2rem;">🌱</span>
                 </div>
                 <div class="modal-subtitle" style="text-align: center; margin-top: 0.5rem;" 
-                     data-zh="MindJoy 想对你说" data-en="MindJoy wants to tell you">MindJoy 想对你说</div>
+                     data-zh="MindJoy 想对你说" data-en="MindJoy wants to tell you">MindJoy wants to tell you</div>
             </div>
         </div>
         
         <!-- 加载状态 -->
         <div id="ai-loading" style="text-align: center; padding: 2rem;">
             <div class="loading-spinner" style="width: 40px; height: 40px; border: 3px solid #E8F5E9; border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem;"></div>
-            <p style="color: var(--text-medium);" data-zh="正在思考中..." data-en="Thinking...">正在思考中...</p>
+            <p style="color: var(--text-medium);" data-zh="正在思考中..." data-en="Thinking...">Thinking...</p>
         </div>
         
         <!-- AI回复内容 -->
@@ -827,15 +827,15 @@
             
             <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
                 <button class="btn-secondary" style="flex: 1;" onclick="closeAiResponseModal()">
-                    <span data-zh="情绪舒缓了" data-en="Feeling Better">情绪舒缓了</span>
+                    <span data-zh="情绪舒缓了" data-en="Feeling Better">Feeling Better</span>
                 </button>
                 <button class="btn-primary" style="flex: 1;" onclick="goToBreathing()">
-                    <span data-zh="做呼吸练习" data-en="Do Breathing">做呼吸练习</span>
+                    <span data-zh="做呼吸练习" data-en="Do Breathing">Do Breathing</span>
                 </button>
             </div>
             <div style="margin-top: 1rem;">
                 <a href="chat.html" class="btn-ai-chat" style="display: block; text-align: center; padding: 0.85rem 1.5rem; background: linear-gradient(135deg, #7B68EE 0%, #9370DB 100%); color: white; border-radius: var(--radius-full); font-weight: 600; text-decoration: none; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(123, 104, 238, 0.3);">
-                    <span data-zh="💬 和 AI 继续聊聊" data-en="💬 Keep Talking with the AI">💬 和 AI 继续聊聊</span>
+                    <span data-zh="💬 和 AI 继续聊聊" data-en="💬 Keep Talking with the AI">💬 Keep Talking with the AI</span>
                 </a>
             </div>
         </div>
@@ -861,32 +861,32 @@
         <div id="breathing-intro">
             <div class="modal-header" style="justify-content: center;">
                 <div>
-                    <div class="modal-title" style="text-align: center;" data-zh="🌿 深呼吸放松练习" data-en="🌿 Deep Breathing Exercise">🌿 深呼吸放松练习</div>
+                    <div class="modal-title" style="text-align: center;" data-zh="🌿 深呼吸放松练习" data-en="🌿 Deep Breathing Exercise">🌿 Deep Breathing Exercise</div>
                 </div>
             </div>
             <div class="breathing-intro">
                 <p data-zh="感谢你愿意分享自己的心事。现在，让我们一起做一个简单的呼吸练习，帮助你放松身心。" 
                    data-en="Thank you for sharing. Now, let's do a simple breathing exercise to help you relax.">
-                    感谢你愿意分享自己的心事。现在，让我们一起做一个简单的呼吸练习，帮助你放松身心。
+                    Thank you for sharing. Now, let's do a simple breathing exercise to help you relax.
                 </p>
                 <br>
                 <p data-zh="这个练习包含3轮呼吸，每轮持续约16秒：" 
                    data-en="This exercise includes 3 rounds, each lasting about 16 seconds:">
-                    这个练习包含3轮呼吸，每轮持续约16秒：
+                    This exercise includes 3 rounds, each lasting about 16 seconds:
                 </p>
                 <ul style="text-align: left; margin: 1rem 2rem; color: var(--text-medium);">
-                    <li data-zh="吸气 4 秒" data-en="Inhale for 4 seconds">吸气 4 秒</li>
-                    <li data-zh="屏气 4 秒" data-en="Hold for 4 seconds">屏气 4 秒</li>
-                    <li data-zh="呼气 4 秒" data-en="Exhale for 4 seconds">呼气 4 秒</li>
-                    <li data-zh="放松 4 秒" data-en="Relax for 4 seconds">放松 4 秒</li>
+                    <li data-zh="吸气 4 秒" data-en="Inhale for 4 seconds">Inhale for 4 seconds</li>
+                    <li data-zh="屏气 4 秒" data-en="Hold for 4 seconds">Hold for 4 seconds</li>
+                    <li data-zh="呼气 4 秒" data-en="Exhale for 4 seconds">Exhale for 4 seconds</li>
+                    <li data-zh="放松 4 秒" data-en="Relax for 4 seconds">Relax for 4 seconds</li>
                 </ul>
             </div>
             <div class="breathing-controls">
                 <button class="btn-breathing btn-secondary" onclick="closeBreathingModal()">
-                    <span data-zh="稍后再说" data-en="Maybe Later">稍后再说</span>
+                    <span data-zh="稍后再说" data-en="Maybe Later">Maybe Later</span>
                 </button>
                 <button class="btn-breathing btn-start" onclick="startBreathing()">
-                    <span data-zh="开始练习" data-en="Start Exercise">开始练习</span>
+                    <span data-zh="开始练习" data-en="Start Exercise">Start Exercise</span>
                 </button>
             </div>
         </div>
@@ -896,20 +896,20 @@
             <div class="breathing-animation">
                 <div class="breathing-outer-ring"></div>
                 <div class="breathing-circle" id="breathing-circle">
-                    <span class="breathing-text" id="breathing-action-text">准备</span>
+                    <span class="breathing-text" id="breathing-action-text" data-zh="准备" data-en="Get Ready">Get Ready</span>
                 </div>
             </div>
-            <div class="breathing-phase" id="breathing-phase" data-zh="准备开始" data-en="Get Ready">准备开始</div>
+            <div class="breathing-phase" id="breathing-phase" data-zh="准备开始" data-en="Get Ready">Get Ready</div>
             <div class="breathing-timer" id="breathing-timer">4</div>
             <div class="breathing-instruction" id="breathing-round">
-                <span data-zh="第 1 轮 / 共 3 轮" data-en="Round 1 of 3">第 1 轮 / 共 3 轮</span>
+                <span data-zh="第 1 轮 / 共 3 轮" data-en="Round 1 of 3">Round 1 of 3</span>
             </div>
             <div class="breathing-progress">
                 <div class="breathing-progress-bar" id="breathing-progress" style="width: 0%"></div>
             </div>
             <div class="breathing-controls">
                 <button class="btn-breathing btn-stop" onclick="stopBreathing()">
-                    <span data-zh="停止" data-en="Stop">停止</span>
+                    <span data-zh="停止" data-en="Stop">Stop</span>
                 </button>
             </div>
         </div>
@@ -917,14 +917,14 @@
         <!-- 完成界面 -->
         <div class="breathing-complete" id="breathing-complete">
             <div class="complete-icon">🎉</div>
-            <div class="complete-title" data-zh="做得很好！" data-en="Well Done!">做得很好！</div>
+            <div class="complete-title" data-zh="做得很好！" data-en="Well Done!">Well Done!</div>
             <div class="complete-message" data-zh="你完成了呼吸练习，希望你现在感觉好一些了。记住，照顾好自己的情绪很重要。" 
                  data-en="You've completed the breathing exercise. Hope you feel better now. Remember, taking care of your emotions is important.">
-                你完成了呼吸练习，希望你现在感觉好一些了。记住，照顾好自己的情绪很重要。
+                You've completed the breathing exercise. Hope you feel better now. Remember, taking care of your emotions is important.
             </div>
             <div class="breathing-controls">
                 <button class="btn-breathing btn-start" onclick="closeBreathingModal()">
-                    <span data-zh="完成" data-en="Done">完成</span>
+                    <span data-zh="完成" data-en="Done">Done</span>
                 </button>
             </div>
         </div>
@@ -937,17 +937,17 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
-                <h4>MindJoy 心灵乐园</h4>
-                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+                <h4 data-zh="MindJoy 心灵乐园" data-en="MindJoy">MindJoy</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">Caring for mental health, warming every heart</p>
             </div>
             <div class="footer-section">
-                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
-                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>12356</strong></p>
-                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+                <h4 data-zh="紧急求助" data-en="Emergency Help">Emergency Help</h4>
+                <p><span data-zh="全国心理援助热线" data-en="National Mental Health Hotline">National Mental Health Hotline</span>: <strong>12356</strong></p>
+                <p><span data-zh="北京心理危机中心" data-en="Beijing Crisis Center">Beijing Crisis Center</span>: <strong>010-82951332</strong></p>
             </div>
             <div class="footer-section">
-                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
-                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+                <h4 data-zh="声明" data-en="Disclaimer">Disclaimer</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">Services provided are for reference only and cannot replace professional medical diagnosis.</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -959,31 +959,32 @@
     <div class="modal" id="crisisModal">
         <div class="modal-content crisis-modal">
             <div class="modal-header">
-                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 We're Here For You</h3>
             </div>
             <div class="modal-body">
-                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">We noticed you might be going through a difficult time. Remember, you're not alone.</p>
                 <div class="crisis-contacts">
-                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">If you need help, please contact:</h4>
                     <ul>
-                        <li>📞 全国心理援助热线：<a href="tel:12356">12356</a></li>
-                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
-                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                        <li>📞 <span data-zh="全国心理援助热线" data-en="National Mental Health Hotline">National Mental Health Hotline</span>: <a href="tel:12356">12356</a></li>
+                        <li>📞 <span data-zh="北京心理危机中心" data-en="Beijing Crisis Center">Beijing Crisis Center</span>: <a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 <span data-zh="生命热线" data-en="Lifeline">Lifeline</span>: <a href="tel:400-821-1215">400-821-1215</a></li>
                     </ul>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">I Understand</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentLang = localStorage.getItem('lang') || 'zh';
+        let currentLang = localStorage.getItem('mindjoy_lang') || 'en';
         
         function switchLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
+            localStorage.setItem('mindjoy_lang', lang);
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
             // 更新桌面端语言按钮
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -1064,7 +1065,7 @@
 
     // 获取当前语言
     function getCurrentLang() {
-        return localStorage.getItem('lang') || 'zh';
+        return localStorage.getItem('mindjoy_lang') || 'en';
     }
 
     // 打开情绪记录弹窗
@@ -1208,7 +1209,7 @@
                 <div class="no-records">
                     <div class="no-records-icon">🌿</div>
                     <p data-zh="还没有倾诉记录，点击树上的分支开始吧" data-en="No confessions yet, click a branch to start">
-                        ${lang === 'zh' ? '还没有倾诉记录，点击树上的分支开始吧' : 'No confessions yet, click a branch to start'}
+                        No confessions yet, click a branch to start
                     </p>
                 </div>
             `;

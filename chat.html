@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <script src="static/js/api.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI 对话 - AI Chat - 心理健康平台 | Mental Health Platform</title>
+    <title>AI Chat | AI 对话 - Mental Health Platform | 心理健康平台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -592,24 +592,24 @@
                 <span class="logo-text">MindJoy</span>
             </a>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
-                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
-                <li><a href="chat.html" class="nav-link active" data-zh="AI 对话" data-en="AI Chat">AI 对话</a></li>
-                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
-                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">Home</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">Test</a></li>
+                <li><a href="chat.html" class="nav-link active" data-zh="AI 对话" data-en="AI Chat">AI Chat</a></li>
+                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">Tree Hole</a></li>
+                <li><a href="diary.html" class="nav-link " data-zh="Mindjoy日记" data-en="Diary">Diary</a></li>
                 <!-- 移动端语言切换 -->
                 <li class="mobile-lang-switch">
                     <div class="lang-switch-mobile">
-                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
-                        <span class="lang-divider">|</span>
                         <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
                     </div>
                 </li>
             </ul>
             <div class="nav-right">
                 <div class="lang-switch">
-                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
-                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn active" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中</button>
                 </div>
             </div>
             <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
@@ -628,7 +628,7 @@
         <!-- 聊天侧边栏 -->
         <aside class="chat-sidebar">
             <div class="sidebar-header">
-                <h3>🤖 <span data-zh="AI 对话" data-en="AI Chat">AI 对话</span></h3>
+                <h3>🤖 <span data-zh="AI 对话" data-en="AI Chat">AI Chat</span></h3>
             </div>
             <div class="sidebar-content">
                 <div class="chat-intro">
@@ -637,40 +637,40 @@
                             <span>🌱</span>
                         </div>
                     </div>
-                    <h4 data-zh="你好，我是 MindJoy 的 AI 助手" data-en="Hi, I'm MindJoy's AI Assistant">你好，我是 MindJoy 的 AI 助手</h4>
-                    <p data-zh="我是 AI，不是医生或心理咨询师。可以和我聊聊压力和情绪；如有危险，请拨打 12356 或当地急救电话。" data-en="I'm an AI, not a doctor or counselor. You can talk to me about stress and emotions. If you're in danger, please call your local emergency number or a crisis line.">我是 AI，不是医生或心理咨询师。可以和我聊聊压力和情绪；如有危险，请拨打 12356 或当地急救电话。</p>
+                    <h4 data-zh="你好，我是 MindJoy 的 AI 助手" data-en="Hi, I'm MindJoy's AI Assistant">Hi, I'm MindJoy's AI Assistant</h4>
+                    <p data-zh="我是 AI，不是医生或心理咨询师。可以和我聊聊压力和情绪；如有危险，请拨打 12356 或当地急救电话。" data-en="I'm an AI, not a doctor or counselor. You can talk to me about stress and emotions. If you're in danger, please call your local emergency number or a crisis line.">I'm an AI, not a doctor or counselor. You can talk to me about stress and emotions. If you're in danger, please call your local emergency number or a crisis line.</p>
                 </div>
                 
                 <div class="quick-topics">
-                    <h5 data-zh="快速话题" data-en="Quick Topics">快速话题</h5>
+                    <h5 data-zh="快速话题" data-en="Quick Topics">Quick Topics</h5>
                     <div class="topic-buttons">
                         <button class="topic-btn" data-message-zh="我最近感觉压力很大" data-message-en="I've been feeling very stressed lately">
-                            <span>😓</span> <span data-zh="压力" data-en="Stress">压力</span>
+                            <span>😓</span> <span data-zh="压力" data-en="Stress">Stress</span>
                         </button>
                         <button class="topic-btn" data-message-zh="我感到很焦虑，不知道怎么办" data-message-en="I feel anxious and don't know what to do">
-                            <span>😰</span> <span data-zh="焦虑" data-en="Anxiety">焦虑</span>
+                            <span>😰</span> <span data-zh="焦虑" data-en="Anxiety">Anxiety</span>
                         </button>
                         <button class="topic-btn" data-message-zh="我心情很低落" data-message-en="I'm feeling down">
-                            <span>😢</span> <span data-zh="低落" data-en="Sadness">低落</span>
+                            <span>😢</span> <span data-zh="低落" data-en="Sadness">Sadness</span>
                         </button>
                         <button class="topic-btn" data-message-zh="我感觉很孤独" data-message-en="I feel very lonely">
-                            <span>😔</span> <span data-zh="孤独" data-en="Lonely">孤独</span>
+                            <span>😔</span> <span data-zh="孤独" data-en="Lonely">Lonely</span>
                         </button>
                         <button class="topic-btn" data-message-zh="我晚上总是睡不好觉" data-message-en="I can't sleep well at night">
-                            <span>😴</span> <span data-zh="失眠" data-en="Insomnia">失眠</span>
+                            <span>😴</span> <span data-zh="失眠" data-en="Insomnia">Insomnia</span>
                         </button>
                         <button class="topic-btn" data-message-zh="我想学习一些放松技巧" data-message-en="I want to learn some relaxation techniques">
-                            <span>🧘</span> <span data-zh="放松" data-en="Relax">放松</span>
+                            <span>🧘</span> <span data-zh="放松" data-en="Relax">Relax</span>
                         </button>
                     </div>
                 </div>
                 
                 <div class="sidebar-actions">
                     <button class="action-btn" id="clearChat">
-                        <span>🗑️</span> <span data-zh="清空对话" data-en="Clear Chat">清空对话</span>
+                        <span>🗑️</span> <span data-zh="清空对话" data-en="Clear Chat">Clear Chat</span>
                     </button>
                     <button class="action-btn" id="downloadChat">
-                        <span>💾</span> <span data-zh="保存对话" data-en="Save Chat">保存对话</span>
+                        <span>💾</span> <span data-zh="保存对话" data-en="Save Chat">Save Chat</span>
                     </button>
                 </div>
             </div>
@@ -679,7 +679,7 @@
                 <div class="crisis-notice">
                     <span class="notice-icon">⚠️</span>
                     <div>
-                        <p data-zh="如遇紧急情况，请拨打" data-en="In case of emergency, call">如遇紧急情况，请拨打</p>
+                        <p data-zh="如遇紧急情况，请拨打" data-en="In case of emergency, call">In case of emergency, call</p>
                         <p><strong>12356</strong></p>
                     </div>
                 </div>
@@ -692,9 +692,9 @@
                 <div class="header-info">
                     <div class="bot-status">
                         <span class="status-dot online"></span>
-                        <span data-zh="AI 助手" data-en="AI Assistant">AI 助手</span>
+                        <span data-zh="AI 助手" data-en="AI Assistant">AI Assistant</span>
                     </div>
-                    <span class="header-subtitle" data-zh="本站不保存对话 · 支持中英双语" data-en="Chats aren't saved by this site · Bilingual">本站不保存对话 · 支持中英双语</span>
+                    <span class="header-subtitle" data-zh="本站不保存对话 · 支持中英双语" data-en="Chats aren't saved by this site · Bilingual">Chats aren't saved by this site · Bilingual</span>
                 </div>
                 <button class="mobile-sidebar-toggle" id="mobileSidebarToggle">
                     <span>☰</span>
@@ -724,7 +724,7 @@
                     </div>
                 </div>
                 <div class="input-hint" data-zh="按 Enter 发送，Shift + Enter 换行" data-en="Press Enter to send, Shift + Enter for new line">
-                    按 Enter 发送，Shift + Enter 换行
+                    Press Enter to send, Shift + Enter for new line
                 </div>
             </div>
         </main>
@@ -735,11 +735,11 @@
 <div class="modal feedback-modal" id="feedbackModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3 data-zh="这个回答对你有帮助吗？" data-en="Was this response helpful?">这个回答对你有帮助吗？</h3>
+            <h3 data-zh="这个回答对你有帮助吗？" data-en="Was this response helpful?">Was this response helpful?</h3>
             <button class="modal-close" onclick="closeFeedbackModal()">&times;</button>
         </div>
         <div class="modal-body">
-            <p data-zh="你的反馈将帮助我变得更好" data-en="Your feedback helps me improve">你的反馈将帮助我变得更好</p>
+            <p data-zh="你的反馈将帮助我变得更好" data-en="Your feedback helps me improve">Your feedback helps me improve</p>
             <div class="rating-stars" id="ratingStars">
                 <button class="star-btn" data-rating="1">⭐</button>
                 <button class="star-btn" data-rating="2">⭐</button>
@@ -748,8 +748,8 @@
                 <button class="star-btn" data-rating="5">⭐</button>
             </div>
             <div class="rating-labels">
-                <span data-zh="没有帮助" data-en="Not helpful">没有帮助</span>
-                <span data-zh="非常有帮助" data-en="Very helpful">非常有帮助</span>
+                <span data-zh="没有帮助" data-en="Not helpful">Not helpful</span>
+                <span data-zh="非常有帮助" data-en="Very helpful">Very helpful</span>
             </div>
         </div>
     </div>
@@ -761,17 +761,17 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
-                <h4>MindJoy 心灵乐园</h4>
-                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+                <h4 data-zh="MindJoy 心灵乐园" data-en="MindJoy">MindJoy</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">Caring for mental health, warming every heart</p>
             </div>
             <div class="footer-section">
-                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
-                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>12356</strong></p>
-                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+                <h4 data-zh="紧急求助" data-en="Emergency Help">Emergency Help</h4>
+                <p><span data-zh="全国心理援助热线" data-en="National Mental Health Hotline">National Mental Health Hotline</span>: <strong>12356</strong></p>
+                <p><span data-zh="北京心理危机中心" data-en="Beijing Crisis Center">Beijing Crisis Center</span>: <strong>010-82951332</strong></p>
             </div>
             <div class="footer-section">
-                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
-                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+                <h4 data-zh="声明" data-en="Disclaimer">Disclaimer</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">Services provided are for reference only and cannot replace professional medical diagnosis.</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -783,31 +783,32 @@
     <div class="modal" id="crisisModal">
         <div class="modal-content crisis-modal">
             <div class="modal-header">
-                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 We're Here For You</h3>
             </div>
             <div class="modal-body">
-                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">We noticed you might be going through a difficult time. Remember, you're not alone.</p>
                 <div class="crisis-contacts">
-                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">If you need help, please contact:</h4>
                     <ul>
-                        <li>📞 全国心理援助热线：<a href="tel:12356">12356</a></li>
-                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
-                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                        <li>📞 <span data-zh="全国心理援助热线" data-en="National Mental Health Hotline">National Mental Health Hotline</span>: <a href="tel:12356">12356</a></li>
+                        <li>📞 <span data-zh="北京心理危机中心" data-en="Beijing Crisis Center">Beijing Crisis Center</span>: <a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 <span data-zh="生命热线" data-en="Lifeline">Lifeline</span>: <a href="tel:400-821-1215">400-821-1215</a></li>
                     </ul>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">I Understand</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentLang = localStorage.getItem('lang') || 'zh';
+        let currentLang = localStorage.getItem('mindjoy_lang') || 'en';
         
         function switchLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
+            localStorage.setItem('mindjoy_lang', lang);
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
             // 更新桌面端语言按钮
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);
@@ -842,7 +843,7 @@
 <script>
 // 获取当前语言
 function getCurrentLang() {
-    return localStorage.getItem('lang') || 'zh';
+    return localStorage.getItem('mindjoy_lang') || 'en';
 }
 
 // 双语消息内容

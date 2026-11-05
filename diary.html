@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <script src="static/js/api.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MindJoy日记 - MindJoy Diary - 心理健康平台 | Mental Health Platform</title>
+    <title>MindJoy Diary | MindJoy日记 - Mental Health Platform | 心理健康平台</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;500;600;700;800&family=Noto+Sans+SC:wght@300;400;500;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1048,24 +1048,24 @@
                 <span class="logo-text">MindJoy</span>
             </a>
             <ul class="nav-menu" id="navMenu">
-                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">首页</a></li>
-                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">心理测试</a></li>
-                <li><a href="chat.html" class="nav-link " data-zh="AI 对话" data-en="AI Chat">AI 对话</a></li>
-                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">情绪树洞</a></li>
-                <li><a href="diary.html" class="nav-link active" data-zh="Mindjoy日记" data-en="Diary">Mindjoy日记</a></li>
+                <li><a href="index.html" class="nav-link " data-zh="首页" data-en="Home">Home</a></li>
+                <li><a href="assessment.html" class="nav-link " data-zh="心理测试" data-en="Test">Test</a></li>
+                <li><a href="chat.html" class="nav-link " data-zh="AI 对话" data-en="AI Chat">AI Chat</a></li>
+                <li><a href="tree-hole.html" class="nav-link " data-zh="情绪树洞" data-en="Tree Hole">Tree Hole</a></li>
+                <li><a href="diary.html" class="nav-link active" data-zh="Mindjoy日记" data-en="Diary">Diary</a></li>
                 <!-- 移动端语言切换 -->
                 <li class="mobile-lang-switch">
                     <div class="lang-switch-mobile">
-                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
-                        <span class="lang-divider">|</span>
                         <button class="lang-btn-mobile" data-lang="en" onclick="switchLang('en')">English</button>
+                        <span class="lang-divider">|</span>
+                        <button class="lang-btn-mobile" data-lang="zh" onclick="switchLang('zh')">中文</button>
                     </div>
                 </li>
             </ul>
             <div class="nav-right">
                 <div class="lang-switch">
-                    <button class="lang-btn active" data-lang="zh" onclick="switchLang('zh')">中</button>
-                    <button class="lang-btn" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn active" data-lang="en" onclick="switchLang('en')">EN</button>
+                    <button class="lang-btn" data-lang="zh" onclick="switchLang('zh')">中</button>
                 </div>
             </div>
             <button class="nav-toggle" id="navToggle" onclick="toggleNav()">
@@ -1082,10 +1082,10 @@
 <div class="diary-page">
     <!-- 视图切换标签 -->
     <div class="view-tabs">
-        <button class="view-tab active" data-view="calendar" data-zh="日历" data-en="Calendar">日历</button>
-        <button class="view-tab" data-view="universe" data-zh="宇宙" data-en="Universe">宇宙</button>
-        <button class="view-tab" data-view="world" data-zh="MindJoy世界" data-en="MindJoy World">MindJoy世界</button>
-        <button class="view-tab" data-view="stats" data-zh="统计" data-en="Statistics">统计</button>
+        <button class="view-tab active" data-view="calendar" data-zh="日历" data-en="Calendar">Calendar</button>
+        <button class="view-tab" data-view="universe" data-zh="宇宙" data-en="Universe">Universe</button>
+        <button class="view-tab" data-view="world" data-zh="MindJoy世界" data-en="MindJoy World">MindJoy World</button>
+        <button class="view-tab" data-view="stats" data-zh="统计" data-en="Statistics">Statistics</button>
     </div>
 
     <!-- 日历视图 -->
@@ -1095,19 +1095,19 @@
                 <div class="year" id="calendar-year">2025</div>
                 <div class="calendar-nav">
                     <button class="calendar-nav-btn" id="prev-month">←</button>
-                    <h2 id="calendar-month" data-zh="十二月" data-en="December">十二月</h2>
+                    <h2 id="calendar-month" data-zh="十二月" data-en="December">December</h2>
                     <button class="calendar-nav-btn" id="next-month">→</button>
                 </div>
             </div>
             <div class="calendar-grid" id="calendar-grid">
                 <!-- 星期标题 -->
-                <div class="calendar-weekday" data-zh="日" data-en="Sun">日</div>
-                <div class="calendar-weekday" data-zh="一" data-en="Mon">一</div>
-                <div class="calendar-weekday" data-zh="二" data-en="Tue">二</div>
-                <div class="calendar-weekday" data-zh="三" data-en="Wed">三</div>
-                <div class="calendar-weekday" data-zh="四" data-en="Thu">四</div>
-                <div class="calendar-weekday" data-zh="五" data-en="Fri">五</div>
-                <div class="calendar-weekday" data-zh="六" data-en="Sat">六</div>
+                <div class="calendar-weekday" data-zh="日" data-en="Sun">Sun</div>
+                <div class="calendar-weekday" data-zh="一" data-en="Mon">Mon</div>
+                <div class="calendar-weekday" data-zh="二" data-en="Tue">Tue</div>
+                <div class="calendar-weekday" data-zh="三" data-en="Wed">Wed</div>
+                <div class="calendar-weekday" data-zh="四" data-en="Thu">Thu</div>
+                <div class="calendar-weekday" data-zh="五" data-en="Fri">Fri</div>
+                <div class="calendar-weekday" data-zh="六" data-en="Sat">Sat</div>
                 <!-- 日期将通过 JavaScript 动态生成 -->
             </div>
         </div>
@@ -1117,8 +1117,8 @@
     <div class="view-content" id="universe-view">
         <div class="universe-view">
             <div class="universe-header">
-                <h2 data-zh="MindJoy宇宙" data-en="MindJoy Universe">MindJoy宇宙</h2>
-                <p data-zh="你的每一天，都是宇宙中独一无二的星球" data-en="Every day of yours is a unique planet in the universe">你的每一天，都是宇宙中独一无二的星球</p>
+                <h2 data-zh="MindJoy宇宙" data-en="MindJoy Universe">MindJoy Universe</h2>
+                <p data-zh="你的每一天，都是宇宙中独一无二的星球" data-en="Every day of yours is a unique planet in the universe">Every day of yours is a unique planet in the universe</p>
             </div>
             <div class="stars" id="stars-container"></div>
             <div class="universe-container" id="universe-container">
@@ -1127,7 +1127,7 @@
             <div class="moon-surface"></div>
             <div class="astronaut">
                 <div style="font-size: 4rem;">🧑‍🚀</div>
-                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.5rem;" data-zh="在宇宙中探索你的心情旅程" data-en="Explore your mood journey in the universe">在宇宙中探索你的心情旅程</div>
+                <div style="color: rgba(255,255,255,0.6); font-size: 0.9rem; margin-top: 0.5rem;" data-zh="在宇宙中探索你的心情旅程" data-en="Explore your mood journey in the universe">Explore your mood journey in the universe</div>
             </div>
         </div>
     </div>
@@ -1136,19 +1136,19 @@
     <div class="view-content" id="world-view">
         <div class="mindjoy-world">
             <div class="world-header">
-                <h2 data-zh="MindJoy世界" data-en="MindJoy World">MindJoy世界</h2>
-                <p data-zh="分享你的心情，与世界温暖相连" data-en="Share your mood, connect warmly with the world">分享你的心情，与世界温暖相连</p>
+                <h2 data-zh="MindJoy世界" data-en="MindJoy World">MindJoy World</h2>
+                <p data-zh="分享你的心情，与世界温暖相连" data-en="Share your mood, connect warmly with the world">Share your mood, connect warmly with the world</p>
             </div>
 
             <!-- 发帖组件 -->
             <div class="post-composer">
-                <textarea class="composer-textarea" placeholder="分享你此刻的心情..." data-zh-placeholder="分享你此刻的心情..." data-en-placeholder="Share your current mood..." id="post-content"></textarea>
+                <textarea class="composer-textarea" placeholder="Share your current mood..." data-zh-placeholder="分享你此刻的心情..." data-en-placeholder="Share your current mood..." id="post-content"></textarea>
                 <div class="composer-actions">
                     <button class="composer-mood-btn" id="select-post-mood">
                         <span id="selected-post-mood-emoji">😊</span>
-                        <span data-zh="选择心情" data-en="Select mood">选择心情</span>
+                        <span data-zh="选择心情" data-en="Select mood">Select mood</span>
                     </button>
-                    <button class="composer-submit" data-zh="发布" data-en="Post" id="submit-post">发布</button>
+                    <button class="composer-submit" data-zh="发布" data-en="Post" id="submit-post">Post</button>
                 </div>
             </div>
 
@@ -1159,11 +1159,11 @@
                     <div class="post-header">
                         <div class="post-avatar" style="background: var(--mood-happy);">😊</div>
                         <div class="post-info">
-                            <div class="post-username">小明</div>
-                            <div class="post-time">2小时前</div>
+                            <div class="post-username" data-zh="小明" data-en="Ming">Ming</div>
+                            <div class="post-time" data-zh="2小时前" data-en="2 hours ago">2 hours ago</div>
                         </div>
                     </div>
-                    <div class="post-content" data-zh="今天阳光很好，出门散步了一圈，感觉心情都变好了！希望大家也能多出去走走 🌞" data-en="The sun is so nice today, went for a walk and my mood got so much better! Hope everyone can also go out and enjoy 🌞">今天阳光很好，出门散步了一圈，感觉心情都变好了！希望大家也能多出去走走 🌞</div>
+                    <div class="post-content" data-zh="今天阳光很好，出门散步了一圈，感觉心情都变好了！希望大家也能多出去走走 🌞" data-en="The sun is so nice today, went for a walk and my mood got so much better! Hope everyone can also go out and enjoy 🌞">The sun is so nice today, went for a walk and my mood got so much better! Hope everyone can also go out and enjoy 🌞</div>
                     <div class="post-actions">
                         <button class="post-action-btn" onclick="toggleLike(this)">
                             <span>❤️</span>
@@ -1171,11 +1171,11 @@
                         </button>
                         <button class="post-action-btn">
                             <span>💬</span>
-                            <span data-zh="评论" data-en="Comment">评论</span>
+                            <span data-zh="评论" data-en="Comment">Comment</span>
                         </button>
                         <button class="post-action-btn">
                             <span>🔗</span>
-                            <span data-zh="分享" data-en="Share">分享</span>
+                            <span data-zh="分享" data-en="Share">Share</span>
                         </button>
                     </div>
                 </div>
@@ -1184,11 +1184,11 @@
                     <div class="post-header">
                         <div class="post-avatar" style="background: var(--mood-calm);">😌</div>
                         <div class="post-info">
-                            <div class="post-username">心晴</div>
-                            <div class="post-time">5小时前</div>
+                            <div class="post-username" data-zh="心晴" data-en="Qing">Qing</div>
+                            <div class="post-time" data-zh="5小时前" data-en="5 hours ago">5 hours ago</div>
                         </div>
                     </div>
-                    <div class="post-content" data-zh="学会了一个新的冥想技巧，深呼吸真的很有用。推荐给需要放松的朋友们~" data-en="Learned a new meditation technique, deep breathing is really helpful. Recommend to friends who need to relax~">学会了一个新的冥想技巧，深呼吸真的很有用。推荐给需要放松的朋友们~</div>
+                    <div class="post-content" data-zh="学会了一个新的冥想技巧，深呼吸真的很有用。推荐给需要放松的朋友们~" data-en="Learned a new meditation technique, deep breathing is really helpful. Recommend to friends who need to relax~">Learned a new meditation technique, deep breathing is really helpful. Recommend to friends who need to relax~</div>
                     <div class="post-actions">
                         <button class="post-action-btn liked" onclick="toggleLike(this)">
                             <span>❤️</span>
@@ -1196,11 +1196,11 @@
                         </button>
                         <button class="post-action-btn">
                             <span>💬</span>
-                            <span data-zh="评论" data-en="Comment">评论</span>
+                            <span data-zh="评论" data-en="Comment">Comment</span>
                         </button>
                         <button class="post-action-btn">
                             <span>🔗</span>
-                            <span data-zh="分享" data-en="Share">分享</span>
+                            <span data-zh="分享" data-en="Share">Share</span>
                         </button>
                     </div>
                 </div>
@@ -1212,41 +1212,41 @@
     <div class="view-content" id="stats-view">
         <div class="stats-view">
             <div class="stats-header">
-                <h2 data-zh="心情统计" data-en="Mood Statistics">心情统计</h2>
+                <h2 data-zh="心情统计" data-en="Mood Statistics">Mood Statistics</h2>
             </div>
 
             <div class="stats-period-tabs">
-                <button class="period-tab active" data-period="week" data-zh="本周" data-en="This Week">本周</button>
-                <button class="period-tab" data-period="month" data-zh="本月" data-en="This Month">本月</button>
-                <button class="period-tab" data-period="year" data-zh="本年" data-en="This Year">本年</button>
+                <button class="period-tab active" data-period="week" data-zh="本周" data-en="This Week">This Week</button>
+                <button class="period-tab" data-period="month" data-zh="本月" data-en="This Month">This Month</button>
+                <button class="period-tab" data-period="year" data-zh="本年" data-en="This Year">This Year</button>
             </div>
 
             <div class="stats-summary">
                 <div class="summary-card">
                     <div class="summary-value" id="total-entries">12</div>
-                    <div class="summary-label" data-zh="日记总数" data-en="Total Entries">日记总数</div>
+                    <div class="summary-label" data-zh="日记总数" data-en="Total Entries">Total Entries</div>
                 </div>
                 <div class="summary-card">
                     <div class="summary-value" id="streak-days">5</div>
-                    <div class="summary-label" data-zh="连续打卡" data-en="Day Streak">连续打卡</div>
+                    <div class="summary-label" data-zh="连续打卡" data-en="Day Streak">Day Streak</div>
                 </div>
                 <div class="summary-card">
                     <div class="summary-value" style="display: flex; align-items: center; justify-content: center; gap: 0.5rem;">
                         <span style="font-size: 2rem;">😊</span>
                     </div>
-                    <div class="summary-label" data-zh="最常见心情" data-en="Most Common Mood">最常见心情</div>
+                    <div class="summary-label" data-zh="最常见心情" data-en="Most Common Mood">Most Common Mood</div>
                 </div>
             </div>
 
             <div class="mood-distribution">
-                <div class="distribution-title" data-zh="心情分布" data-en="Mood Distribution">心情分布</div>
+                <div class="distribution-title" data-zh="心情分布" data-en="Mood Distribution">Mood Distribution</div>
                 <div class="distribution-bars" id="distribution-bars">
                     <!-- 动态生成 -->
                 </div>
             </div>
 
             <div class="mood-calendar-mini">
-                <div class="mini-calendar-title" data-zh="心情日历" data-en="Mood Calendar">心情日历</div>
+                <div class="mini-calendar-title" data-zh="心情日历" data-en="Mood Calendar">Mood Calendar</div>
                 <div class="mini-calendar-grid" id="mini-calendar">
                     <!-- 动态生成 -->
                 </div>
@@ -1258,11 +1258,11 @@
 <!-- 心情选择弹窗 -->
 <div class="mood-selector-overlay" id="mood-selector">
     <div class="mood-selector-modal">
-        <div class="mood-question" data-zh="今天过得怎么样？" data-en="How was your day?">今天过得怎么样？</div>
+        <div class="mood-question" data-zh="今天过得怎么样？" data-en="How was your day?">How was your day?</div>
         <div class="mood-grid" id="mood-grid">
             <!-- 15种心情 -->
         </div>
-        <button class="mood-confirm-btn" id="mood-confirm" disabled data-zh="确定" data-en="Confirm">确定</button>
+        <button class="mood-confirm-btn" id="mood-confirm" disabled data-zh="确定" data-en="Confirm">Confirm</button>
     </div>
 </div>
 
@@ -1277,9 +1277,9 @@
             <div class="editor-date" id="editor-date">Sat. 12.25</div>
             <div class="editor-mood-display">
                 <div class="editor-mood-emoji" id="editor-mood-emoji" style="background: var(--mood-happy);">😊</div>
-                <div class="editor-mood-label" id="editor-mood-label" data-zh="开心" data-en="Happy">开心</div>
+                <div class="editor-mood-label" id="editor-mood-label" data-zh="开心" data-en="Happy">Happy</div>
             </div>
-            <textarea class="editor-textarea" id="editor-textarea" placeholder="记录今天的心情..." data-zh-placeholder="记录今天的心情..." data-en-placeholder="Record today's mood..."></textarea>
+            <textarea class="editor-textarea" id="editor-textarea" placeholder="Record today's mood..." data-zh-placeholder="记录今天的心情..." data-en-placeholder="Record today's mood..."></textarea>
             <div class="editor-toolbar">
                 <button class="toolbar-btn" title="添加图片">📷</button>
                 <button class="toolbar-btn" title="添加标签">🏷️</button>
@@ -1295,7 +1295,7 @@
             </div>
             <div class="public-toggle">
                 <div class="toggle-switch" id="public-toggle"></div>
-                <span class="toggle-label" data-zh="公开到 MindJoy世界" data-en="Share to MindJoy World">公开到 MindJoy世界</span>
+                <span class="toggle-label" data-zh="公开到 MindJoy世界" data-en="Share to MindJoy World">Share to MindJoy World</span>
             </div>
         </div>
     </div>
@@ -1307,17 +1307,17 @@
     <footer class="footer">
         <div class="footer-container">
             <div class="footer-section">
-                <h4>MindJoy 心灵乐园</h4>
-                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">关爱心理健康，温暖每一颗心</p>
+                <h4 data-zh="MindJoy 心灵乐园" data-en="MindJoy">MindJoy</h4>
+                <p data-zh="关爱心理健康，温暖每一颗心" data-en="Caring for mental health, warming every heart">Caring for mental health, warming every heart</p>
             </div>
             <div class="footer-section">
-                <h4 data-zh="紧急求助" data-en="Emergency Help">紧急求助</h4>
-                <p data-zh="全国心理援助热线" data-en="National Mental Health Hotline">全国心理援助热线：<strong>12356</strong></p>
-                <p data-zh="北京心理危机中心" data-en="Beijing Crisis Center">北京心理危机中心：<strong>010-82951332</strong></p>
+                <h4 data-zh="紧急求助" data-en="Emergency Help">Emergency Help</h4>
+                <p><span data-zh="全国心理援助热线" data-en="National Mental Health Hotline">National Mental Health Hotline</span>: <strong>12356</strong></p>
+                <p><span data-zh="北京心理危机中心" data-en="Beijing Crisis Center">Beijing Crisis Center</span>: <strong>010-82951332</strong></p>
             </div>
             <div class="footer-section">
-                <h4 data-zh="声明" data-en="Disclaimer">声明</h4>
-                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。</p>
+                <h4 data-zh="声明" data-en="Disclaimer">Disclaimer</h4>
+                <p data-zh="本平台提供的服务仅供参考，不能替代专业医疗诊断和治疗。" data-en="Services provided are for reference only and cannot replace professional medical diagnosis.">Services provided are for reference only and cannot replace professional medical diagnosis.</p>
             </div>
         </div>
         <div class="footer-bottom">
@@ -1329,31 +1329,32 @@
     <div class="modal" id="crisisModal">
         <div class="modal-content crisis-modal">
             <div class="modal-header">
-                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 我们很担心你</h3>
+                <h3 data-zh="💚 我们很担心你" data-en="💚 We're Here For You">💚 We're Here For You</h3>
             </div>
             <div class="modal-body">
-                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">我们注意到你可能正在经历困难时刻。请记住，你不是一个人。</p>
+                <p data-zh="我们注意到你可能正在经历困难时刻。请记住，你不是一个人。" data-en="We noticed you might be going through a difficult time. Remember, you're not alone.">We noticed you might be going through a difficult time. Remember, you're not alone.</p>
                 <div class="crisis-contacts">
-                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">如果你需要帮助，请联系：</h4>
+                    <h4 data-zh="如果你需要帮助，请联系：" data-en="If you need help, please contact:">If you need help, please contact:</h4>
                     <ul>
-                        <li>📞 全国心理援助热线：<a href="tel:12356">12356</a></li>
-                        <li>📞 北京心理危机中心：<a href="tel:010-82951332">010-82951332</a></li>
-                        <li>📞 生命热线：<a href="tel:400-821-1215">400-821-1215</a></li>
+                        <li>📞 <span data-zh="全国心理援助热线" data-en="National Mental Health Hotline">National Mental Health Hotline</span>: <a href="tel:12356">12356</a></li>
+                        <li>📞 <span data-zh="北京心理危机中心" data-en="Beijing Crisis Center">Beijing Crisis Center</span>: <a href="tel:010-82951332">010-82951332</a></li>
+                        <li>📞 <span data-zh="生命热线" data-en="Lifeline">Lifeline</span>: <a href="tel:400-821-1215">400-821-1215</a></li>
                     </ul>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">我知道了</button>
+                <button class="btn btn-primary" onclick="closeCrisisModal()" data-zh="我知道了" data-en="I Understand">I Understand</button>
             </div>
         </div>
     </div>
 
     <script>
-        let currentLang = localStorage.getItem('lang') || 'zh';
+        let currentLang = localStorage.getItem('mindjoy_lang') || 'en';
         
         function switchLang(lang) {
             currentLang = lang;
-            localStorage.setItem('lang', lang);
+            localStorage.setItem('mindjoy_lang', lang);
+            document.documentElement.lang = lang === 'zh' ? 'zh-CN' : 'en';
             // 更新桌面端语言按钮
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === lang);

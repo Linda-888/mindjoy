@@ -55,6 +55,13 @@
     });
   };
 
+  // The diary's text boxes have translations, but nothing was applying them.
+  window.addEventListener('langchange', function (e) {
+    document.querySelectorAll('[data-zh-placeholder]').forEach(function (el) {
+      el.placeholder = el.getAttribute('data-' + e.detail.lang + '-placeholder');
+    });
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
     var style = document.createElement('style');
     style.textContent =
