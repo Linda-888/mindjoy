@@ -1,7 +1,7 @@
 // Connects MindJoy's pages to its API. Chat history lives only in this page's
 // memory, so it is gone when the page closes or the chat is cleared.
 (function () {
-  var API_BASE = 'https://mindjoy-api.lingyahuang.com';
+  var API_BASE = 'https://api.mindjoyspace.com';
   var MAX_HISTORY = 20;
   var realFetch = window.fetch.bind(window);
   var history = [];
